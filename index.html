@@ -95,7 +95,8 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <div><h3 id="surveyRoleTitle">Тандалт</h3><p class="small">Одоогоор асуултуудыг жишээгээр байрлуулсан. Маргааш эцсийн асуултуудыг оруулна.</p></div>
 <button class="btn secondary" onclick="backToSurveyRoles()">← Буцах</button>
 </div>
-<div class="notice">📝 <b>Түр хувилбар:</b> Эцсийн асуултуудыг оруулсны дараа 1–5 оноо, автоматаар тооцоолол болон AI дүгнэлтийг холбоно.</div>
+<div class="notice">📝 Нэр бичих шаардлагагүй. Сурагчийн дугаараа (жишээ: 6А-01) оруулна уу. Эцэг эх мөн хүүхдийнхээ ижил дугаарыг оруулна.</div>
+<div class="row" style="margin-top:12px"><div><label>Сурагчийн дугаар</label><select id="surveyStudentCode"><option value="">-- Сурагчийн дугаараа сонгоно уу --</option><option value="6А-01">6А-01</option><option value="6А-02">6А-02</option><option value="6А-03">6А-03</option><option value="6А-04">6А-04</option><option value="6А-05">6А-05</option><option value="6А-06">6А-06</option><option value="6А-07">6А-07</option><option value="6А-08">6А-08</option><option value="6А-09">6А-09</option><option value="6А-10">6А-10</option><option value="6А-11">6А-11</option><option value="6А-12">6А-12</option><option value="6А-13">6А-13</option><option value="6А-14">6А-14</option><option value="6А-15">6А-15</option><option value="6А-16">6А-16</option><option value="6А-17">6А-17</option><option value="6А-18">6А-18</option><option value="6А-19">6А-19</option><option value="6А-20">6А-20</option><option value="6А-21">6А-21</option><option value="6А-22">6А-22</option><option value="6А-23">6А-23</option><option value="6А-24">6А-24</option><option value="6А-25">6А-25</option><option value="6А-26">6А-26</option><option value="6А-27">6А-27</option><option value="6А-28">6А-28</option><option value="6А-29">6А-29</option><option value="6А-30">6А-30</option><option value="6А-31">6А-31</option><option value="6А-32">6А-32</option><option value="6А-33">6А-33</option><option value="6А-34">6А-34</option><option value="6А-35">6А-35</option><option value="6А-36">6А-36</option><option value="6А-37">6А-37</option><option value="6А-38">6А-38</option><option value="6А-39">6А-39</option><option value="6А-40">6А-40</option></select></div></div>
 <div id="surveyQuestions" style="margin-top:18px"></div>
 <button class="btn" onclick="finishSurveyPlaceholder()">Тандалт дуусгах</button>
 </div>
@@ -225,10 +226,17 @@ function openSurveyRole(role){
  box.innerHTML=qs.map((item,i)=>`<div class="question"><b>${i+1}. ${item.q}</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">${item.options.map((v,j)=>`<label class="option"><input type="radio" name="survey${i}" value="${j+1}"> ${String.fromCharCode(97+j)}) ${v}</label>`).join('')}</div></div>`).join('');
 }
 function backToSurveyRoles(){document.getElementById('surveyForm').classList.add('hidden');document.getElementById('surveyResult').classList.add('hidden');document.getElementById('surveyHome').classList.remove('hidden');}
-function finishSurveyPlaceholder(){
+async function finishSurveyPlaceholder(){
  const qs=surveyQuestionsByRole[currentSurveyRole];
+ const code=document.getElementById('surveyStudentCode').value.trim();
+ if(!code){alert('Сурагчийн дугаарыг оруулна уу.');return;}
  for(let i=0;i<qs.length;i++){if(!document.querySelector(`input[name=survey${i}]:checked`)){alert(`${i+1}-р асуултыг бөглөнө үү.`);return;}}
- const r=document.getElementById('surveyResult');r.classList.remove('hidden');r.innerHTML='<div class="score">✓</div><p>Таны тандалт амжилттай бөглөгдлөө.</p><div class="notice">Энэ хувилбарт хариултыг дэлгэц дээр баталгаажуулж байна. Supabase-д хадгалах холболтыг дараагийн шатанд холбоно.</div><br><button class="btn secondary" onclick="backToSurveyRoles()">Тандалт руу буцах</button>';
+ const baseId=currentSurveyRole==='student'?100:200;
+ const rows=qs.map((q,i)=>({class_code:'6-р анги',student_code:code,grade:6,question_id:baseId+i+1,answer:Number(document.querySelector(`input[name=survey${i}]:checked`).value)}));
+ const {error}=await supabaseClient.from('responses').insert(rows);
+ if(error){alert('Хариулт хадгалахад алдаа гарлаа: '+error.message);console.error(error);return;}
+ const r=document.getElementById('surveyResult');r.classList.remove('hidden');r.innerHTML='<div class="score">✓</div><p>Таны тандалт амжилттай хадгалагдлаа.</p><div class="notice">☁️ Хариултыг Supabase-д амжилттай хадгаллаа. Нэр цуглуулахгүй.</div><br><button class="btn secondary" onclick="backToSurveyRoles()">Тандалт руу буцах</button>';
+ document.getElementById('surveyStudentCode').value='';
 }
 </script>
 <script>
