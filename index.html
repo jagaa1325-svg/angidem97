@@ -235,7 +235,8 @@ async function finishSurveyPlaceholder(){
  const rows=qs.map((q,i)=>({class_code:'6-р анги',student_code:code,grade:6,question_id:baseId+i+1,answer:Number(document.querySelector(`input[name=survey${i}]:checked`).value)}));
  const {error}=await supabaseClient.from('responses').insert(rows);
  if(error){alert('Хариулт хадгалахад алдаа гарлаа: '+error.message);console.error(error);return;}
- const r=document.getElementById('surveyResult');r.classList.remove('hidden');r.innerHTML='<div class="score">✓</div><p>Таны тандалт амжилттай хадгалагдлаа.</p><div class="notice">☁️ Хариултыг Supabase-д амжилттай хадгаллаа. Нэр цуглуулахгүй.</div><br><button class="btn secondary" onclick="backToSurveyRoles()">Тандалт руу буцах</button>';
+ document.getElementById('surveyForm').classList.add('hidden');
+ const r=document.getElementById('surveyResult');r.classList.remove('hidden');r.innerHTML='<div class="score">✓</div><h2>Тандалт дууслаа!</h2><p>Таны судалгаанд оролцсон хариулт амжилттай хадгалагдлаа.</p><div class="notice">☁️ Хариулт Supabase-д хадгалагдсан. Танд баярлалаа!</div><br><button class="btn secondary" onclick="backToSurveyRoles()">Дуусгах</button>';
  document.getElementById('surveyStudentCode').value='';
 }
 </script>
