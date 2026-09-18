@@ -226,18 +226,49 @@ function openSurveyRole(role){
  box.innerHTML=qs.map((item,i)=>`<div class="question"><b>${i+1}. ${item.q}</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">${item.options.map((v,j)=>`<label class="option"><input type="radio" name="survey${i}" value="${j+1}"> ${String.fromCharCode(97+j)}) ${v}</label>`).join('')}</div></div>`).join('');
 }
 function backToSurveyRoles(){document.getElementById('surveyForm').classList.add('hidden');document.getElementById('surveyResult').classList.add('hidden');document.getElementById('surveyHome').classList.remove('hidden');}
+let surveySubmitting=false;
 async function finishSurveyPlaceholder(){
+ if(surveySubmitting)return;
  const qs=surveyQuestionsByRole[currentSurveyRole];
  const code=document.getElementById('surveyStudentCode').value.trim();
- if(!code){alert('Сурагчийн дугаарыг оруулна уу.');return;}
+ if(!code){alert('Сурагчийн дугаарыг сонгоно уу.');return;}
  for(let i=0;i<qs.length;i++){if(!document.querySelector(`input[name=survey${i}]:checked`)){alert(`${i+1}-р асуултыг бөглөнө үү.`);return;}}
  const baseId=currentSurveyRole==='student'?100:200;
- const rows=qs.map((q,i)=>({class_code:'6-р анги',student_code:code,grade:6,question_id:baseId+i+1,answer:Number(document.querySelector(`input[name=survey${i}]:checked`).value)}));
+ const questionIds=qs.map((q,i)=>baseId+i+1);
+ 
+ // Нэг сурагчийн ижил төрлийн тандалтыг дахин хадгалахаас сэргийлнэ.
+ const {data:existing,error:checkError}=await supabaseClient
+   .from('responses')
+   .select('question_id')
+   .eq('class_code','6-р анги')
+   .eq('student_code',code)
+   .eq('grade',6)
+   .in('question_id',questionIds);
+ if(checkError){alert('Өмнөх хариултыг шалгахад алдаа гарлаа: '+checkError.message);return;}
+ if(existing && existing.length>0){
+   alert(currentSurveyRole==='student'
+     ? 'Энэ сурагчийн тандалт өмнө нь хадгалагдсан байна. Дахин илгээх шаардлагагүй.'
+     : 'Энэ сурагчийн эцэг эхийн тандалт өмнө нь хадгалагдсан байна. Дахин илгээх шаардлагагүй.');
+   return;
+ }
+ 
+ surveySubmitting=true;
+ const submitButton=document.querySelector('#surveyForm button[onclick="finishSurveyPlaceholder()"]');
+ if(submitButton){submitButton.disabled=true;submitButton.textContent='Хадгалж байна...';}
+ const now=new Date().toISOString();
+ const rows=qs.map((q,i)=>({class_code:'6-р анги',student_code:code,grade:6,question_id:questionIds[i],answer:Number(document.querySelector(`input[name=survey${i}]:checked`).value),created_at:now}));
  const {error}=await supabaseClient.from('responses').insert(rows);
- if(error){alert('Хариулт хадгалахад алдаа гарлаа: '+error.message);console.error(error);return;}
+ if(error){
+   alert('Хариулт хадгалахад алдаа гарлаа: '+error.message);
+   console.error(error);
+   surveySubmitting=false;
+   if(submitButton){submitButton.disabled=false;submitButton.textContent='Тандалт дуусгах';}
+   return;
+ }
  document.getElementById('surveyForm').classList.add('hidden');
  const r=document.getElementById('surveyResult');r.classList.remove('hidden');r.innerHTML='<div class="score">✓</div><h2>Тандалт дууслаа!</h2><p>Таны судалгаанд оролцсон хариулт амжилттай хадгалагдлаа.</p><div class="notice">☁️ Хариулт Supabase-д хадгалагдсан. Танд баярлалаа!</div><br><button class="btn secondary" onclick="backToSurveyRoles()">Дуусгах</button>';
  document.getElementById('surveyStudentCode').value='';
+ surveySubmitting=false;
 }
 </script>
 <script>
