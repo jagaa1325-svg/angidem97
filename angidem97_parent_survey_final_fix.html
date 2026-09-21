@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>АНГИ ДЭМ 97 — Багшийн дэмжлэгийн веб</title>
+<style>
+:root{--p:#4267d5;--p2:#6f5ce8;--ink:#1f2d3d;--muted:#6d7b8c;--bg:#f4f7fb;--card:#fff;--line:#e4e9f2;--good:#19945a;--warn:#b67b00;--alert:#c74646}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:24px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:12px}.brand img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:12px;padding:3px}.logo{font-weight:800;font-size:25px}.tag{font-size:13px;opacity:.9}.container{max-width:1120px;margin:25px auto;padding:0 18px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}nav button{background:#fff;color:#445;border:1px solid var(--line);padding:11px 15px;border-radius:12px;cursor:pointer}nav button.active{background:var(--p);color:#fff;border-color:var(--p)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:18px;box-shadow:0 7px 25px #26364b0b}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.stat{padding:18px;border-radius:15px;background:#f7f9fd}.stat b{display:block;font-size:29px;margin:4px 0}.stat span{font-size:13px;color:var(--muted)}
+h1,h2,h3{margin-top:0}.hero{padding:30px;background:linear-gradient(135deg,#fff,#f0f3ff)}.hero h1{font-size:32px;margin-bottom:8px}.hero p{max-width:760px;line-height:1.6;color:var(--muted)}
+.btn{background:var(--p);border:0;color:white;padding:12px 17px;border-radius:11px;cursor:pointer;font-weight:650}.btn.secondary{background:#eaf0ff;color:#3451aa}.btn.danger{background:#fff0f0;color:#b33}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d7deea;border-radius:10px;font-size:15px;background:#fff}
+label{font-size:13px;color:var(--muted);display:block;margin:10px 0 6px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pill{display:inline-block;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:700}.good{background:#dff5e9;color:var(--good)}.warn{background:#fff2cc;color:var(--warn)}.alert{background:#ffe2e2;color:var(--alert)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line);font-size:14px}
+.question{padding:16px 0;border-bottom:1px solid var(--line)}.option{display:block;margin:7px 0;padding:10px;border:1px solid var(--line);border-radius:10px;cursor:pointer}.option:hover{background:#f5f7ff}
+.progress{height:9px;background:#e8edf5;border-radius:9px;overflow:hidden}.bar{height:100%;width:0;background:var(--p);transition:.2s}
+.notice{background:#f5f8ff;border-left:4px solid var(--p);padding:13px 15px;border-radius:8px;line-height:1.5}
+.activity{padding:15px;border:1px solid var(--line);border-radius:13px;margin:10px 0}.activity b{display:block;margin-bottom:5px}
+.hidden{display:none}.small{font-size:12px;color:var(--muted)}.center{text-align:center}.score{font-size:48px;font-weight:800;color:var(--p)}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.row{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.hero h1{font-size:25px}}
+.roleCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;cursor:pointer;font:inherit;color:var(--ink);min-height:135px;box-shadow:0 5px 18px rgba(20,40,80,.06);transition:.15s}.roleCard:hover{transform:translateY(-2px);border-color:var(--p)}.roleCard:first-line{font-size:28px}
+</style>
+</head>
+<body>
+<header><div class="brand"><img src="logo.jpg" alt="97-р сургуулийн лого"><div><div class="logo">АНГИ ДЭМ 97</div><div class="tag">Багшийн ажиглалт · Шуурхай үнэлгээ · Дэмжлэг</div></div></div><div class="small" style="color:#fff">Багшийн хувийн ажлын самбар</div></header>
+<div class="container">
+<nav>
+<button class="active" onclick="show('dashboard',this)">🏠 Нүүр</button>
+<button onclick="show('students',this)">👥 Сурагчид</button>
+<button onclick="show('test',this)">⚡ Шуурхай үнэлгээ</button>
+<button onclick="show('survey',this)">📋 Тандалт</button>
+<button onclick="show('report',this)">📊 Тайлан</button>
+<button onclick="show('questionsAdmin',this)">⚙️ Асуултын сан</button>
+<button onclick="show('guide',this)">💡 Ажиллах санаа</button>
+</nav>
+
+<section id="dashboard">
+<div class="card hero">
+<h1>Сурагч бүрийг анзаарах — анги бүрийг дэмжих</h1>
+<p>АНГИ ДЭМ 97 нь ангийн багш сурагчдын сургалтын орчинд дасан зохицох байдал, суралцах оролцоо, харилцаа болон анхаарах хэрэгцээг хурдан илрүүлж, анги удирдлагын ажлаа төлөвлөхөд зориулсан дэмжлэгийн хэрэгсэл юм.</p>
+<div class="notice"><b>Чухал:</b> Энэ веб нь эмнэлзүйн/сэтгэл зүйн онош тавихгүй. Эрсдэлийн дохио ажиглагдвал сургуулийн сэтгэл зүйч болон холбогдох мэргэжилтэнтэй хамтран ажиллана.</div><br>
+<button class="btn" onclick="show('test')">Шуурхай үнэлгээ эхлүүлэх →</button>
+</div>
+<div class="grid">
+<div class="stat"><span>Нийт сурагч</span><b id="nStudents">0</b></div>
+<div class="stat"><span>🟢 Тогтвортой</span><b id="nGood">0</b></div>
+<div class="stat"><span>🟡 Анхаарч ажиллах</span><b id="nWarn">0</b></div>
+<div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b id="nAlert">0</b></div>
+</div>
+<div class="card"><h2>Ангидаа анхаарах гол чиглэл</h2><div class="grid3">
+<div class="activity"><b>🤝 Харилцаа</b><div class="progress"><div class="bar" style="width:0%"></div></div><p class="small">0% — одоогоор мэдээлэл алга</p></div>
+<div class="activity"><b>📚 Суралцах идэвх</b><div class="progress"><div class="bar" style="width:0%"></div></div><p class="small">0% — одоогоор мэдээлэл алга</p></div>
+<div class="activity"><b>🌱 Дасан зохицол</b><div class="progress"><div class="bar" style="width:0%"></div></div><p class="small">0% — одоогоор мэдээлэл алга</p></div>
+</div></div>
+</section>
+
+<section id="students" class="hidden">
+<div class="card"><h2>👥 Сурагчдын бүртгэл</h2><div class="row"><div><label>Анги</label><input id="className" value="5А анги"></div><div><label>Сурагч нэмэх</label><input id="newStudent" placeholder="Нэр эсвэл код"></div></div><br><button class="btn" onclick="addStudent()">+ Сурагч нэмэх</button></div>
+<div class="card"><h3>Сурагчдын жагсаалт</h3><table><thead><tr><th>№</th><th>Нэр / код</th><th>Үнэлгээ</th><th>Төлөв</th></tr></thead><tbody id="studentTable"></tbody></table></div>
+</section>
+
+<section id="test" class="hidden">
+<div class="card"><h2>⚡ Шуурхай үнэлгээ</h2><p class="small">20 богино асуулт · 5 түвшний хариулт · ойролцоогоор 10–15 минут</p><div class="row"><div><label>Анги</label><select id="testGrade"><option value="6">6-р анги</option><option value="9">9-р анги</option><option value="12">12-р анги</option></select></div><div><label>Сурагчийн код</label><input id="testStudent" placeholder="Жишээ: 6А-01"></div></div>
+<div class="progress"><div id="qbar" class="bar"></div></div><div id="questions"></div>
+<button class="btn" onclick="finishTest()">Үр дүн гаргах</button></div>
+<div id="testResult" class="card hidden center"></div>
+</section>
+
+<section id="survey" class="hidden">
+<div class="card hero">
+<h2>📋 Тандалт судалгаа</h2>
+<p>6-р ангийн сурагчдын <b>дасан зохицол, харилцаа, суралцах байдал, сэтгэл хөдлөл</b>-ийг сурагч болон эцэг эхийн байр сууриас тандалт хийх хэсэг.</p>
+<div class="notice"><b>Анхаарах:</b> Энэ хэсэг нь сэтгэл зүйн эмнэлзүйн онош тавихгүй. Тандалтын үр дүнг багшийн ажиглалт, ярилцлагатай хамтатган ашиглана.</div>
+</div>
+
+<div id="surveyHome" class="card">
+<h3>🎓 6-р анги</h3>
+<p class="small">Тандалт бөглөх хүнийг сонгоно уу.</p>
+<div class="grid3">
+<button class="roleCard" onclick="openSurveyRole('student')">👧<br><b>Сурагч</b><br><span class="small">Өөрийн үнэлгээ</span></button>
+<button class="roleCard" onclick="openSurveyRole('parent')">👨‍👩‍👧<br><b>Эцэг эх</b><br><span class="small">Эцэг эхийн ажиглалт</span></button>
+</div>
+</div>
+
+<div id="surveyForm" class="card hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+<div><h3 id="surveyRoleTitle">Тандалт</h3><p class="small">Асуулт бүрээс өөрт тохирох нэг хариултыг сонгоно уу. Бүх асуултад хариулсны дараа “Тандалт дуусгах” товчийг дарна уу.</p></div>
+<button class="btn secondary" onclick="backToSurveyRoles()">← Буцах</button>
+</div>
+<div class="notice">📝 Нэр бичих шаардлагагүй. Хүүхдийнхээ бүлэг болон сурагчийн кодыг сонгоно уу. Жишээ: 6А-01. Эцэг эх хүүхдийнхээ кодыг сонгоно.</div>
+<div class="row" style="margin-top:12px">
+  <div><label>1. Бүлэг</label><select id="surveyGroup" onchange="populateSurveyCodes()">
+    <option value="">-- Бүлгээ сонгоно уу --</option>
+    <option value="6А">6А</option><option value="6Б">6Б</option><option value="6В">6В</option><option value="6Г">6Г</option><option value="6Д">6Д</option><option value="6Е">6Е</option><option value="6Ё">6Ё</option><option value="6Ж">6Ж</option><option value="6З">6З</option><option value="6И">6И</option>
+  </select></div>
+  <div><label>2. Сурагчийн код</label><select id="surveyStudentCode" disabled><option value="">-- Эхлээд бүлгээ сонгоно уу --</option></select><p class="small">Бүлэг бүр 01–50 хүртэлх сурагчийн кодтой.</p></div>
+</div>
+<div id="surveyQuestions" style="margin-top:18px"></div>
+<button type="button" id="finishSurveyBtn" class="btn" onclick="finishSurveyPlaceholder()">Тандалт дуусгах</button>
+</div>
+
+<div id="surveyResult" class="card hidden center"></div>
+</section>
+
+<section id="report" class="hidden">
+<div id="reportLogin" class="card center">
+  <h2>🔐 Багшийн тайлан</h2>
+  <p class="small">Сурагчдын үнэлгээний мэдээлэл зөвхөн эрхтэй багшид харагдана.</p>
+  <div style="max-width:480px;margin:0 auto;text-align:left">
+    <label>Багшийн имэйл</label>
+    <input id="teacherEmail" type="email" placeholder="teacher@example.com">
+    <label>Нууц үг</label>
+    <input id="teacherPassword" type="password" placeholder="Нууц үг">
+    <br><br>
+    <button class="btn" onclick="teacherLogin()">Нэвтрэх</button>
+    <div id="loginMsg" class="small" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<div id="reportContent" class="hidden">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>
+        <h2>📊 Ангийн нэгдсэн тайлан</h2>
+        <p class="small">Supabase-д хадгалагдсан бодит үнэлгээний мэдээлэл.</p>
+      </div>
+      <button class="btn secondary" onclick="teacherLogout()">Гарах</button>
+    </div>
+    <div class="row">
+      <div><label>Анги сонгох</label><select id="reportGrade" onchange="loadReport()">
+        <option value="all">Бүх анги</option><option value="6">6-р анги</option><option value="9">9-р анги</option><option value="12">12-р анги</option>
+      </select></div>
+      <div><label>Хайх сурагчийн код</label><input id="reportSearch" placeholder="Жишээ: 12A-01" oninput="renderReportTable()"></div>
+    </div>
+  </div>
+
+  <div class="grid" id="reportStats"></div>
+  <div class="card"><h3>📋 Сурагчдын үр дүн</h3>
+    <div id="reportStatus" class="small">Мэдээлэл ачаалж байна...</div>
+    <div style="overflow:auto">
+      <table><thead><tr><th>№</th><th>Сурагчийн код</th><th>Анги</th><th>Ерөнхий</th><th>Дасан зохицол</th><th>Харилцаа</th><th>Суралцах</th><th>Сэтгэл хөдлөл</th><th>Түвшин</th></tr></thead>
+      <tbody id="reportTable"></tbody></table>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="questionsAdmin" class="hidden">
+<div id="qAdminLogin" class="card center">
+  <h2>🔐 Асуултын сан</h2>
+  <p class="small">Асуулт нэмэх, засах, устгах хэсэг. Зөвхөн нэвтэрсэн багш ашиглана.</p>
+  <button class="btn" onclick="goToReportLogin()">Багшийн нэвтрэлт рүү очих</button>
+</div>
+<div id="qAdminContent" class="hidden">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div><h2>⚙️ Асуултын сан удирдах</h2><p class="small">Анги бүрийн асуултыг өөрөө нэмэх, засах, устгах боломжтой.</p></div>
+      <button class="btn secondary" onclick="loadQuestionBank()">↻ Шинэчлэх</button>
+    </div>
+    <div class="notice"><b>Зөвлөмж:</b> Сурагчдын үнэлгээнд ашиглах асуултаа 1–20 дугаартай, нэг утгатай, ойлгомжтой өгүүлбэрээр оруулаарай. Урвуу оноо хэрэгтэй бол “Урвуу оноо” сонголтыг идэвхжүүлнэ.</div>
+  </div>
+
+  <div class="card">
+    <h3 id="qFormTitle">➕ Шинэ асуулт нэмэх</h3>
+    <div class="row">
+      <div><label>Анги</label><select id="qbGrade"><option value="6">6-р анги</option><option value="7">7-р анги</option><option value="8">8-р анги</option><option value="9">9-р анги</option><option value="10">10-р анги</option><option value="11">11-р анги</option><option value="12">12-р анги</option></select></div>
+      <div><label>Асуултын дугаар</label><input id="qbNo" type="number" min="1" max="100" placeholder="Жишээ: 1"></div>
+    </div>
+    <label>Асуулт</label><textarea id="qbText" rows="3" style="width:100%;padding:12px;border:1px solid #d7deea;border-radius:10px;font-size:15px;font-family:inherit" placeholder="Асуултаа энд бичнэ үү..."></textarea>
+    <div class="row">
+      <div><label>Чиглэл</label><select id="qbCategory"><option value="adapt">🌱 Дасан зохицол</option><option value="relation">🤝 Харилцаа</option><option value="study">📚 Суралцах</option><option value="emotion">💬 Сэтгэл хөдлөл</option></select></div>
+      <div><label>Онооны тохиргоо</label><label style="display:flex;align-items:center;gap:8px;color:var(--ink);font-size:14px"><input id="qbReverse" type="checkbox" style="width:auto"> Урвуу оноо (4 → 0)</label></div>
+    </div>
+    <br><button class="btn" onclick="saveQuestion()">💾 Хадгалах</button> <button class="btn secondary" onclick="resetQuestionForm()">Цэвэрлэх</button>
+    <div id="qbMsg" class="small" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><div><label>Асуултуудыг харах анги</label><select id="qbFilterGrade" onchange="renderQuestionBank()"><option value="6">6-р анги</option><option value="7">7-р анги</option><option value="8">8-р анги</option><option value="9">9-р анги</option><option value="10">10-р анги</option><option value="11">11-р анги</option><option value="12">12-р анги</option></select></div><div><label>Хайх</label><input id="qbSearch" placeholder="Асуултын үгээр хайх" oninput="renderQuestionBank()"></div></div>
+    <div id="qbStatus" class="small" style="margin:12px 0">Ачаалж байна...</div>
+    <div style="overflow:auto"><table><thead><tr><th>№</th><th>Асуулт</th><th>Чиглэл</th><th>Урвуу</th><th>Үйлдэл</th></tr></thead><tbody id="qbTable"></tbody></table></div>
+  </div>
+</div>
+</section>
+
+<section id="guide" class="hidden">
+<div class="card"><h2>💡 Үр дүнд тулгуурлан хийх ажлууд</h2>
+<div class="activity"><b>🤝 Харилцаа сул байвал</b>Багаар ажиллах богино дасгал, хосын ярилцлага, ангийн эерэг дүрмийг хамтран боловсруулах.</div>
+<div class="activity"><b>📚 Суралцах идэвх буурвал</b>Богино зорилго тавих, сурагчийн давуу талыг илрүүлэх, сонголттой даалгавар болон амжилтын жижиг алхмууд ашиглах.</div>
+<div class="activity"><b>🌱 Дасан зохицол сул байвал</b>Анги доторх өдөр тутмын хуваарь, дүрэм, хүлээлтийг ойлгомжтой болгох; шинэ сурагчийг хос/багаар дэмжих.</div>
+<div class="activity"><b>💬 Сурагчийг тусгайлан анхаарах шаардлагатай бол</b>Тайван, шүүмжлэлгүй ярилцах; зөвхөн вебийн оноонд тулгуурлан дүгнэлт хийхгүй байх; шаардлагатай үед сургуулийн сэтгэл зүйчид шилжүүлэх.</div>
+</div>
+<div class="card"><h3>Багшид зориулсан санамж</h3><p>Үнэлгээний зорилго нь хүүхдийг “сайн/муу” гэж ангилах биш, <b>ямар дэмжлэг хэрэгтэйг эрт олж харах</b> юм.</p></div>
+</section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ===== 6-Р АНГИЙН ТАНДАЛТ =====
+const surveyRoleNames={student:"👧 Сурагчийн тандалт",parent:"👨‍👩‍👧 Эцэг эхийн тандалт"};
+const surveyQuestionsByRole={
+ student:[
+  {q:"Дунд ангид орсон миний сэтгэгдэл",options:["Шинэ хичээл, шинэ мэдлэг сурах хүсэл, эрмэлзэл нэмэгдсэн","Өөртөө итгэлтэй болж, илүү бие даан суралцаж байна","Суралцах шинэ мэдлэг их байгаа болохоор хичээлдээ илүү анхаардаг болсон"]},
+  {q:"Шинэ мэргэжлийн багш нартайгаа дасан зохицож чадаж байна уу?",options:["Дасан зохицож чадсан","Дасаж байгаа","Дасахгүй байна"]},
+  {q:"17 төрлийн хичээл судлахад ямар бэрхшээл байна вэ?",options:["Хичээлийн ачаалал их санагдах","Олон төрлийн хичээлд зэрэг анхаарал төвлөрүүлэх","Хичээл, даалгавраа төлөвлөж зохицуулах","Өөр өөр багшийн арга барил, шаардлагад дасан зохицох"]},
+  {q:"Сургууль дээр би өөрийгөө аюулгүй тайван тухтай байгаагаар мэдэрдэг",options:["Тийм","Ихэнхдээ","Заримдаа","Огт үгүй"]}
+ ],
+ parent:[
+  {q:"Дунд ангид орсон таны хүүхдийн сэтгэгдэл ямар байна вэ?",options:["Маш эерэг-шинэ орчинд хичээлдээ идэвхтэй сонирхолтой хандаж байна","Эерэг-ерөнхийдөө сэтгэл хангалуун байна","Дунд зэрэг-дасах явцтай байгаа, зарим зүйлд хүндрэлтэй байна","Сөрөг-хичээлийн ачаалал орчин, шинэ багш нарт дасан зохицоход хүндрэлтэй байна"]},
+  {q:"Таны хүүхэд 6 дугаар ангид шилжин суралцаж эхэлснээс хойш ямар өөрчлөлт ажиглагдаж байна вэ?",options:["Өөртөө илүү итгэлтэй болж байна","Бие даан хичээлээ хийхийг хичээдэг болсон","Хичээлдээ илүү хариуцлагатай хандаж байна","Өдөр тутмын хичээл даалгавараа зохицуулж сурч байна","Одоогоор онцын өөрчлөлт ажиглагдаагүй"]},
+  {q:"Таны хүүхэд 17 төрлийн хичээл судлах явцад ямар бэрхшээл тулгарч байна вэ?",options:["Хичээл даалгаврын ачааллыг зохицуулахад хүндрэлтэй байна","Хичээлээ төлөвлөн, цагаа зөв зохицуулах","Зарим хичээлийн агуулгыг ойлгон эзэмших","Олон төрлийн хичээлд жигд анхаарал хандуулах","Онцын хүндрэл, бэрхшээл ажиглагдаагүй байна"]},
+  {q:"Таны хүүхэд сургууль дээрээ өөрийгөө аюулгүй, тайван байдлаар мэдэрч, багш болон найз нөхөдтэйгөө чөлөөтэй харилцаж чаддаг уу?",options:["Тийм, бүрэн чаддаг","Ихэнхдээ чаддаг","Заримдаа хүндрэлтэй байдаг","Ихэнхдээ хүндрэлтэй байдаг","Үгүй, хүндрэлтэй байдаг"]}
+ ]
+};
+let currentSurveyRole="student";
+// 6-р ангийн 10 бүлэг, бүлэг бүр 50 хүртэлх сурагчийн код
+const grade6Groups=["А","Б","В","Г","Д","Е","Ё","Ж","З","И"];
+function populateSurveyCodes(){
+  const groupEl=document.getElementById('surveyGroup');
+  const sel=document.getElementById('surveyStudentCode');
+  const group=(groupEl.value || '').trim();
+  sel.innerHTML='';
+  const first=document.createElement('option');
+  first.value='';
+  first.textContent=group ? '-- Сурагчийн кодоо сонгоно уу --' : '-- Эхлээд бүлгээ сонгоно уу --';
+  sel.appendChild(first);
+  if(group){
+    for(let n=1;n<=50;n++){
+      const code=group+'-'+String(n).padStart(2,'0');
+      const option=document.createElement('option');
+      option.value=code;
+      option.textContent=code;
+      sel.appendChild(option);
+    }
+    sel.disabled=false;
+  }else{
+    sel.disabled=true;
+  }
+  sel.value='';
+}
+
+function openSurveyRole(role){
+ currentSurveyRole=role;
+ document.getElementById('surveyHome').classList.add('hidden');
+ document.getElementById('surveyResult').classList.add('hidden');
+ document.getElementById('surveyForm').classList.remove('hidden');
+ document.getElementById('surveyRoleTitle').textContent=surveyRoleNames[role];
+ document.querySelector('#surveyForm .small').textContent='Асуулт бүрээс өөрт тохирох нэг хариултыг сонгоно уу.';
+ const qs=surveyQuestionsByRole[role],box=document.getElementById('surveyQuestions');
+ box.innerHTML=qs.map((item,i)=>`<div class="question"><b>${i+1}. ${item.q}</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">${item.options.map((v,j)=>`<label class="option"><input type="radio" name="survey${i}" value="${j+1}"> ${String.fromCharCode(97+j)}) ${v}</label>`).join('')}</div></div>`).join('');
+}
+function backToSurveyRoles(){document.getElementById('surveyForm').classList.add('hidden');document.getElementById('surveyResult').classList.add('hidden');document.getElementById('surveyHome').classList.remove('hidden');}
+let surveySubmitting=false;
+async function finishSurveyPlaceholder(){
+  if(surveySubmitting) return;
+  const qs=surveyQuestionsByRole[currentSurveyRole];
+  const group=document.getElementById('surveyGroup').value.trim();
+  const code=document.getElementById('surveyStudentCode').value.trim();
+  const submitButton=document.getElementById('finishSurveyBtn');
+
+  if(!group){ alert('Бүлгээ сонгоно уу.'); return; }
+  if(!code){ alert('Сурагчийн кодоо сонгоно уу.'); return; }
+  for(let i=0;i<qs.length;i++){
+    if(!document.querySelector(`input[name=survey${i}]:checked`)){
+      alert(`${i+1}-р асуултыг бөглөнө үү.`); return;
+    }
+  }
+
+  surveySubmitting=true;
+  if(submitButton){ submitButton.disabled=true; submitButton.textContent='Хадгалж байна...'; }
+
+  try{
+    const baseId=currentSurveyRole==='student'?100:200;
+    const questionIds=qs.map((q,i)=>baseId+i+1);
+    const now=new Date().toISOString();
+    const rows=qs.map((q,i)=>({
+      class_code:group,
+      student_code:code,
+      grade:6,
+      question_id:questionIds[i],
+      answer:Number(document.querySelector(`input[name=survey${i}]:checked`).value),
+      created_at:now
+    }));
+
+    const {error}=await supabaseClient.from('responses').insert(rows);
+    if(error) throw error;
+
+    document.getElementById('surveyForm').classList.add('hidden');
+    const r=document.getElementById('surveyResult');
+    r.classList.remove('hidden');
+    r.innerHTML='<div class="score">✓</div><h2>Тандалт дууслаа!</h2><p>Таны хариулт амжилттай хадгалагдлаа.</p><div class="notice">☁️ Хариулт Supabase-д хадгалагдсан. Танд баярлалаа!</div><br><button type="button" class="btn secondary" onclick="backToSurveyRoles()">Дуусгах</button>';
+  }catch(error){
+    console.error('Survey save error:',error);
+    alert('Хариулт хадгалагдсангүй. Алдаа: '+(error.message||error));
+  }finally{
+    surveySubmitting=false;
+    if(submitButton){ submitButton.disabled=false; submitButton.textContent='Тандалт дуусгах'; }
+  }
+}
+</script>
+<script>
+const SUPABASE_URL="https://anhfsppemtotnrqdegvy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_UTZCx5tEHmP95X1fhCGy_w_AdNqNlYJ";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const builtInQuestionSets={
+6:[
+["Би ангидаа өөрийгөө тухтай, аюулгүй мэдэрдэг.","adapt"],["Шинэ хичээл, шинэ багштай дасахад надад амар байдаг.","adapt"],["Сургуулийн өдөр тутмын хуваарьт би сайн дассан.","adapt"],["Ангидаа өөрийнхөөрөө байж чаддаг.","adapt"],["Хичээлүүд олон болоход зохицуулж чаддаг.","adapt"],["Би ангийнхаа хүүхдүүдтэй эвтэй байдаг.","relation"],["Найзтайгаа асуудал гарвал ярилцаж чаддаг.","relation"],["Багшаасаа ойлгоогүй зүйлээ асууж чаддаг.","relation"],["Ангидаа ганцаардаж байгаа мэт мэдрэмж надад төрдөг.","relation",1],["Бусад хүүхэд намайг ойлгодог, хүндэлдэг гэж боддог.","relation"],["Хичээл хийх сонирхол надад байдаг.","study"],["Хичээл дээр асуултад хариулахдаа өөртөө итгэлтэй байдаг.","study"],["Ойлгохгүй зүйл гарвал дахин оролддог.","study"],["Даалгавраа хийхэд надад хэт хэцүү санагддаг.","study",1],["Хичээл дээр анхаарлаа төвлөрүүлж чаддаг.","study"],["Сургуульдаа ирэхэд ихэнхдээ сайхан санагддаг.","emotion"],["Хичээл эсвэл шалгалтын үед их сандардаг.","emotion",1],["Алдаа гаргахаараа өөрийгөө муу гэж боддог.","emotion",1],["Санаа зовсон үедээ итгэдэг хүнтэйгээ ярилцаж чаддаг.","emotion"],["Сургууль дээр намайг дэмжих хүн байдаг гэж мэдэрдэг.","emotion"]],
+9:[
+["Би ангийнхаа орчинд өөрийгөө тухтай мэдэрдэг.","adapt"],["Сургалтын ачааллаа зохицуулж чаддаг.","adapt"],["Өөрчлөгдөж буй хичээл, шаардлагад дасан зохицож чаддаг.","adapt"],["Сургуульд өөрийн байр сууриа ойлгодог.","adapt"],["Ирээдүйнхээ талаар бодоход надад тодорхой байдаг.","adapt"],["Ангийнхантайгаа өөрийн бодлоо чөлөөтэй хуваалцаж чаддаг.","relation"],["Найз нөхдийн харилцаа миний хичээлд эерэгээр нөлөөлдөг.","relation"],["Багшаас тусламж хүсэхэд надад амар байдаг.","relation"],["Бусадтай өөрийгөө харьцуулж санаа зовдог.","relation",1],["Ангидаа өөрийгөө хүлээн зөвшөөрөгдсөн гэж мэдэрдэг.","relation"],["Хичээлдээ идэвхтэй оролцох хүсэлтэй байдаг.","study"],["Хичээлээ төлөвлөж, цаг хугацаагаа зохицуулж чаддаг.","study"],["Амжилтгүй болсон үед дахин оролдож чаддаг.","study"],["Сурлагын шаардлага надад хэт их дарамт болдог.","study",1],["Ирээдүйд ямар чиглэлээр суралцахаа бодож эхэлсэн.","study"],["Шалгалт, үнэлгээний үед их сандардаг.","emotion",1],["Сэтгэл санаа өөрчлөгдөх үедээ өөрийгөө тайвшруулж чаддаг.","emotion"],["Санаа зовсон зүйлээ итгэдэг хүнтэйгээ ярилцаж чаддаг.","emotion"],["Сүүлийн үед хичээлдээ анхаарлаа төвлөрүүлэхэд хэцүү байдаг.","emotion",1],["Сургууль дээр намайг ойлгож, дэмжих хүн байдаг гэж мэдэрдэг.","emotion"]],
+12:[
+["Би сургуулийн орчинд өөрийгөө тухтай, хүлээн зөвшөөрөгдсөн гэж мэдэрдэг.","adapt"],["Хичээлийн ачаалал болон бусад үүргээ зохицуулж чаддаг.","adapt"],["Сургалтын шаардлагад өөрийгөө тохируулж чаддаг.","adapt"],["Сургуулийн сүүлийн жилтэй холбоотой өөрчлөлтүүдэд дасан зохицож чаддаг.","adapt"],["Ирээдүйн зорилгоо тодорхой хэмжээнд төсөөлдөг.","adapt"],["Ангийнхантайгаа харилцах харилцаа надад эерэг байдаг.","relation"],["Багштайгаа хэрэгтэй үедээ нээлттэй ярилцаж чаддаг.","relation"],["Найз нөхөд, гэр бүлийн харилцаа надад дэмжлэг болдог.","relation"],["Бусадтай өөрийгөө харьцуулж ирээдүйдээ санаа зовдог.","relation",1],["Би өөрийн бодол, шийдвэрээ бусдын дарамтгүйгээр илэрхийлж чаддаг.","relation"],["Хичээлдээ зорилготой, тууштай оролцдог.","study"],["Шалгалт, элсэлттэй холбоотой зорилгоо төлөвлөж чаддаг.","study"],["Хийж буй зүйл маань миний ирээдүйн зорилготой холбоотой гэж боддог.","study"],["Сурлагын ачаалал надад хэт их дарамт болдог.","study",1],["Мэргэжил, цаашдын суралцах чиглэлээ сонгоход дэмжлэг хэрэгтэй байдаг.","study",1],["Шалгалт, элсэлтийн үед их сандардаг.","emotion",1],["Ирээдүйнхээ талаар бодох үедээ санаа зовох үе байдаг.","emotion",1],["Хүнд үедээ өөрийгөө тайвшруулах, зохицуулах арга надад байдаг.","emotion"],["Сэтгэл санаа, санаа зовнилоо итгэдэг хүнтэйгээ ярилцаж чаддаг.","emotion"],["Сургууль дээр миний хэрэгцээг ойлгож, дэмжих хүн байдаг гэж мэдэрдэг.","emotion"]]
+};
+let questionSets=JSON.parse(JSON.stringify(builtInQuestionSets));
+let questions=questionSets[6]||[];
+let questionBankRows=[];
+let editingQuestionId=null;
+
+const labels=["Огт үгүй","Ховор","Заримдаа","Ихэнхдээ","Үргэлж"];
+
+function escapeHtml(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function categoryLabel(c){return ({adapt:"🌱 Дасан зохицол",relation:"🤝 Харилцаа",study:"📚 Суралцах",emotion:"💬 Сэтгэл хөдлөл"}[c]||c)}
+function normalizeQuestionRows(rows){
+  const sets={};
+  (rows||[]).forEach(r=>{const g=+r.grade;if(!sets[g])sets[g]=[];sets[g].push([r.question_text,r.category,r.reverse_score?1:0]);});
+  Object.keys(sets).forEach(g=>sets[g].sort((a,b)=>0));
+  return sets;
+}
+async function loadPublicQuestions(){
+  try{
+    const {data,error}=await supabaseClient.from("question_bank").select("id,grade,question_no,question_text,category,reverse_score,active").eq("active",true).order("grade").order("question_no");
+    if(error || !data || !data.length) return false;
+    const sets={}; data.forEach(r=>{const g=+r.grade;if(!sets[g])sets[g]=[];sets[g].push([r.question_text,r.category,r.reverse_score?1:0]);});
+    Object.keys(sets).forEach(g=>sets[g].sort((a,b)=>0));
+    Object.keys(sets).forEach(g=>sets[g].sort((a,b)=>a[0].localeCompare(b[0])));
+    // Re-sort using database question number after retaining it separately below.
+    const byNo={}; data.forEach(r=>{const g=+r.grade;if(!byNo[g])byNo[g]=[];byNo[g].push({no:+r.question_no,text:r.question_text,cat:r.category,rev:r.reverse_score?1:0});});
+    questionSets={...builtInQuestionSets}; Object.keys(byNo).forEach(g=>{questionSets[g]=byNo[g].sort((a,b)=>a.no-b.no).map(x=>[x.text,x.cat,x.rev]);});
+    const tg=document.getElementById("testGrade"); if(tg){questions=questionSets[+tg.value]||[]; document.getElementById("questions").innerHTML=""; renderQuestions();}
+    return true;
+  }catch(e){console.warn(e);return false;}
+}
+async function requireTeacherForQuestionBank(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  const ok=!!session; document.getElementById("qAdminContent").classList.toggle("hidden",!ok); document.getElementById("qAdminLogin").classList.toggle("hidden",ok);
+  if(ok) await loadQuestionBank();
+  return ok;
+}
+function goToReportLogin(){show("report");}
+async function loadQuestionBank(){
+  const status=document.getElementById("qbStatus"); if(!status)return; status.textContent="Асуултууд ачаалж байна...";
+  const {data,error}=await supabaseClient.from("question_bank").select("id,grade,question_no,question_text,category,reverse_score,active").order("grade").order("question_no");
+  if(error){status.textContent="Ачаалахад алдаа: "+error.message;return;}
+  questionBankRows=data||[]; status.textContent=questionBankRows.length+" асуулт байна."; renderQuestionBank();
+}
+function renderQuestionBank(){
+  const body=document.getElementById("qbTable"); if(!body)return; const g=+document.getElementById("qbFilterGrade").value; const term=(document.getElementById("qbSearch").value||"").trim().toLowerCase();
+  const arr=questionBankRows.filter(r=>+r.grade===g && (!term||r.question_text.toLowerCase().includes(term)));
+  body.innerHTML=arr.map(r=>`<tr><td>${r.question_no}</td><td>${escapeHtml(r.question_text)}</td><td>${categoryLabel(r.category)}</td><td>${r.reverse_score?"Тийм":"Үгүй"}</td><td><button class="btn secondary" onclick="editQuestion('${r.id}')">Засах</button> <button class="btn danger" onclick="deleteQuestion('${r.id}')">Устгах</button></td></tr>`).join("")||`<tr><td colspan="5" class="center small">Энэ ангид асуулт алга.</td></tr>`;
+}
+async function saveQuestion(){
+  const {data:{session}}=await supabaseClient.auth.getSession(); if(!session){alert("Эхлээд багшийн тайлан хэсгээр нэвтэрнэ үү.");return;}
+  const grade=+document.getElementById("qbGrade").value,no=+document.getElementById("qbNo").value,text=document.getElementById("qbText").value.trim(),cat=document.getElementById("qbCategory").value,rev=document.getElementById("qbReverse").checked;
+  const msg=document.getElementById("qbMsg"); if(!no||!text){msg.textContent="Асуултын дугаар болон асуултаа оруулна уу.";return;} msg.textContent="Хадгалж байна...";
+  const payload={grade,question_no:no,question_text:text,category:cat,reverse_score:rev,active:true};
+  let res=editingQuestionId?await supabaseClient.from("question_bank").update(payload).eq("id",editingQuestionId):await supabaseClient.from("question_bank").insert(payload);
+  if(res.error){msg.textContent="Алдаа: "+res.error.message;return;} msg.textContent="Амжилттай хадгаллаа."; resetQuestionForm(); await loadQuestionBank(); await loadPublicQuestions();
+}
+function editQuestion(id){const r=questionBankRows.find(x=>String(x.id)===String(id));if(!r)return;editingQuestionId=r.id;document.getElementById("qFormTitle").textContent="✏️ Асуулт засах";document.getElementById("qbGrade").value=r.grade;document.getElementById("qbNo").value=r.question_no;document.getElementById("qbText").value=r.question_text;document.getElementById("qbCategory").value=r.category;document.getElementById("qbReverse").checked=!!r.reverse_score;window.scrollTo({top:0,behavior:"smooth"});}
+async function deleteQuestion(id){if(!confirm("Энэ асуултыг устгах уу?"))return;const {data:{session}}=await supabaseClient.auth.getSession();if(!session){alert("Эхлээд нэвтэрнэ үү.");return;}const {error}=await supabaseClient.from("question_bank").delete().eq("id",id);if(error){alert("Устгахад алдаа: "+error.message);return;}await loadQuestionBank();await loadPublicQuestions();}
+function resetQuestionForm(){editingQuestionId=null;document.getElementById("qFormTitle").textContent="➕ Шинэ асуулт нэмэх";document.getElementById("qbNo").value="";document.getElementById("qbText").value="";document.getElementById("qbReverse").checked=false;document.getElementById("qbMsg").textContent="";}
+
+function show(id,btn){
+ document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ if(id==="students")renderStudents();
+}
+function renderQuestions(){
+ const box=document.getElementById("questions"); if(box.children.length)return;
+ questions.forEach((q,i)=>{let d=document.createElement("div");d.className="question";
+ d.innerHTML="<b>"+(i+1)+". "+q[0]+"</b>"+labels.map((x,v)=>`<label class="option"><input type="radio" name="q${i}" value="${v}"> ${x}</label>`).join("");
+ box.appendChild(d)});
+ document.querySelectorAll("#questions input").forEach(x=>x.addEventListener("change",updateProgress));
+}
+function updateProgress(){let a=questions.filter((_,i)=>document.querySelector(`input[name=q${i}]:checked`)).length;document.getElementById("qbar").style.width=a/questions.length*100+"%"}
+async function finishTest(){
+ let vals=[];for(let i=0;i<questions.length;i++){let x=document.querySelector(`input[name=q${i}]:checked`);if(!x){alert((i+1)+"-р асуултыг бөглөнө үү.");return}vals.push(+x.value)}
+ const student=document.getElementById("testStudent").value.trim();
+ const grade=+document.getElementById("testGrade").value;
+ const classCode=document.getElementById("className").value.trim()||(`${grade}-р анги`);
+ if(!student){alert("Сурагчийн нэр / код оруулна уу.");return}
+ let total=0;let cats={adapt:[],relation:[],study:[],emotion:[]};
+ vals.forEach((v,i)=>{let q=questions[i],s=q[2]?4-v:v;total+=s;cats[q[1]].push(s)});
+ let pct=Math.round(total/(questions.length*4)*100), avg=k=>Math.round(cats[k].reduce((a,b)=>a+b,0)/cats[k].length/4*100);
+ let level=pct>=75?["🟢 Тогтвортой","good","Сурагчийн ерөнхий дасан зохицол харьцангуй сайн байна."]:pct>=50?["🟡 Анхаарч ажиллах","warn","Зарим чиглэлд багшийн нэмэлт ажиглалт, дэмжлэг хэрэгтэй байж болно."]:["🟠 Дэмжлэг хэрэгтэй","alert","Нэмэлт ярилцлага, ажиглалт хийж, шаардлагатай бол сургуулийн сэтгэл зүйчтэй хамтран ажиллана."];
+ const rows=vals.map((v,i)=>({class_code:classCode,student_code:student,grade,question_id:i+1,answer:v}));
+ const {error}=await supabaseClient.from("responses").insert(rows);
+ if(error){alert("Мэдээлэл хадгалахад алдаа гарлаа: "+error.message);console.error(error);return}
+ let r=document.getElementById("testResult");r.classList.remove("hidden");r.innerHTML=`<div class="score">${pct}%</div><div class="pill ${level[1]}">${level[0]}</div><p>${level[2]}</p><div class="grid3"><div class="stat"><b>${avg("adapt")}%</b><span>Дасан зохицол</span></div><div class="stat"><b>${avg("relation")}%</b><span>Харилцаа</span></div><div class="stat"><b>${avg("study")}%</b><span>Суралцах идэвх</span></div></div><br><div class="notice">☁️ Үр дүн Supabase-д амжилттай хадгалагдлаа.</div><br><button class="btn secondary" onclick="this.parentElement.classList.add('hidden')">Хаах</button>`;
+}
+function addStudent(){let x=document.getElementById("newStudent"),v=x.value.trim();if(!v){alert("Нэр эсвэл код оруулна уу.");return}let arr=JSON.parse(localStorage.getItem("angiStudents")||"[]");arr.push({name:v,score:"—",status:"Үнэлгээ хүлээгдэж байна"});localStorage.setItem("angiStudents",JSON.stringify(arr));x.value="";renderStudents()}
+function renderStudents(){let arr=JSON.parse(localStorage.getItem("angiStudents")||"[]");if(!arr.length)arr=[{name:"5А-01",score:"82%",status:"Тогтвортой"},{name:"5А-02",score:"69%",status:"Анхаарч ажиллах"},{name:"5А-03",score:"—",status:"Үнэлгээ хүлээгдэж байна"}];document.getElementById("studentTable").innerHTML=arr.map((s,i)=>`<tr><td>${i+1}</td><td>${s.name}</td><td>${s.score}</td><td>${s.status}</td></tr>`).join("")}
+document.getElementById("testGrade").addEventListener("change",()=>{questions=questionSets[+document.getElementById("testGrade").value]||[];document.getElementById("questions").innerHTML="";document.getElementById("testResult").classList.add("hidden");renderQuestions();});
+renderQuestions();renderStudents();
+// ===== БАГШИЙН НЭВТРЭЛТ + БОДИТ ТАЙЛАН =====
+let reportRows = [];
+let reportStudents = [];
+
+async function teacherLogin(){
+  const email = document.getElementById("teacherEmail").value.trim();
+  const password = document.getElementById("teacherPassword").value;
+  const msg = document.getElementById("loginMsg");
+  if(!email || !password){ msg.textContent="Имэйл болон нууц үгээ оруулна уу."; return; }
+  msg.textContent="Нэвтэрч байна...";
+  const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){ msg.textContent="Нэвтрэхэд алдаа: "+error.message; return; }
+  msg.textContent="";
+  showReportContent();
+  await loadReport();
+}
+
+async function teacherLogout(){
+  await supabaseClient.auth.signOut();
+  document.getElementById("reportContent").classList.add("hidden");
+  document.getElementById("reportLogin").classList.remove("hidden");
+  document.getElementById("reportTable").innerHTML="";
+}
+
+async function showReportContent(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  const ok=!!session;
+  document.getElementById("reportContent").classList.toggle("hidden",!ok);
+  document.getElementById("reportLogin").classList.toggle("hidden",ok);
+  return ok;
+}
+
+async function loadReport(){
+  const status=document.getElementById("reportStatus");
+  status.textContent="Мэдээлэл ачаалж байна...";
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session){showReportContent(); return;}
+  const grade=document.getElementById("reportGrade").value;
+  let q=supabaseClient.from("responses").select("student_code,grade,question_id,answer,created_at,class_code").order("created_at",{ascending:true});
+  if(grade!=="all") q=q.eq("grade",+grade);
+  const {data,error}=await q;
+  if(error){
+    status.textContent="Тайлан ачаалахад алдаа: "+error.message;
+    return;
+  }
+  reportRows=data||[];
+  buildReportStudents();
+  renderReportTable();
+  status.textContent=reportStudents.length+" сурагчийн үнэлгээ олдлоо.";
+}
+
+function buildReportStudents(){
+  // Each 20-answer submission is grouped by student + grade + submission timestamp.
+  // For legacy rows with NULL created_at, all rows for the same student/grade are grouped together.
+  const map=new Map();
+  for(const r of reportRows){
+    const key=r.created_at
+      ? `${r.student_code}|${r.grade}|${new Date(r.created_at).getTime()}`
+      : `${r.student_code}|${r.grade}|legacy`;
+    if(!map.has(key)) map.set(key,[]);
+    map.get(key).push(r);
+  }
+  const latest=new Map();
+  for(const rows of map.values()){
+    if(!rows.length) continue;
+    const code=rows[0].student_code, grade=rows[0].grade;
+    const stamp=rows[0].created_at ? new Date(rows[0].created_at).getTime() : 0;
+    const k=`${code}|${grade}`;
+    if(!latest.has(k) || stamp >= latest.get(k).stamp) latest.set(k,{rows,stamp});
+  }
+
+  reportStudents=[];
+  for(const item of latest.values()){
+    const rows=item.rows;
+    const vals={};
+    rows.forEach(r=>vals[+r.question_id]=+r.answer);
+    const grade=+rows[0].grade;
+    const qs=questionSets[grade]||[];
+    if(!qs.length) continue;
+    const cats={adapt:[],relation:[],study:[],emotion:[]};
+    let total=0,n=0;
+    qs.forEach((q,i)=>{
+      const v=vals[i+1];
+      if(v===undefined) return;
+      const s=q[2]?4-v:v;
+      total+=s;n++;
+      cats[q[1]].push(s);
+    });
+    if(!n) continue;
+    const pct=Math.round(total/(n*4)*100);
+    const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
+    const level=pct>=75?["🟢 Тогтвортой","good"]:pct>=50?["🟡 Анхаарч ажиллах","warn"]:["🟠 Дэмжлэг хэрэгтэй","alert"];
+    reportStudents.push({
+      code:rows[0].student_code,grade,overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
+    });
+  }
+  reportStudents.sort((a,b)=>a.grade-b.grade || a.code.localeCompare(b.code));
+}
+
+function renderReportTable(){
+  const body=document.getElementById("reportTable");
+  const stats=document.getElementById("reportStats");
+  const selected=document.getElementById("reportGrade").value;
+  const term=document.getElementById("reportSearch").value.trim().toLowerCase();
+  let arr=reportStudents.filter(s=>(selected==="all"||String(s.grade)===selected) && (!term||s.code.toLowerCase().includes(term)));
+
+  const avg=k=>arr.length?Math.round(arr.reduce((a,b)=>a+b[k],0)/arr.length):0;
+  const good=arr.filter(s=>s.overall>=75).length;
+  const warn=arr.filter(s=>s.overall>=50&&s.overall<75).length;
+  const alert=arr.filter(s=>s.overall<50).length;
+  stats.innerHTML=`
+    <div class="stat"><span>Сурагч</span><b>${arr.length}</b></div>
+    <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b></div>
+    <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b></div>
+    <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b></div>
+  `;
+  body.innerHTML=arr.map((s,i)=>`
+    <tr><td>${i+1}</td><td>${s.code}</td><td>${s.grade}-р анги</td>
+    <td><b>${s.overall}%</b></td><td>${s.adapt}%</td><td>${s.relation}%</td>
+    <td>${s.study}%</td><td>${s.emotion}%</td><td><span class="pill ${s.level[1]}">${s.level[0]}</span></td></tr>
+  `).join("") || `<tr><td colspan="9" class="center small">Одоогоор мэдээлэл алга.</td></tr>`;
+}
+
+// Тайлан дээр дарахад эхлээд нэвтрэлт шалгана.
+const originalShow=show;
+show=function(id,btn){
+  originalShow(id,btn);
+  if(id==="report"){
+    showReportContent().then(ok=>{if(ok) loadReport();});
+  }
+  if(id==="questionsAdmin") requireTeacherForQuestionBank();
+};
+showReportContent();
+loadPublicQuestions();
+
+</script>
+</body></html>
