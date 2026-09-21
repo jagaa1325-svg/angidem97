@@ -50,15 +50,15 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <button class="btn" onclick="show('test')">Шуурхай үнэлгээ эхлүүлэх →</button>
 </div>
 <div class="grid">
-<div class="stat"><span>Нийт сурагч</span><b id="nStudents">32</b></div>
-<div class="stat"><span>🟢 Тогтвортой</span><b id="nGood">24</b></div>
-<div class="stat"><span>🟡 Анхаарч ажиллах</span><b id="nWarn">6</b></div>
-<div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b id="nAlert">2</b></div>
+<div class="stat"><span>Нийт сурагч</span><b id="nStudents">0</b></div>
+<div class="stat"><span>🟢 Тогтвортой</span><b id="nGood">0</b></div>
+<div class="stat"><span>🟡 Анхаарч ажиллах</span><b id="nWarn">0</b></div>
+<div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b id="nAlert">0</b></div>
 </div>
 <div class="card"><h2>Ангидаа анхаарах гол чиглэл</h2><div class="grid3">
-<div class="activity"><b>🤝 Харилцаа</b><div class="progress"><div class="bar" style="width:72%"></div></div><p class="small">72% — харьцангуй тогтвортой</p></div>
-<div class="activity"><b>📚 Суралцах идэвх</b><div class="progress"><div class="bar" style="width:66%"></div></div><p class="small">66% — нэмэлт дэмжлэг төлөвлөж болно</p></div>
-<div class="activity"><b>🌱 Дасан зохицол</b><div class="progress"><div class="bar" style="width:81%"></div></div><p class="small">81% — сайн түвшин</p></div>
+<div class="activity"><b>🤝 Харилцаа</b><div class="progress"><div class="bar" style="width:0%"></div></div><p class="small">0% — одоогоор мэдээлэл алга</p></div>
+<div class="activity"><b>📚 Суралцах идэвх</b><div class="progress"><div class="bar" style="width:0%"></div></div><p class="small">0% — одоогоор мэдээлэл алга</p></div>
+<div class="activity"><b>🌱 Дасан зохицол</b><div class="progress"><div class="bar" style="width:0%"></div></div><p class="small">0% — одоогоор мэдээлэл алга</p></div>
 </div></div>
 </section>
 
@@ -92,12 +92,19 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 
 <div id="surveyForm" class="card hidden">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-<div><h3 id="surveyRoleTitle">Тандалт</h3><p class="small">Одоогоор асуултуудыг жишээгээр байрлуулсан. Маргааш эцсийн асуултуудыг оруулна.</p></div>
+<div><h3 id="surveyRoleTitle">Тандалт</h3><p class="small">Асуулт бүрээс өөрт тохирох нэг хариултыг сонгоно уу. Бүх асуултад хариулсны дараа “Тандалт дуусгах” товчийг дарна уу.</p></div>
 <button class="btn secondary" onclick="backToSurveyRoles()">← Буцах</button>
 </div>
-<div class="notice">📝 <b>Түр хувилбар:</b> Эцсийн асуултуудыг оруулсны дараа 1–5 оноо, автоматаар тооцоолол болон AI дүгнэлтийг холбоно.</div>
+<div class="notice">📝 Нэр бичих шаардлагагүй. Хүүхдийнхээ бүлэг болон сурагчийн кодыг сонгоно уу. Жишээ: 6А-01. Эцэг эх хүүхдийнхээ кодыг сонгоно.</div>
+<div class="row" style="margin-top:12px">
+  <div><label>1. Бүлэг</label><select id="surveyGroup" onchange="populateSurveyCodes()">
+    <option value="">-- Бүлгээ сонгоно уу --</option>
+    <option value="6А">6А</option><option value="6Б">6Б</option><option value="6В">6В</option><option value="6Г">6Г</option><option value="6Д">6Д</option><option value="6Е">6Е</option><option value="6Ё">6Ё</option><option value="6Ж">6Ж</option><option value="6З">6З</option><option value="6И">6И</option>
+  </select></div>
+  <div><label>2. Сурагчийн код</label><select id="surveyStudentCode" disabled><option value="">-- Эхлээд бүлгээ сонгоно уу --</option></select><p class="small">Бүлэг бүр 01–50 хүртэлх сурагчийн кодтой.</p></div>
+</div>
 <div id="surveyQuestions" style="margin-top:18px"></div>
-<button class="btn" onclick="finishSurveyPlaceholder()">Тандалт дуусгах</button>
+<button type="button" id="finishSurveyBtn" class="btn" onclick="finishSurveyPlaceholder()">Тандалт дуусгах</button>
 </div>
 
 <div id="surveyResult" class="card hidden center"></div>
@@ -128,13 +135,9 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
       <button class="btn secondary" onclick="teacherLogout()">Гарах</button>
     </div>
     <div class="row">
-      <div><label>6-р ангийн бүлэг сонгох</label><select id="reportGroup" onchange="renderReportTable()">
-         <option value="all">Бүх бүлэг</option>
-         <option value="6А">6А</option><option value="6Б">6Б</option><option value="6В">6В</option>
-         <option value="6Г">6Г</option><option value="6Д">6Д</option><option value="6Е">6Е</option>
-         <option value="6Ё">6Ё</option><option value="6Ж">6Ж</option><option value="6З">6З</option>
-         <option value="6И">6И</option>
-       </select></div>
+      <div><label>Анги сонгох</label><select id="reportGrade" onchange="loadReport()">
+        <option value="all">Бүх анги</option><option value="6">6-р анги</option><option value="9">9-р анги</option><option value="12">12-р анги</option>
+      </select></div>
       <div><label>Хайх сурагчийн код</label><input id="reportSearch" placeholder="Жишээ: 12A-01" oninput="renderReportTable()"></div>
     </div>
   </div>
@@ -218,6 +221,32 @@ const surveyQuestionsByRole={
  ]
 };
 let currentSurveyRole="student";
+// 6-р ангийн 10 бүлэг, бүлэг бүр 50 хүртэлх сурагчийн код
+const grade6Groups=["А","Б","В","Г","Д","Е","Ё","Ж","З","И"];
+function populateSurveyCodes(){
+  const groupEl=document.getElementById('surveyGroup');
+  const sel=document.getElementById('surveyStudentCode');
+  const group=(groupEl.value || '').trim();
+  sel.innerHTML='';
+  const first=document.createElement('option');
+  first.value='';
+  first.textContent=group ? '-- Сурагчийн кодоо сонгоно уу --' : '-- Эхлээд бүлгээ сонгоно уу --';
+  sel.appendChild(first);
+  if(group){
+    for(let n=1;n<=50;n++){
+      const code=group+'-'+String(n).padStart(2,'0');
+      const option=document.createElement('option');
+      option.value=code;
+      option.textContent=code;
+      sel.appendChild(option);
+    }
+    sel.disabled=false;
+  }else{
+    sel.disabled=true;
+  }
+  sel.value='';
+}
+
 function openSurveyRole(role){
  currentSurveyRole=role;
  document.getElementById('surveyHome').classList.add('hidden');
@@ -225,14 +254,64 @@ function openSurveyRole(role){
  document.getElementById('surveyForm').classList.remove('hidden');
  document.getElementById('surveyRoleTitle').textContent=surveyRoleNames[role];
  document.querySelector('#surveyForm .small').textContent='Асуулт бүрээс өөрт тохирох нэг хариултыг сонгоно уу.';
- const qs=surveyQuestionsByRole[role],box=document.getElementById('surveyQuestions');
- box.innerHTML=qs.map((item,i)=>`<div class="question"><b>${i+1}. ${item.q}</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">${item.options.map((v,j)=>`<label class="option"><input type="radio" name="survey${i}" value="${j+1}"> ${String.fromCharCode(97+j)}) ${v}</label>`).join('')}</div></div>`).join('');
+ const qs=surveyQuestionsByRole[role];
+ const box=document.getElementById('surveyQuestions');
+ // Асуулт болон сонголтыг зөвхөн тухайн оролцогчийн эх өгөгдлөөс, тусдаа radio бүлгээр үүсгэнэ.
+ box.innerHTML=qs.map((item,i)=>{
+   const options=item.options.map((v,j)=>{
+     const inputName=`survey_${role}_${i}`;
+     return `<label class="option"><input type="radio" name="${inputName}" value="${j+1}"> ${String.fromCharCode(97+j)}) ${v}</label>`;
+   }).join('');
+   return `<div class="question" data-survey-role="${role}" data-question-index="${i}"><b>${i+1}. ${item.q}</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">${options}</div></div>`;
+ }).join('');
 }
 function backToSurveyRoles(){document.getElementById('surveyForm').classList.add('hidden');document.getElementById('surveyResult').classList.add('hidden');document.getElementById('surveyHome').classList.remove('hidden');}
-function finishSurveyPlaceholder(){
- const qs=surveyQuestionsByRole[currentSurveyRole];
- for(let i=0;i<qs.length;i++){if(!document.querySelector(`input[name=survey${i}]:checked`)){alert(`${i+1}-р асуултыг бөглөнө үү.`);return;}}
- const r=document.getElementById('surveyResult');r.classList.remove('hidden');r.innerHTML='<div class="score">✓</div><p>Таны тандалт амжилттай бөглөгдлөө.</p><div class="notice">Энэ хувилбарт хариултыг дэлгэц дээр баталгаажуулж байна. Supabase-д хадгалах холболтыг дараагийн шатанд холбоно.</div><br><button class="btn secondary" onclick="backToSurveyRoles()">Тандалт руу буцах</button>';
+let surveySubmitting=false;
+async function finishSurveyPlaceholder(){
+  if(surveySubmitting) return;
+  const qs=surveyQuestionsByRole[currentSurveyRole];
+  const group=document.getElementById('surveyGroup').value.trim();
+  const code=document.getElementById('surveyStudentCode').value.trim();
+  const submitButton=document.getElementById('finishSurveyBtn');
+
+  if(!group){ alert('Бүлгээ сонгоно уу.'); return; }
+  if(!code){ alert('Сурагчийн кодоо сонгоно уу.'); return; }
+  for(let i=0;i<qs.length;i++){
+    if(!document.querySelector(`input[name=survey_${currentSurveyRole}_${i}]:checked`)){
+      alert(`${i+1}-р асуултыг бөглөнө үү.`); return;
+    }
+  }
+
+  surveySubmitting=true;
+  if(submitButton){ submitButton.disabled=true; submitButton.textContent='Хадгалж байна...'; }
+
+  try{
+    const baseId=currentSurveyRole==='student'?100:200;
+    const questionIds=qs.map((q,i)=>baseId+i+1);
+    const now=new Date().toISOString();
+    const rows=qs.map((q,i)=>({
+      class_code:group,
+      student_code:code,
+      grade:6,
+      question_id:questionIds[i],
+      answer:Number(document.querySelector(`input[name=survey_${currentSurveyRole}_${i}]:checked`).value),
+      created_at:now
+    }));
+
+    const {error}=await supabaseClient.from('responses').insert(rows);
+    if(error) throw error;
+
+    document.getElementById('surveyForm').classList.add('hidden');
+    const r=document.getElementById('surveyResult');
+    r.classList.remove('hidden');
+    r.innerHTML='<div class="score">✓</div><h2>Тандалт дууслаа!</h2><p>Таны хариулт амжилттай хадгалагдлаа.</p><div class="notice">☁️ Хариулт Supabase-д хадгалагдсан. Танд баярлалаа!</div><br><button type="button" class="btn secondary" onclick="backToSurveyRoles()">Дуусгах</button>';
+  }catch(error){
+    console.error('Survey save error:',error);
+    alert('Хариулт хадгалагдсангүй. Алдаа: '+(error.message||error));
+  }finally{
+    surveySubmitting=false;
+    if(submitButton){ submitButton.disabled=false; submitButton.textContent='Тандалт дуусгах'; }
+  }
 }
 </script>
 <script>
@@ -377,7 +456,9 @@ async function loadReport(){
   status.textContent="Мэдээлэл ачаалж байна...";
   const {data:{session}}=await supabaseClient.auth.getSession();
   if(!session){showReportContent(); return;}
-  let q=supabaseClient.from("responses").select("student_code,grade,question_id,answer,created_at,class_code").eq("grade",6).order("created_at",{ascending:true});
+  const grade=document.getElementById("reportGrade").value;
+  let q=supabaseClient.from("responses").select("student_code,grade,question_id,answer,created_at,class_code").order("created_at",{ascending:true});
+  if(grade!=="all") q=q.eq("grade",+grade);
   const {data,error}=await q;
   if(error){
     status.textContent="Тайлан ачаалахад алдаа: "+error.message;
@@ -389,20 +470,14 @@ async function loadReport(){
   status.textContent=reportStudents.length+" сурагчийн үнэлгээ олдлоо.";
 }
 
-function normalizeGroup(value){
-  return String(value||"")
-    .trim()
-    .toUpperCase()
-    .replace(/АНГИ/g,"")
-    .replace(/\s+/g,"")
-    .replace(/[^6АБВГДЕЁЖЗИ]/g,"");
-}
-
 function buildReportStudents(){
   // Each 20-answer submission is grouped by student + grade + submission timestamp.
   // For legacy rows with NULL created_at, all rows for the same student/grade are grouped together.
   const map=new Map();
   for(const r of reportRows){
+    // Тайлангийн хүснэгтэд зөвхөн 1–20 дугаар үндсэн оношилгооны хариуг оруулна.
+    // Сурагч/эцэг эхийн тандалтын 101–204 ID бүхий мөрүүдийг энд хольж тооцохгүй.
+    if(+r.question_id<1 || +r.question_id>20) continue;
     const key=r.created_at
       ? `${r.student_code}|${r.grade}|${new Date(r.created_at).getTime()}`
       : `${r.student_code}|${r.grade}|legacy`;
@@ -412,9 +487,9 @@ function buildReportStudents(){
   const latest=new Map();
   for(const rows of map.values()){
     if(!rows.length) continue;
-    const code=rows[0].student_code, grade=rows[0].grade, classCode=rows[0].class_code||"";
+    const code=rows[0].student_code, grade=rows[0].grade;
     const stamp=rows[0].created_at ? new Date(rows[0].created_at).getTime() : 0;
-    const k=`${code}|${grade}|${normalizeGroup(classCode)}`;
+    const k=`${code}|${grade}`;
     if(!latest.has(k) || stamp >= latest.get(k).stamp) latest.set(k,{rows,stamp});
   }
 
@@ -440,7 +515,7 @@ function buildReportStudents(){
     const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
     const level=pct>=75?["🟢 Тогтвортой","good"]:pct>=50?["🟡 Анхаарч ажиллах","warn"]:["🟠 Дэмжлэг хэрэгтэй","alert"];
     reportStudents.push({
-      code:rows[0].student_code,grade,classCode,group:normalizeGroup(classCode),overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
+      code:rows[0].student_code,grade,overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
     });
   }
   reportStudents.sort((a,b)=>a.grade-b.grade || a.code.localeCompare(b.code));
@@ -449,9 +524,9 @@ function buildReportStudents(){
 function renderReportTable(){
   const body=document.getElementById("reportTable");
   const stats=document.getElementById("reportStats");
-  const selected=document.getElementById("reportGroup").value;
+  const selected=document.getElementById("reportGrade").value;
   const term=document.getElementById("reportSearch").value.trim().toLowerCase();
-  let arr=reportStudents.filter(s=>(selected==="all"||s.group===normalizeGroup(selected)) && (!term||s.code.toLowerCase().includes(term)));
+  let arr=reportStudents.filter(s=>(selected==="all"||String(s.grade)===selected) && (!term||s.code.toLowerCase().includes(term)));
 
   const avg=k=>arr.length?Math.round(arr.reduce((a,b)=>a+b[k],0)/arr.length):0;
   const good=arr.filter(s=>s.overall>=75).length;
@@ -464,7 +539,7 @@ function renderReportTable(){
     <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b></div>
   `;
   body.innerHTML=arr.map((s,i)=>`
-    <tr><td>${i+1}</td><td>${s.code}</td><td>${s.group||s.classCode||s.grade+"-р анги"}</td>
+    <tr><td>${i+1}</td><td>${s.code}</td><td>${s.grade}-р анги</td>
     <td><b>${s.overall}%</b></td><td>${s.adapt}%</td><td>${s.relation}%</td>
     <td>${s.study}%</td><td>${s.emotion}%</td><td><span class="pill ${s.level[1]}">${s.level[0]}</span></td></tr>
   `).join("") || `<tr><td colspan="9" class="center small">Одоогоор мэдээлэл алга.</td></tr>`;
