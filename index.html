@@ -150,6 +150,30 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
       <tbody id="reportTable"></tbody></table>
     </div>
   </div>
+
+  <div class="card" id="surveyReportCard">
+    <h3>📋 Тандалтын дэлгэрэнгүй тайлан</h3>
+    <p class="small">Сурагчийн 4, эцэг эхийн 4 асуултыг тусад нь нэгтгэн харуулна. Асуулт, хариултын үг өөрчлөгдөхгүй.</p>
+
+    <div class="grid3" id="surveySummaryStats"></div>
+
+    <div class="row">
+      <div class="card" style="margin:0">
+        <h3>👧 Сурагчийн тандалт</h3>
+        <div id="studentSurveyReport">Мэдээлэл ачаалж байна...</div>
+      </div>
+      <div class="card" style="margin:0">
+        <h3>👨‍👩‍👧 Эцэг эхийн тандалт</h3>
+        <div id="parentSurveyReport">Мэдээлэл ачаалж байна...</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>🔎 Сурагчийн кодоор анхаарах дохио</h3>
+      <p class="small">Энэ нь онош биш. Зөвхөн тандалтын хариунд тулгуурласан анхаарах дохио бөгөөд багшийн ажиглалт, ярилцлагатай хамтатгана.</p>
+      <div id="surveySupportList">Мэдээлэл ачаалж байна...</div>
+    </div>
+  </div>
 </div>
 </section>
 
@@ -422,6 +446,124 @@ renderQuestions();renderStudents();
 // ===== БАГШИЙН НЭВТРЭЛТ + БОДИТ ТАЙЛАН =====
 let reportRows = [];
 let reportStudents = [];
+let surveyReportRows = {student:[], parent:[]};
+
+const surveyAnswerLabels = {
+  student: surveyQuestionsByRole.student,
+  parent: surveyQuestionsByRole.parent
+};
+
+function surveyRoleFromQuestionId(qid){
+  qid=+qid;
+  if(qid>=101 && qid<=104) return "student";
+  if(qid>=201 && qid<=204) return "parent";
+  return null;
+}
+
+function latestSurveySubmissions(rows){
+  const groups=new Map();
+  for(const r of (rows||[])){
+    const role=surveyRoleFromQuestionId(r.question_id);
+    if(!role || !r.student_code) continue;
+    const stamp=r.created_at ? new Date(r.created_at).getTime() : 0;
+    const key=`${role}|${r.student_code}|${r.class_code||""}|${stamp}`;
+    if(!groups.has(key)) groups.set(key,{role,code:r.student_code,classCode:r.class_code||"",stamp,rows:[]});
+    groups.get(key).rows.push(r);
+  }
+  // Keep the newest complete 4-question submission per role + student code.
+  const latest=new Map();
+  for(const g of groups.values()){
+    if(g.rows.length<4) continue;
+    const key=`${g.role}|${g.code}`;
+    if(!latest.has(key) || g.stamp>=latest.get(key).stamp) latest.set(key,g);
+  }
+  return [...latest.values()];
+}
+
+function renderSurveyQuestionReport(role, submissions){
+  const qs=surveyQuestionsByRole[role];
+  if(!submissions.length) return '<p class="small">Одоогоор мэдээлэл алга.</p>';
+  let out='';
+  submissions.sort((a,b)=>a.code.localeCompare(b.code,'mn'));
+  qs.forEach((q,i)=>{
+    const counts=new Array(q.options.length).fill(0);
+    submissions.forEach(s=>{
+      const row=s.rows.find(r=>+r.question_id===((role==='student'?100:200)+i+1));
+      if(row){
+        const v=+row.answer;
+        if(v>=1 && v<=counts.length) counts[v-1]++;
+      }
+    });
+    const total=submissions.length;
+    out += `<div class="activity"><b>${i+1}. ${escapeHtml(q.q)}</b>`;
+    q.options.forEach((opt,j)=>{
+      const n=counts[j], pct=total?Math.round(n/total*100):0;
+      out += `<div style="margin-top:9px"><div style="display:flex;justify-content:space-between;gap:10px"><span>${String.fromCharCode(97+j)}) ${escapeHtml(opt)}</span><b>${pct}% (${n})</b></div><div class="progress"><div class="bar" style="width:${pct}%"></div></div></div>`;
+    });
+    out += '</div>';
+  });
+  return out;
+}
+
+function surveySupportLevel(role, answers){
+  let signals=0;
+  if(role==='student'){
+    // Directly negative / difficulty choices from the supplied 4-question survey.
+    if(answers[2]===3) signals++;     // Q2: Дасахгүй байна
+    if(answers[3]>=1) signals++;      // Q3: difficulty is present in every listed difficulty option
+    if(answers[4]>=3) signals++;      // Q4: Заримдаа / Огт үгүй
+  }else{
+    if(answers[1]===4) signals++;     // Q1: Сөрөг
+    if(answers[3]>=1 && answers[3]<=4) signals++; // Q3: a difficulty is present
+    if(answers[4]>=3) signals++;      // Q4: some or frequent difficulty
+  }
+  if(signals>=2) return ["🟠 Дэмжлэгийн дохио","alert"];
+  if(signals===1) return ["🟡 Анхаарч ажиллах","warn"];
+  return ["🟢 Тогтвортой","good"];
+}
+
+function renderSurveySupportList(submissions){
+  if(!submissions.length) return '<p class="small">Одоогоор сурагчийн тандалтын мэдээлэл алга.</p>';
+  const rows=submissions.map(s=>{
+    const answers={};
+    s.rows.forEach(r=>answers[+r.question_id-100]=+r.answer);
+    const [level,cls]=surveySupportLevel('student',answers);
+    return {code:s.code,classCode:s.classCode,level,cls,signals:(level.startsWith('🟠')?2:level.startsWith('🟡')?1:0),answers};
+  }).sort((a,b)=>b.signals-a.signals || a.code.localeCompare(b.code,'mn'));
+  let out='<div style="overflow:auto"><table><thead><tr><th>№</th><th>Сурагчийн код</th><th>Анхаарах дохио</th><th>Төлөв</th></tr></thead><tbody>';
+  rows.forEach((r,i)=>{
+    out += `<tr><td>${i+1}</td><td><b>${escapeHtml(r.code)}</b></td><td>${r.signals}</td><td><span class="pill ${r.cls}">${r.level}</span></td></tr>`;
+  });
+  out+='</tbody></table></div>';
+  return out;
+}
+
+function renderSurveyReport(){
+  const subs=latestSurveySubmissions(reportRows);
+  surveyReportRows={
+    student:subs.filter(x=>x.role==='student'),
+    parent:subs.filter(x=>x.role==='parent')
+  };
+  const totalStudent=surveyReportRows.student.length;
+  const totalParent=surveyReportRows.parent.length;
+  const total=totalStudent+totalParent;
+  const stats=document.getElementById('surveySummaryStats');
+  if(stats){
+    stats.innerHTML=`
+      <div class="stat"><span>📋 Нийт тандалт</span><b>${total}</b><span>Сурагч + эцэг эх</span></div>
+      <div class="stat"><span>👧 Сурагч</span><b>${totalStudent}</b><span>4 асуулт</span></div>
+      <div class="stat"><span>👨‍👩‍👧 Эцэг эх</span><b>${totalParent}</b><span>4 асуулт</span></div>
+    `;
+  }
+  const sr=document.getElementById('studentSurveyReport');
+  const pr=document.getElementById('parentSurveyReport');
+  const sl=document.getElementById('surveySupportList');
+  if(sr) sr.innerHTML=renderSurveyQuestionReport('student',surveyReportRows.student);
+  if(pr) pr.innerHTML=renderSurveyQuestionReport('parent',surveyReportRows.parent);
+  if(sl) sl.innerHTML=renderSurveySupportList(surveyReportRows.student);
+}
+
+
 
 async function teacherLogin(){
   const email = document.getElementById("teacherEmail").value.trim();
@@ -467,13 +609,8 @@ async function loadReport(){
   reportRows=data||[];
   buildReportStudents();
   renderReportTable();
-  const surveyStudentKeys=new Set(), surveyParentKeys=new Set();
-  (reportRows||[]).forEach(r=>{
-    const qid=+r.question_id, key=`${r.class_code||''}|${r.student_code||''}|${r.created_at||''}`;
-    if(qid>=101 && qid<=104) surveyStudentKeys.add(key);
-    if(qid>=201 && qid<=204) surveyParentKeys.add(key);
-  });
-  status.textContent=`Үндсэн оношилгоо: ${reportStudents.length} | Сурагчийн тандалт: ${surveyStudentKeys.size} | Эцэг эхийн тандалт: ${surveyParentKeys.size}`;
+  renderSurveyReport();
+  status.textContent=reportStudents.length+" сурагчийн үнэлгээ олдлоо.";
 }
 
 function buildReportStudents(){
@@ -516,12 +653,6 @@ function buildReportStudents(){
       total+=s;n++;
       cats[q[1]].push(s);
     });
-    // Тайланд зөвхөн бүрэн 20 асуулттай үндсэн оношилгооны илгээмжийг оруулна.
-    // Тандалтын хуучин/буруу хадгалагдсан 1–8 дугаар мөрүүдийг тайланд оруулахгүй.
-    const answeredIds = new Set(rows.map(r => +r.question_id));
-    const isCompleteTest = qs.length === 20 && answeredIds.size >= 20 &&
-      Array.from({length:20}, (_,idx) => idx + 1).every(id => answeredIds.has(id));
-    if(!isCompleteTest) continue;
     if(!n) continue;
     const pct=Math.round(total/(n*4)*100);
     const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
@@ -544,32 +675,11 @@ function renderReportTable(){
   const good=arr.filter(s=>s.overall>=75).length;
   const warn=arr.filter(s=>s.overall>=50&&s.overall<75).length;
   const alert=arr.filter(s=>s.overall<50).length;
-  // Тайлангийн дээд үзүүлэлтүүдийг үндсэн оношилгоо болон тандалтыг тусад нь тоолно.
-  // Ингэснээр тандалтын 4/5 хариултын мөрүүдийг сурагчийн оношилгооны тоонд хольж тооцохгүй.
-  const surveyStudentKeys=new Set();
-  const surveyParentKeys=new Set();
-  (reportRows||[]).forEach(r=>{
-    const qid=+r.question_id;
-    if(qid>=101 && qid<=104){
-      surveyStudentKeys.add(`${r.class_code||''}|${r.student_code||''}|${r.created_at||''}`);
-    }else if(qid>=201 && qid<=204){
-      surveyParentKeys.add(`${r.class_code||''}|${r.student_code||''}|${r.created_at||''}`);
-    }
-  });
-  const surveyStudentCount=[...surveyStudentKeys].filter(k=>{
-    const parts=k.split('|'); return selected==='all'||parts[0]!=='' ? (selected==='all'||true) : true;
-  }).length;
-  const surveyParentCount=[...surveyParentKeys].length;
-  const surveyTotal=surveyStudentCount+surveyParentCount;
-  const pctOf=n=>arr.length?Math.round(n/arr.length*100):0;
   stats.innerHTML=`
-    <div class="stat"><span>📋 Нийт тандалт</span><b>${surveyTotal}</b><small>хамрагдалт</small></div>
-    <div class="stat"><span>👧 Сурагчийн тандалт</span><b>${surveyStudentCount}</b><small>хамрагдалт</small></div>
-    <div class="stat"><span>👨‍👩‍👧 Эцэг эхийн тандалт</span><b>${surveyParentCount}</b><small>хамрагдалт</small></div>
-    <div class="stat"><span>📝 Үндсэн оношилгоо</span><b>${arr.length}</b><small>бүрэн бөглөсөн</small></div>
-    <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b><small>${pctOf(good)}%</small></div>
-    <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b><small>${pctOf(warn)}%</small></div>
-    <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b><small>${pctOf(alert)}%</small></div>
+    <div class="stat"><span>Сурагч</span><b>${arr.length}</b></div>
+    <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b></div>
+    <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b></div>
+    <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b></div>
   `;
   body.innerHTML=arr.map((s,i)=>`
     <tr><td>${i+1}</td><td>${s.code}</td><td>${s.grade}-р анги</td>
