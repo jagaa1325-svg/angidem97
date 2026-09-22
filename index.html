@@ -561,14 +561,15 @@ function renderReportTable(){
   }).length;
   const surveyParentCount=[...surveyParentKeys].length;
   const surveyTotal=surveyStudentCount+surveyParentCount;
+  const pctOf=n=>arr.length?Math.round(n/arr.length*100):0;
   stats.innerHTML=`
-    <div class="stat"><span>📋 Нийт тандалт</span><b>${surveyTotal}</b></div>
-    <div class="stat"><span>👧 Сурагчийн тандалт</span><b>${surveyStudentCount}</b></div>
-    <div class="stat"><span>👨‍👩‍👧 Эцэг эхийн тандалт</span><b>${surveyParentCount}</b></div>
-    <div class="stat"><span>📝 Үндсэн оношилгоо</span><b>${arr.length}</b></div>
-    <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b></div>
-    <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b></div>
-    <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b></div>
+    <div class="stat"><span>📋 Нийт тандалт</span><b>${surveyTotal}</b><small>хамрагдалт</small></div>
+    <div class="stat"><span>👧 Сурагчийн тандалт</span><b>${surveyStudentCount}</b><small>хамрагдалт</small></div>
+    <div class="stat"><span>👨‍👩‍👧 Эцэг эхийн тандалт</span><b>${surveyParentCount}</b><small>хамрагдалт</small></div>
+    <div class="stat"><span>📝 Үндсэн оношилгоо</span><b>${arr.length}</b><small>бүрэн бөглөсөн</small></div>
+    <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b><small>${pctOf(good)}%</small></div>
+    <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b><small>${pctOf(warn)}%</small></div>
+    <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b><small>${pctOf(alert)}%</small></div>
   `;
   body.innerHTML=arr.map((s,i)=>`
     <tr><td>${i+1}</td><td>${s.code}</td><td>${s.grade}-р анги</td>
