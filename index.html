@@ -467,7 +467,13 @@ async function loadReport(){
   reportRows=data||[];
   buildReportStudents();
   renderReportTable();
-  status.textContent=reportStudents.length+" сурагчийн үнэлгээ олдлоо.";
+  const surveyStudentKeys=new Set(), surveyParentKeys=new Set();
+  (reportRows||[]).forEach(r=>{
+    const qid=+r.question_id, key=`${r.class_code||''}|${r.student_code||''}|${r.created_at||''}`;
+    if(qid>=101 && qid<=104) surveyStudentKeys.add(key);
+    if(qid>=201 && qid<=204) surveyParentKeys.add(key);
+  });
+  status.textContent=`Үндсэн оношилгоо: ${reportStudents.length} | Сурагчийн тандалт: ${surveyStudentKeys.size} | Эцэг эхийн тандалт: ${surveyParentKeys.size}`;
 }
 
 function buildReportStudents(){
@@ -510,6 +516,12 @@ function buildReportStudents(){
       total+=s;n++;
       cats[q[1]].push(s);
     });
+    // Тайланд зөвхөн бүрэн 20 асуулттай үндсэн оношилгооны илгээмжийг оруулна.
+    // Тандалтын хуучин/буруу хадгалагдсан 1–8 дугаар мөрүүдийг тайланд оруулахгүй.
+    const answeredIds = new Set(rows.map(r => +r.question_id));
+    const isCompleteTest = qs.length === 20 && answeredIds.size >= 20 &&
+      Array.from({length:20}, (_,idx) => idx + 1).every(id => answeredIds.has(id));
+    if(!isCompleteTest) continue;
     if(!n) continue;
     const pct=Math.round(total/(n*4)*100);
     const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
@@ -532,8 +544,28 @@ function renderReportTable(){
   const good=arr.filter(s=>s.overall>=75).length;
   const warn=arr.filter(s=>s.overall>=50&&s.overall<75).length;
   const alert=arr.filter(s=>s.overall<50).length;
+  // Тайлангийн дээд үзүүлэлтүүдийг үндсэн оношилгоо болон тандалтыг тусад нь тоолно.
+  // Ингэснээр тандалтын 4/5 хариултын мөрүүдийг сурагчийн оношилгооны тоонд хольж тооцохгүй.
+  const surveyStudentKeys=new Set();
+  const surveyParentKeys=new Set();
+  (reportRows||[]).forEach(r=>{
+    const qid=+r.question_id;
+    if(qid>=101 && qid<=104){
+      surveyStudentKeys.add(`${r.class_code||''}|${r.student_code||''}|${r.created_at||''}`);
+    }else if(qid>=201 && qid<=204){
+      surveyParentKeys.add(`${r.class_code||''}|${r.student_code||''}|${r.created_at||''}`);
+    }
+  });
+  const surveyStudentCount=[...surveyStudentKeys].filter(k=>{
+    const parts=k.split('|'); return selected==='all'||parts[0]!=='' ? (selected==='all'||true) : true;
+  }).length;
+  const surveyParentCount=[...surveyParentKeys].length;
+  const surveyTotal=surveyStudentCount+surveyParentCount;
   stats.innerHTML=`
-    <div class="stat"><span>Сурагч</span><b>${arr.length}</b></div>
+    <div class="stat"><span>📋 Нийт тандалт</span><b>${surveyTotal}</b></div>
+    <div class="stat"><span>👧 Сурагчийн тандалт</span><b>${surveyStudentCount}</b></div>
+    <div class="stat"><span>👨‍👩‍👧 Эцэг эхийн тандалт</span><b>${surveyParentCount}</b></div>
+    <div class="stat"><span>📝 Үндсэн оношилгоо</span><b>${arr.length}</b></div>
     <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b></div>
     <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b></div>
     <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b></div>
