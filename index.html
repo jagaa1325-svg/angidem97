@@ -540,10 +540,167 @@ function renderSurveySupportList(submissions){
 
 function renderSurveyReport(){
   const subs=latestSurveySubmissions(reportRows);
+
   surveyReportRows={
     student:subs.filter(x=>x.role==='student'),
     parent:subs.filter(x=>x.role==='parent')
   };
+
+  const all=[...subs];
+
+  let green=0;
+  let yellow=0;
+  let red=0;
+
+  const redStudents=[];
+
+  all.forEach(s=>{
+    const answers={};
+
+    s.rows.forEach(r=>{
+      const qid=+r.question_id;
+      answers[qid-(s.role==='student'?100:200)]=+r.answer;
+    });
+
+    const result=surveySupportLevel(s.role,answers);
+    const level=result[0];
+
+    if(level.startsWith('🟢')){
+      green++;
+    }else if(level.startsWith('🟡')){
+      yellow++;
+    }else{
+      red++;
+
+      if(s.role==='student'){
+        redStudents.push(s.code);
+      }
+    }
+  });
+
+  const total=all.length;
+
+  const greenPct=total?Math.round(green/total*100):0;
+  const yellowPct=total?Math.round(yellow/total*100):0;
+  const redPct=total?Math.round(red/total*100):0;
+
+  const greenStudents=surveyReportRows.student.filter(s=>{
+    const a={};
+    s.rows.forEach(r=>a[+r.question_id-100]=+r.answer);
+    return surveySupportLevel('student',a)[0].startsWith('🟢');
+  }).length;
+
+  const greenParents=surveyReportRows.parent.filter(s=>{
+    const a={};
+    s.rows.forEach(r=>a[+r.question_id-200]=+r.answer);
+    return surveySupportLevel('parent',a)[0].startsWith('🟢');
+  }).length;
+
+  const yellowStudents=surveyReportRows.student.filter(s=>{
+    const a={};
+    s.rows.forEach(r=>a[+r.question_id-100]=+r.answer);
+    return surveySupportLevel('student',a)[0].startsWith('🟡');
+  }).length;
+
+  const yellowParents=surveyReportRows.parent.filter(s=>{
+    const a={};
+    s.rows.forEach(r=>a[+r.question_id-200]=+r.answer);
+    return surveySupportLevel('parent',a)[0].startsWith('🟡');
+  }).length;
+
+  const redStudentCount=surveyReportRows.student.filter(s=>{
+    const a={};
+    s.rows.forEach(r=>a[+r.question_id-100]=+r.answer);
+    return surveySupportLevel('student',a)[0].startsWith('🟠');
+  }).length;
+
+  const redParentCount=surveyReportRows.parent.filter(s=>{
+    const a={};
+    s.rows.forEach(r=>a[+r.question_id-200]=+r.answer);
+    return surveySupportLevel('parent',a)[0].startsWith('🟠');
+  }).length;
+
+  const stats=document.getElementById('surveySummaryStats');
+
+  if(stats){
+    stats.innerHTML=`
+      <div class="stat">
+        <span>🟢 Тогтвортой</span>
+        <b>${greenPct}%</b>
+        <span>${green} нийт · ${greenStudents} сурагч · ${greenParents} эцэг эх</span>
+      </div>
+
+      <div class="stat">
+        <span>🟡 Анхаарч ажиллах</span>
+        <b>${yellowPct}%</b>
+        <span>${yellow} нийт · ${yellowStudents} сурагч · ${yellowParents} эцэг эх</span>
+      </div>
+
+      <div class="stat">
+        <span>🔴 Дэмжлэг хэрэгтэй</span>
+        <b>${redPct}%</b>
+        <span>${red} нийт · ${redStudentCount} сурагч · ${redParentCount} эцэг эх</span>
+      </div>
+    `;
+  }
+
+  const sr=document.getElementById('studentSurveyReport');
+  const pr=document.getElementById('parentSurveyReport');
+  const sl=document.getElementById('surveySupportList');
+
+  if(sr){
+    sr.innerHTML=renderSurveyQuestionReport(
+      'student',
+      surveyReportRows.student
+    );
+  }
+
+  if(pr){
+    pr.innerHTML=renderSurveyQuestionReport(
+      'parent',
+      surveyReportRows.parent
+    );
+  }
+
+  if(sl){
+    if(redStudents.length){
+      const uniqueCodes=[...new Set(redStudents)]
+        .sort((a,b)=>a.localeCompare(b,'mn'));
+
+      sl.innerHTML=`
+        <div class="activity">
+          <h3>🔴 Дэмжлэг хэрэгтэй сурагчид</h3>
+          <p class="small">
+            Сурагчийн кодоор харуулсан. Сургуулийн сэтгэл зүйчтэй
+            хамтран ажиллахад ашиглана.
+          </p>
+
+          <div style="
+            display:flex;
+            flex-wrap:wrap;
+            gap:8px;
+            margin-top:12px;
+          ">
+            ${uniqueCodes.map(code=>`
+              <span class="pill alert">
+                ${escapeHtml(code)}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }else{
+      sl.innerHTML=`
+        <div class="activity">
+          <h3>🔴 Дэмжлэг хэрэгтэй сурагчид</h3>
+          <p class="small">
+            Одоогоор дэмжлэг хэрэгтэй сурагч бүртгэгдээгүй байна.
+          </p>
+        </div>
+      `;
+    }
+  }
+}
   const totalStudent=surveyReportRows.student.length;
   const totalParent=surveyReportRows.parent.length;
   const total=totalStudent+totalParent;
