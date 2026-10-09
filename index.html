@@ -143,6 +143,18 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
   </div>
 
   <div class="grid" id="reportStats"></div>
+  <div class="card" id="trafficLightReport">
+    <h3>🚦 Улаан · Шар · Ногоон түвшний нэгтгэл</h3>
+    <p class="small">Хувийг тайланд харагдаж буй бодит үнэлгээтэй сурагчдын мэдээллээс тооцно. Ногоон ≥75%, шар 50–74%, улаан &lt;50%. Энэ нь тандалтын үзүүлэлт болохоос сэтгэл зүйн онош биш.</p>
+    <div id="trafficLightStats" class="grid3"></div>
+    <div id="trafficLightStack" aria-label="Улаан шар ногоон хувийн харьцаа" style="display:flex;height:24px;overflow:hidden;border-radius:12px;background:#e5e7eb;margin:14px 0"></div>
+    <div id="trafficLightLegend" class="small"></div>
+    <h4 style="margin-top:20px">📊 Түвшний харьцуулсан график</h4>
+    <div id="trafficLightBars"></div>
+    <h4 style="margin-top:22px">📈 Дөрвөн чиглэлийн дундаж үзүүлэлт</h4>
+    <p class="small">Сонгосон анги болон хайлтын шүүлтүүрт харагдаж буй сурагчдын дунджаар тооцно.</p>
+    <div id="dimensionBars"></div>
+  </div>
   <div class="card"><h3>📋 Сурагчдын үр дүн</h3>
     <div id="reportStatus" class="small">Мэдээлэл ачаалж байна...</div>
     <div style="overflow:auto">
@@ -584,7 +596,7 @@ function renderSurveyReport(){
       const a={};
       s.rows.forEach(r=>a[+r.question_id-100]=+r.answer);
       const result=surveySupportLevel('student',a);
-      if(result[0].startsWith('🟠')) red.push({code:s.code,classCode:s.classCode});
+      if(result[0].startsWith('🟠') || result[0].startsWith('🔴')) red.push({code:s.code,classCode:s.classCode});
     });
     red.sort((a,b)=>a.classCode.localeCompare(b.classCode,'mn')||a.code.localeCompare(b.code,'mn'));
     sl.innerHTML=red.length
@@ -684,7 +696,7 @@ function buildReportStudents(){
     if(!n) continue;
     const pct=Math.round(total/(n*4)*100);
     const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
-    const level=pct>=75?["🟢 Тогтвортой","good"]:pct>=50?["🟡 Анхаарч ажиллах","warn"]:["🟠 Дэмжлэг хэрэгтэй","alert"];
+    const level=pct>=75?["🟢 Тогтвортой","good"]:pct>=50?["🟡 Анхаарч ажиллах","warn"]:["🔴 Дэмжлэг хэрэгтэй","alert"];
     reportStudents.push({
       code:rows[0].student_code,grade,overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
     });
@@ -703,12 +715,44 @@ function renderReportTable(){
   const good=arr.filter(s=>s.overall>=75).length;
   const warn=arr.filter(s=>s.overall>=50&&s.overall<75).length;
   const alert=arr.filter(s=>s.overall<50).length;
+  const pct=n=>arr.length?Math.round(n/arr.length*100):0;
   stats.innerHTML=`
-    <div class="stat"><span>Сурагч</span><b>${arr.length}</b></div>
-    <div class="stat"><span>🟢 Тогтвортой</span><b>${good}</b></div>
-    <div class="stat"><span>🟡 Анхаарч ажиллах</span><b>${warn}</b></div>
-    <div class="stat"><span>🟠 Дэмжлэг хэрэгтэй</span><b>${alert}</b></div>
+    <div class="stat"><span>Нийт сурагч</span><b>${arr.length}</b><span>Үнэлгээтэй сурагч</span></div>
+    <div class="stat"><span>🟢 Ногоон · Тогтвортой</span><b>${good}</b><span>${pct(good)}%</span></div>
+    <div class="stat"><span>🟡 Шар · Анхаарах</span><b>${warn}</b><span>${pct(warn)}%</span></div>
+    <div class="stat"><span>🔴 Улаан · Дэмжлэг</span><b>${alert}</b><span>${pct(alert)}%</span></div>
   `;
+  const tstats=document.getElementById("trafficLightStats");
+  const stack=document.getElementById("trafficLightStack");
+  const legend=document.getElementById("trafficLightLegend");
+  const bars=document.getElementById("trafficLightBars");
+  const dimensions=document.getElementById("dimensionBars");
+  if(tstats) tstats.innerHTML=`
+    <div class="stat"><span>🟢 Ногоон</span><b>${pct(good)}%</b><span>${good} сурагч</span></div>
+    <div class="stat"><span>🟡 Шар</span><b>${pct(warn)}%</b><span>${warn} сурагч</span></div>
+    <div class="stat"><span>🔴 Улаан</span><b>${pct(alert)}%</b><span>${alert} сурагч</span></div>`;
+  if(stack) stack.innerHTML=arr.length?`
+    <div title="Ногоон ${pct(good)}%" style="width:${pct(good)}%;background:#16a34a"></div>
+    <div title="Шар ${pct(warn)}%" style="width:${pct(warn)}%;background:#eab308"></div>
+    <div title="Улаан ${pct(alert)}%" style="width:${pct(alert)}%;background:#dc2626"></div>`:'<div style="padding:3px 8px;font-size:12px;color:#6b7280">Одоогоор үнэлгээний мэдээлэл алга</div>';
+  if(legend) legend.textContent=arr.length?`Ногоон ${pct(good)}% (${good}) · Шар ${pct(warn)}% (${warn}) · Улаан ${pct(alert)}% (${alert})`:'Бодит мэдээлэл орж ирсний дараа хувь, график автоматаар гарна.';
+  if(bars) bars.innerHTML=arr.length?[
+    ["🟢 Ногоон",good,pct(good),"#16a34a"],
+    ["🟡 Шар",warn,pct(warn),"#eab308"],
+    ["🔴 Улаан",alert,pct(alert),"#dc2626"]
+  ].map(([label,count,percent,color])=>`<div style="margin:12px 0">
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:5px"><span>${label}</span><b>${percent}% · ${count} сурагч</b></div>
+    <div style="height:14px;background:#eef0f3;border-radius:8px;overflow:hidden"><div style="height:100%;width:${percent}%;background:${color};border-radius:8px"></div></div>
+  </div>`).join(""):'<p class="small">График харуулах бодит үнэлгээ одоогоор алга.</p>';
+  if(dimensions) dimensions.innerHTML=arr.length?[
+    ["Дасан зохицол",avg("adapt")],
+    ["Харилцаа",avg("relation")],
+    ["Суралцах байдал",avg("study")],
+    ["Сэтгэл хөдлөл",avg("emotion")]
+  ].map(([label,value])=>`<div style="margin:12px 0">
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:5px"><span>${label}</span><b>${value}%</b></div>
+    <div style="height:14px;background:#eef0f3;border-radius:8px;overflow:hidden"><div style="height:100%;width:${Math.max(0,Math.min(100,value))}%;background:#4776c5;border-radius:8px"></div></div>
+  </div>`).join(""):'<p class="small">Бодит мэдээлэл цугларсны дараа чиглэл тус бүрийн график гарна.</p>';
   body.innerHTML=arr.map((s,i)=>`
     <tr><td>${i+1}</td><td>${s.code}</td><td>${s.grade}-р анги</td>
     <td><b>${s.overall}%</b></td><td>${s.adapt}%</td><td>${s.relation}%</td>
