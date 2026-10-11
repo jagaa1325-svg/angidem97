@@ -136,7 +136,10 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
     </div>
     <div class="row">
       <div><label>Анги сонгох</label><select id="reportGrade" onchange="loadReport()">
-        <option value="all">Бүх анги</option><option value="6">6-р анги</option><option value="9">9-р анги</option><option value="12">12-р анги</option>
+        <option value="all">Бүх анги</option>
+        <option value="6-total">Нийт 6 дугаар анги (10 бүлэг)</option>
+        <option value="6А">6А анги</option><option value="6Б">6Б анги</option><option value="6В">6В анги</option><option value="6Г">6Г анги</option><option value="6Д">6Д анги</option><option value="6Е">6Е анги</option><option value="6Ё">6Ё анги</option><option value="6Ж">6Ж анги</option><option value="6З">6З анги</option><option value="6И">6И анги</option>
+        <option value="9">9-р анги (нэгтгэл)</option><option value="12">12-р анги (нэгтгэл)</option>
       </select></div>
       <div><label>Хайх сурагчийн код</label><input id="reportSearch" placeholder="Жишээ: 12A-01" oninput="renderReportTable()"></div>
     </div>
@@ -640,7 +643,10 @@ async function loadReport(){
   if(!session){showReportContent(); return;}
   const grade=document.getElementById("reportGrade").value;
   let q=supabaseClient.from("responses").select("student_code,grade,question_id,answer,created_at,class_code").order("created_at",{ascending:true});
-  if(grade!=="all") q=q.eq("grade",+grade);
+  // Бүлэг сонгосон үед тухайн бүлгийн кодоор шүүнэ; хуучин 9/12-р ангийн нэгтгэл grade-аар шүүнэ.
+  if(/^6[АБВГДЕЁЖЗИ]$/.test(grade)) q=q.eq("class_code",grade);
+  else if(grade==="6-total") q=q.in("class_code",["6А","6Б","6В","6Г","6Д","6Е","6Ё","6Ж","6З","6И"]);
+  else if(grade!=="all") q=q.eq("grade",+grade);
   const {data,error}=await q;
   if(error){
     status.textContent="Тайлан ачаалахад алдаа: "+error.message;
@@ -698,7 +704,7 @@ function buildReportStudents(){
     const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
     const level=pct>=75?["🟢 Тогтвортой","good"]:pct>=50?["🟡 Анхаарч ажиллах","warn"]:["🔴 Дэмжлэг хэрэгтэй","alert"];
     reportStudents.push({
-      code:rows[0].student_code,grade,overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
+      code:rows[0].student_code,grade,classCode:rows[0].class_code||"",overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
     });
   }
   reportStudents.sort((a,b)=>a.grade-b.grade || a.code.localeCompare(b.code));
@@ -709,7 +715,10 @@ function renderReportTable(){
   const stats=document.getElementById("reportStats");
   const selected=document.getElementById("reportGrade").value;
   const term=document.getElementById("reportSearch").value.trim().toLowerCase();
-  let arr=reportStudents.filter(s=>(selected==="all"||String(s.grade)===selected) && (!term||s.code.toLowerCase().includes(term)));
+  let arr=reportStudents.filter(s=>{
+    const classMatch=/^6[АБВГДЕЁЖЗИ]$/.test(selected) ? String(s.classCode||"")===selected : (selected==="all" || (selected==="6-total" ? /^6[АБВГДЕЁЖЗИ]$/.test(String(s.classCode||"")) : String(s.grade)===selected));
+    return classMatch && (!term||s.code.toLowerCase().includes(term));
+  });
 
   const avg=k=>arr.length?Math.round(arr.reduce((a,b)=>a+b[k],0)/arr.length):0;
   const good=arr.filter(s=>s.overall>=75).length;
