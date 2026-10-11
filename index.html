@@ -642,21 +642,36 @@ async function loadReport(){
   const {data:{session}}=await supabaseClient.auth.getSession();
   if(!session){showReportContent(); return;}
   const grade=document.getElementById("reportGrade").value;
-  let q=supabaseClient.from("responses").select("student_code,grade,question_id,answer,created_at,class_code").order("created_at",{ascending:true});
-  // Бүлэг сонгосон үед тухайн бүлгийн кодоор шүүнэ; хуучин 9/12-р ангийн нэгтгэл grade-аар шүүнэ.
-  if(/^6[АБВГДЕЁЖЗИ]$/.test(grade)) q=q.eq("class_code",grade);
-  else if(grade==="6-total") q=q.in("class_code",["6А","6Б","6В","6Г","6Д","6Е","6Ё","6Ж","6З","6И"]);
-  else if(grade!=="all") q=q.eq("grade",+grade);
-  const {data,error}=await q;
-  if(error){
-    status.textContent="Тайлан ачаалахад алдаа: "+error.message;
-    return;
+  const allRows=[];
+  const pageSize=500;
+  try{
+    // Supabase/PostgREST хүсэлтийн нэг удаагийн мөрийн хязгаарыг давахгүйн тулд
+    // бүх хариуг хэсэгчлэн татна. Олон бүлэг, 4 асуулттай тандалтын мөрүүд алдагдахгүй.
+    for(let offset=0; ; offset+=pageSize){
+      let q=supabaseClient.from("responses")
+        .select("student_code,grade,question_id,answer,created_at,class_code")
+        .order("created_at",{ascending:true})
+        .range(offset,offset+pageSize-1);
+      // Бүлэг сонгосон үед тухайн бүлгийн кодоор шүүнэ; 6-total нь 10 бүлгийг нэгтгэнэ.
+      if(/^6[АБВГДЕЁЖЗИ]$/.test(grade)) q=q.eq("class_code",grade);
+      else if(grade==="6-total") q=q.in("class_code",["6А","6Б","6В","6Г","6Д","6Е","6Ё","6Ж","6З","6И"]);
+      else if(grade!=="all") q=q.eq("grade",+grade);
+      const {data,error}=await q;
+      if(error) throw error;
+      const page=data||[];
+      allRows.push(...page);
+      if(page.length<pageSize) break;
+    }
+    reportRows=allRows;
+    buildReportStudents();
+    renderReportTable();
+    renderSurveyReport();
+    const surveys=latestSurveySubmissions(reportRows);
+    status.textContent=`Үндсэн үнэлгээтэй ${reportStudents.length} сурагч · Тандалт бөглөсөн ${surveys.length} сурагч/эцэг эхийн бүртгэл.`;
+  }catch(error){
+    console.error("Report load error:",error);
+    status.textContent="Тайлан ачаалахад алдаа: "+(error.message||error);
   }
-  reportRows=data||[];
-  buildReportStudents();
-  renderReportTable();
-  renderSurveyReport();
-  status.textContent=reportStudents.length+" сурагчийн үнэлгээ олдлоо.";
 }
 
 function buildReportStudents(){
