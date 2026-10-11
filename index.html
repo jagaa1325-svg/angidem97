@@ -26,6 +26,14 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 .hidden{display:none}.small{font-size:12px;color:var(--muted)}.center{text-align:center}.score{font-size:48px;font-weight:800;color:var(--p)}
 @media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr}.row{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}}
 @media(max-width:500px){.grid{grid-template-columns:1fr}.hero h1{font-size:25px}}
+.info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.info-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;line-height:1.65}
+.info-card h3{margin-bottom:10px}
+.info-card ul,.info-card ol{padding-left:22px;margin:8px 0}
+.info-card li{margin:7px 0}
+.site-footer{max-width:1120px;margin:4px auto 24px;padding:18px 22px;color:var(--muted);font-size:12px;text-align:center}
+.site-footer button{border:0;background:none;color:#3451aa;text-decoration:underline;cursor:pointer;font:inherit}
+@media(max-width:800px){.info-grid{grid-template-columns:1fr}}
 .roleCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;cursor:pointer;font:inherit;color:var(--ink);min-height:135px;box-shadow:0 5px 18px rgba(20,40,80,.06);transition:.15s}.roleCard:hover{transform:translateY(-2px);border-color:var(--p)}.roleCard:first-line{font-size:28px}
 </style>
 </head>
@@ -40,6 +48,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <button onclick="show('report',this)">📊 Тайлан</button>
 <button onclick="show('questionsAdmin',this)">⚙️ Асуултын сан</button>
 <button onclick="show('guide',this)">💡 Ажиллах санаа</button>
+<button onclick="show('about',this)">ℹ️ Танилцуулга / Холбоо барих</button>
 </nav>
 
 <section id="dashboard">
@@ -252,7 +261,73 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 </div>
 <div class="card"><h3>Багшид зориулсан санамж</h3><p>Үнэлгээний зорилго нь хүүхдийг “сайн/муу” гэж ангилах биш, <b>ямар дэмжлэг хэрэгтэйг эрт олж харах</b> юм.</p></div>
 </section>
+
+<section id="about" class="hidden">
+  <div class="card hero">
+    <div class="pill good">Танилцуулга</div>
+    <h1>АНГИ ДЭМ 97</h1>
+    <p><b>Сурагч бүрийг анзаарах — анги бүрийг дэмжих.</b></p>
+    <p>АНГИ ДЭМ 97 нь ангийн багшид сурагчдын сургалтын орчинд дасан зохицох байдал, харилцаа, суралцах оролцоо, сэтгэл хөдлөлийн талаар санал мэдээлэл цуглуулж, ямар дэмжлэг хэрэгтэйг эрт анзаарахад туслах зориулалттай веб хэрэгсэл юм.</p>
+    <div class="notice"><b>Чухал:</b> Энэ веб нь эмнэлзүйн болон сэтгэл зүйн онош тавихгүй. Үр дүнг багшийн ажиглалт, хүүхэдтэй хийх тайван ярилцлага болон шаардлагатай үед сургуулийн сэтгэл зүйчийн мэргэжлийн үнэлгээтэй хамтатган ашиглана.</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h3>🎯 Зорилго</h3>
+      <ul>
+        <li>Сурагчдын дасан зохицол, харилцаа, суралцах байдал, сэтгэл хөдлөлийн талаар богино тандалт авах.</li>
+        <li>Сурагч болон эцэг эхийн хариултыг тус тусад нь нэгтгэн харах.</li>
+        <li>Багшид ангийн болон бүлгийн түвшинд цаашдын дэмжлэгээ төлөвлөхөд туслах.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>👥 Хэнд зориулсан бэ?</h3>
+      <p>Ангийн багш, сурагч болон эцэг эхэд зориулсан. Багш тайланг ашиглан бүлэг, анги болон чиглэлээр нэгтгэсэн үр дүнг харж болно.</p>
+      <p>Хариултад нэр шаардахгүй бөгөөд бүлэг, сурагчийн кодоор бүртгэлүүдийг холбодог. Код нь хүүхдийг таних боломж олгож болох тул нууцлан ашиглана.</p>
+    </div>
+    <div class="info-card">
+      <h3>🧭 Хэрхэн ашиглах вэ?</h3>
+      <ol>
+        <li>“Тандалт” хэсэгт орж “Сурагч” эсвэл “Эцэг эх”-ийг сонгоно.</li>
+        <li>Бүлэг болон сурагчийн кодыг зөв сонгоно.</li>
+        <li>Бүх асуултад хариулж, тандалтыг дуусгана.</li>
+        <li>Багш “Тайлан” хэсэгт сурагч, эцэг эхийн тандалтыг тусад нь харж, шаардлагатай бол бүлэг сонгоно.</li>
+      </ol>
+    </div>
+    <div class="info-card">
+      <h3>📊 Үр дүнг ойлгох нь</h3>
+      <p>4 асуулттай тандалтын үр дүн болон 20 асуулттай шуурхай үнэлгээ нь хоёр тусдаа мэдээлэл юм. Тэдгээрийн тоо заавал ижил байхгүй.</p>
+      <p>Ногоон, шар, улаан зэрэг тэмдэглэгээ нь урьдчилсан анхаарах дохио болохоос хүүхдийн талаар эцсийн дүгнэлт биш.</p>
+    </div>
+    <div class="info-card">
+      <h3>🔒 Нууцлал ба хариуцлагатай хэрэглээ</h3>
+      <ul>
+        <li>Сурагчийн нэр, код болон хариултыг олон нийтэд ил тавихгүй.</li>
+        <li>Тайланг зөвхөн боловсролын дэмжлэгийн зорилгоор, шаардлагатай эрх бүхий хүмүүстэй хуваалцана.</li>
+        <li>Сурагчийг “сайн/муу” гэж шошголохгүй; үр дүнг ажиглалт, ярилцлагаар нягтална.</li>
+        <li>Дэмжлэг хэрэгтэй байж болзошгүй тохиолдолд хүүхдийн эрх ашиг, нууцлалыг нэн тэргүүнд тавина.</li>
+      </ul>
+    </div>
+    <div class="info-card" id="contactCard">
+      <h3>☎️ Холбоо барих</h3>
+      <p>Сайттай холбоотой санал, асуулт болон техникийн асуудлаар хариуцсан багштай холбогдоно уу.</p>
+      <p><b>Утас:</b> <a href="tel:88037166" style="color:var(--p);font-weight:650">88037166</a></p>
+      <p><b>И-мэйл:</b> <a href="mailto:jagaa.1325@gmail.com" style="color:var(--p);font-weight:650">jagaa.1325@gmail.com</a></p>
+      <p class="small">Санал, асуулт болон техникийн асуудлаар дээрх утас, и-мэйлээр холбогдоно уу. Сурагчийн хувийн мэдээлэл, тандалтын хариуг энгийн и-мэйлээр илгээхгүй байхыг зөвлөж байна.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3>💬 Санал хүсэлт</h3>
+    <p>Сайтын асуулга, тайлан болон ашиглах зааварт өөрчлөлт санал болгохдоо сурагчийн нэр, хувийн хариултыг нийтэд илгээхгүйгээр асуудлын тайлбарыг хуваалцаарай.</p>
+  </div>
+</section>
 </div>
+
+<footer class="site-footer">
+  <div><b>АНГИ ДЭМ 97</b> · Багшийн дэмжлэгийн веб</div>
+  <div>Тандалт нь онош биш. Хариуг хүүхдийн эрх ашиг, нууцлалыг хүндэтгэн ашиглана.</div>
+  <div><button type="button" onclick="show('about')">Танилцуулга ба холбоо барих</button></div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
