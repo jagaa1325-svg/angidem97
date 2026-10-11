@@ -145,10 +145,23 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
     </div>
   </div>
 
-  <div class="grid" id="reportStats"></div>
-  <div class="card" id="trafficLightReport">
-    <h3>🚦 Улаан · Шар · Ногоон түвшний нэгтгэл</h3>
-    <p class="small">Хувийг тайланд харагдаж буй бодит үнэлгээтэй сурагчдын мэдээллээс тооцно. Ногоон ≥75%, шар 50–74%, улаан &lt;50%. Энэ нь тандалтын үзүүлэлт болохоос сэтгэл зүйн онош биш.</p>
+  <div class="card hidden" id="surveySignalsReport">
+    <h3>📋 Тандалтын нэгтгэл — сурагч ба эцэг эхийн хариулт</h3>
+    <p class="small">Энэ нэгтгэл нь 4 асуулттай тандалтын бүрэн хариултуудаас тооцно. Доорх ногоон/шар/улаан нь зөвхөн урьдчилсан анхаарах дохио бөгөөд сэтгэл зүйн онош биш. Сурагчийн ба эцэг эхийн хариуг тусад нь харуулна.</p>
+    <div class="grid3" id="surveySignalsStats"></div>
+    <div class="row" style="margin-top:14px">
+      <div class="card" style="margin:0"><h4>👧 Сурагчийн тандалтын дохио</h4><div id="studentSignalBars"></div></div>
+      <div class="card" style="margin:0"><h4>👨‍👩‍👧 Эцэг эхийн тандалтын дохио</h4><div id="parentSignalBars"></div></div>
+    </div>
+  </div>
+  <div class="card hidden" id="assessmentEmptyNotice">
+    <h3>📝 Шуурхай үнэлгээний мэдээлэл</h3>
+    <p class="small">Одоогоор энэ сонголтод 20 асуулттай шуурхай үнэлгээний онооны бүртгэл алга. Тандалтын хариултууд доорх тусдаа нэгтгэлд харагдана; эдгээр хоёр төрлийн үр дүнг хооронд нь нийлүүлж тооцохгүй.</p>
+  </div>
+  <div class="grid hidden" id="reportStats"></div>
+  <div class="card hidden" id="trafficLightReport">
+    <h3>🚦 Шуурхай үнэлгээний улаан · шар · ногоон түвшин</h3>
+    <p class="small">Зөвхөн 20 асуулттай шуурхай үнэлгээний бодит оноотой сурагчдаас тооцно. Ногоон ≥75%, шар 50–74%, улаан &lt;50%. Энэ нь эмнэлзүйн/сэтгэл зүйн онош биш.</p>
     <div id="trafficLightStats" class="grid3"></div>
     <div id="trafficLightStack" aria-label="Улаан шар ногоон хувийн харьцаа" style="display:flex;height:24px;overflow:hidden;border-radius:12px;background:#e5e7eb;margin:14px 0"></div>
     <div id="trafficLightLegend" class="small"></div>
@@ -158,7 +171,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
     <p class="small">Сонгосон анги болон хайлтын шүүлтүүрт харагдаж буй сурагчдын дунджаар тооцно.</p>
     <div id="dimensionBars"></div>
   </div>
-  <div class="card"><h3>📋 Сурагчдын үр дүн</h3>
+  <div class="card"><h3>📝 Шуурхай үнэлгээний үр дүн (20 асуулт)</h3>
     <div id="reportStatus" class="small">Мэдээлэл ачаалж байна...</div>
     <div style="overflow:auto">
       <table><thead><tr><th>№</th><th>Сурагчийн код</th><th>Анги</th><th>Ерөнхий</th><th>Дасан зохицол</th><th>Харилцаа</th><th>Суралцах</th><th>Сэтгэл хөдлөл</th><th>Түвшин</th></tr></thead>
@@ -521,18 +534,23 @@ function renderSurveyQuestionReport(role, submissions){
 }
 
 function surveySupportLevel(role, answers){
+  // Зөвхөн тодорхой сөрөг/хүндрэлтэй хариуг дохио гэж тооцно; онош биш.
   let signals=0;
   if(role==='student'){
-    // Directly negative / difficulty choices from the supplied 4-question survey.
-    if(answers[2]===3) signals++;     // Q2: Дасахгүй байна
-    if(answers[3]>=1) signals++;      // Q3: difficulty is present in every listed difficulty option
-    if(answers[4]>=3) signals++;      // Q4: Заримдаа / Огт үгүй
+    // Q2: 3 = дасан зохицож чадахгүй байна.
+    if(Number(answers[2])===3) signals++;
+    // Q4: 3 = заримдаа аюулгүй/тайван; 4 = огт үгүй.
+    if(Number(answers[4])>=3) signals++;
+    // Q3 нь зөвхөн бэрхшээлийн төрлийг асуудаг, хүндрэлгүй сонголтгүй тул түвшин тогтооход ашиглахгүй.
   }else{
-    if(answers[1]===4) signals++;     // Q1: Сөрөг
-    if(answers[3]>=1 && answers[3]<=4) signals++; // Q3: a difficulty is present
-    if(answers[4]>=3) signals++;      // Q4: some or frequent difficulty
+    // Эцэг эх: Q1-ын 4-р сонголт сөрөг сэтгэгдэл.
+    if(Number(answers[1])===4) signals++;
+    // Q3-ын 5-р сонголт л онцын бэрхшээлгүй; 1–4 нь хүндрэл дурдаж байна.
+    if(Number(answers[3])>=1 && Number(answers[3])<=4) signals++;
+    // Q4-ын 3–5 нь ямар нэг хүндрэлтэйг илэрхийлнэ.
+    if(Number(answers[4])>=3) signals++;
   }
-  if(signals>=2) return ["🟠 Дэмжлэгийн дохио","alert"];
+  if(signals>=2) return ["🔴 Дэмжлэгийн дохио","alert"];
   if(signals===1) return ["🟡 Анхаарч ажиллах","warn"];
   return ["🟢 Тогтвортой","good"];
 }
@@ -553,12 +571,67 @@ function renderSurveySupportList(submissions){
   return out;
 }
 
+function surveyAnswersForSubmission(submission){
+  const answers={};
+  submission.rows.forEach(r=>{
+    const qid=Number(r.question_id);
+    answers[submission.role==='student'?qid-100:qid-200]=Number(r.answer);
+  });
+  return answers;
+}
+
+function signalLevelCounts(submissions, role){
+  const counts={good:0,warn:0,alert:0};
+  submissions.forEach(s=>{
+    const answers=surveyAnswersForSubmission(s);
+    const result=surveySupportLevel(role,answers);
+    const cls=result[1];
+    if(cls==='good') counts.good++;
+    else if(cls==='warn') counts.warn++;
+    else counts.alert++;
+  });
+  return counts;
+}
+
+function renderSignalBars(submissions, role){
+  if(!submissions.length) return '<p class="small">Бүрэн бөглөсөн тандалтын мэдээлэл алга.</p>';
+  const counts=signalLevelCounts(submissions,role);
+  const total=submissions.length;
+  const items=[
+    ['🟢 Тогтвортой',counts.good,'#19945a'],
+    ['🟡 Анхаарч ажиллах',counts.warn,'#eab308'],
+    ['🔴 Дэмжлэгийн дохио',counts.alert,'#dc2626']
+  ];
+  return items.map(([label,n,color])=>{
+    const pct=Math.round(n/total*100);
+    return `<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:4px"><span>${label}</span><b>${n} (${pct}%)</b></div><div style="height:12px;background:#eef0f3;border-radius:8px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${color}"></div></div></div>`;
+  }).join('')+`<p class="small">Тооцооны суурь: ${total} бүрэн хариулт.</p>`;
+}
+
+function renderSurveySignalsSummary(studentSubs,parentSubs){
+  const card=document.getElementById('surveySignalsReport');
+  const stats=document.getElementById('surveySignalsStats');
+  const studentBars=document.getElementById('studentSignalBars');
+  const parentBars=document.getElementById('parentSignalBars');
+  const total=studentSubs.length+parentSubs.length;
+  if(!card) return;
+  card.classList.toggle('hidden',total===0);
+  if(total===0) return;
+  if(stats) stats.innerHTML=`
+    <div class="stat"><span>📋 Нийт бүрэн тандалт</span><b>${total}</b><span>Сурагч + эцэг эхийн бөглөсөн хариулт</span></div>
+    <div class="stat"><span>👧 Сурагчийн тандалт</span><b>${studentSubs.length}</b><span>4 асуулт бүрэн</span></div>
+    <div class="stat"><span>👨‍👩‍👧 Эцэг эхийн тандалт</span><b>${parentSubs.length}</b><span>4 асуулт бүрэн</span></div>`;
+  if(studentBars) studentBars.innerHTML=renderSignalBars(studentSubs,'student');
+  if(parentBars) parentBars.innerHTML=renderSignalBars(parentSubs,'parent');
+}
+
 function renderSurveyReport(){
   const subs=latestSurveySubmissions(reportRows);
   surveyReportRows={
     student:subs.filter(x=>x.role==='student'),
     parent:subs.filter(x=>x.role==='parent')
   };
+  renderSurveySignalsSummary(surveyReportRows.student,surveyReportRows.parent);
 
   const totalStudent=surveyReportRows.student.length;
   const totalParent=surveyReportRows.parent.length;
@@ -667,7 +740,7 @@ async function loadReport(){
     renderReportTable();
     renderSurveyReport();
     const surveys=latestSurveySubmissions(reportRows);
-    status.textContent=`Үндсэн үнэлгээтэй ${reportStudents.length} сурагч · Тандалт бөглөсөн ${surveys.length} сурагч/эцэг эхийн бүртгэл.`;
+    status.textContent=`20 асуулттай үндсэн үнэлгээ: ${reportStudents.length} сурагч · Бүрэн тандалт: ${surveys.length} сурагч/эцэг эхийн хариулт. Төрлүүдийг тусад нь тооцов.`;
   }catch(error){
     console.error("Report load error:",error);
     status.textContent="Тайлан ачаалахад алдаа: "+(error.message||error);
@@ -728,12 +801,18 @@ function buildReportStudents(){
 function renderReportTable(){
   const body=document.getElementById("reportTable");
   const stats=document.getElementById("reportStats");
+  const trafficReport=document.getElementById("trafficLightReport");
+  const assessmentEmpty=document.getElementById("assessmentEmptyNotice");
   const selected=document.getElementById("reportGrade").value;
   const term=document.getElementById("reportSearch").value.trim().toLowerCase();
   let arr=reportStudents.filter(s=>{
     const classMatch=/^6[АБВГДЕЁЖЗИ]$/.test(selected) ? String(s.classCode||"")===selected : (selected==="all" || (selected==="6-total" ? /^6[АБВГДЕЁЖЗИ]$/.test(String(s.classCode||"")) : String(s.grade)===selected));
     return classMatch && (!term||s.code.toLowerCase().includes(term));
   });
+  // Тандалтын 101–204 ID-ууд нь 20 асуулттай үнэлгээ биш. Үнэлгээний хэсгийг зөвхөн 1–20 ID-ийн бодит оноо байвал харуулна.
+  stats.classList.toggle("hidden",arr.length===0);
+  if(trafficReport) trafficReport.classList.toggle("hidden",arr.length===0);
+  if(assessmentEmpty) assessmentEmpty.classList.toggle("hidden",arr.length!==0);
 
   const avg=k=>arr.length?Math.round(arr.reduce((a,b)=>a+b[k],0)/arr.length):0;
   const good=arr.filter(s=>s.overall>=75).length;
@@ -781,7 +860,7 @@ function renderReportTable(){
     <tr><td>${i+1}</td><td>${s.code}</td><td>${s.grade}-р анги</td>
     <td><b>${s.overall}%</b></td><td>${s.adapt}%</td><td>${s.relation}%</td>
     <td>${s.study}%</td><td>${s.emotion}%</td><td><span class="pill ${s.level[1]}">${s.level[0]}</span></td></tr>
-  `).join("") || `<tr><td colspan="9" class="center small">Одоогоор мэдээлэл алга.</td></tr>`;
+  `).join("") || `<tr><td colspan="9" class="center small">Энэ сонголтод 20 асуулттай шуурхай үнэлгээний онооны бүртгэл алга. Тандалтын хариуг доорх тусдаа нэгтгэлээс үзнэ үү.</td></tr>`;
 }
 
 // Тайлан дээр дарахад эхлээд нэвтрэлт шалгана.
