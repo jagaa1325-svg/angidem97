@@ -218,11 +218,11 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
   </div>
 
   <div class="card ai-analysis-card" id="aiReportCard">
-    <h3>🤖 AI дүн шинжилгээ</h3>
-    <p class="small">Одоогоор сонгосон ангийн нэгтгэсэн тоо, хувь болон асуултын хариултын тархалтад тулгуурлан багшид зориулсан тайлбар, дэмжлэгийн санаа гаргана. Сурагчийн нэр, код, нэг бүрийн хариултыг AI руу илгээхгүй.</p>
-    <div class="notice" style="margin-bottom:14px"><b>Нууцлал ба хэрэглээ:</b> Товчийг дарахад зөвхөн нэр, кодгүй нэгтгэсэн статистик OpenAI AI үйлчилгээнд илгээгдэнэ. Үр дүн нь онош биш; багшийн мэргэжлийн дүгнэлт, сургуулийн сэтгэл зүйчийн ажлыг орлохгүй. AI хүсэлт API хэрэглээний төлбөртэй байж болно.</div>
+    <h3>📊 Тайлангийн автомат тайлбар (үнэгүй)</h3>
+    <p class="small">Сонгосон ангийн нэгтгэсэн оноо, хувь, хариултын тархалтад тулгуурлан багшид зориулсан автомат тайлбар, дэмжлэгийн санаа гаргана.</p>
+    <div class="notice" style="margin-bottom:14px"><b>Үнэгүй горим:</b> Энэ тайлбар нь сайтын доторх оноо, хувь, тоонд тулгуурласан дүрэмд суурилсан тооцоолол. OpenAI API ашиглахгүй, нэмэлт API төлбөр үүсгэхгүй. Үр дүн нь сэтгэл зүйн онош биш бөгөөд багшийн ажиглалт, ярилцлага, сургуулийн сэтгэл зүйчийн дэмжлэгийг орлохгүй.</div>
     <div class="ai-button-row">
-      <button class="btn" id="aiReportButton" onclick="runAIReportAnalysis()">✨ AI дүн шинжилгээ гаргах</button>
+      <button class="btn" id="aiReportButton" onclick="runAIReportAnalysis()">📊 Автомат тайлбар гаргах</button>
       <span id="aiReportStatus" class="small" aria-live="polite"></span>
     </div>
     <div id="aiReportOutput" class="ai-output hidden" style="margin-top:14px" aria-live="polite"></div>
@@ -955,7 +955,7 @@ function renderReportTable(){
 }
 
 
-// AI тайлан — зөвхөн нэгтгэсэн, код/нэргүй статистик Edge Function руу явуулна.
+// Төлбөргүй автомат тайлбар: зөвхөн тайлангийн нэгтгэсэн тоо, хувь дээр үндэслэнэ.
 function buildAIQuestionSummary(role, submissions){
   const qs=surveyQuestionsByRole[role]||[];
   return qs.map((q,i)=>{
@@ -997,39 +997,87 @@ function buildAIReportPayload(){
   };
 }
 
+function freeScoreMeaning(value){
+  if(value>=75) return 'Харьцангуй тогтвортой тал';
+  if(value>=50) return 'Анхаарч, дэмжлэг төлөвлөх тал';
+  return 'Нэмэлт ажиглалт, ганцаарчилсан дэмжлэг шаардлагатай байж болох тал';
+}
+function freeScoreAdvice(name,value){
+  if(value>=75) return `${name}: ${value}% — харьцангуй тогтвортой. Эерэг дадлыг хадгалж, сурагчийн оролцоог дэмжээрэй.`;
+  if(value>=50) return `${name}: ${value}% — анхаарч ажиллах чиглэл. Дараагийн 2–3 долоо хоногт тодорхой жижиг зорилго тавьж, ахицыг ажиглаарай.`;
+  return `${name}: ${value}% — нэмэлт дэмжлэг шаардлагатай байж болзошгүй. Сурагчтай тайван, нууцлалтай ярилцаж, багшийн ажиглалтаа сургуулийн сэтгэл зүйчтэй зөвлөлдөн нягтлаарай.`;
+}
+function appendSurveyDistribution(lines,title,survey){
+  lines.push(`${title}: ${survey.completed} хариулт`);
+  const active=(survey.questions||[]).filter(q=>q.responses>0);
+  if(!active.length){lines.push('  Одоогоор асуултын хариултын тархалт алга.');return;}
+  active.forEach(q=>{
+    const top=[...q.options].sort((a,b)=>b.count-a.count)[0];
+    if(top&&top.count>0) lines.push(`  • ${q.question} — хамгийн олон сонгосон хариулт: “${top.label}” (${top.count}, ${top.percent}%). Энэ нь дангаараа онош, дүгнэлт болохгүй.`);
+  });
+}
+function makeFreeRuleBasedAnalysis(payload){
+  const lines=[];
+  lines.push('ТАЙЛАНГИЙН АВТОМАТ ТАЙЛБАР — ҮНЭГҮЙ ГОРИМ');
+  lines.push(`Сонгосон хүрээ: ${payload.selection}`);
+  lines.push(`Огноо: ${payload.generatedOn}`);
+  lines.push('');
+  const q=payload.quickAssessment||{};
+  if(q.assessedStudents>0){
+    const lv=q.levels||{}; const av=q.averages||{};
+    const pct=n=>Math.round((Number(n)||0)/q.assessedStudents*100);
+    lines.push(`ҮНДСЭН ҮНЭЛГЭЭ: ${q.assessedStudents} сурагчийн үнэлгээ байна.`);
+    lines.push(`🟢 Ногоон — ${lv.green||0} сурагч (${pct(lv.green)}%); 🟡 Шар — ${lv.yellow||0} сурагч (${pct(lv.yellow)}%); 🔴 Улаан — ${lv.red||0} сурагч (${pct(lv.red)}%).`);
+    lines.push('Чиглэл тус бүрийн тайлбар:');
+    lines.push(freeScoreAdvice('Дасан зохицол',Number(av.adaptation)||0));
+    lines.push(freeScoreAdvice('Харилцаа',Number(av.relationships)||0));
+    lines.push(freeScoreAdvice('Суралцах байдал',Number(av.learning)||0));
+    lines.push(freeScoreAdvice('Сэтгэл хөдлөл',Number(av.emotions)||0));
+    if((lv.red||0)>0) lines.push(`Анхаарах дараагийн алхам: улаан ангилалд орсон ${lv.red} сурагчийн кодыг тайлангийн жагсаалтаас багш нууцлалтай шалгаж, шошголохгүйгээр тус бүртэй ярилцан, шаардлагатай үед сургуулийн сэтгэл зүйчтэй хамтран дэмжлэг төлөвлөөрэй.`);
+    else if((lv.yellow||0)>0) lines.push('Анхаарах дараагийн алхам: шар ангиллын сурагчдад зорилтот дэмжлэг өгч, богино хугацааны дараа ахицыг дахин ажиглаарай.');
+    else lines.push('Анхаарах дараагийн алхам: одоогийн эерэг үзүүлэлтийг хадгалж, ангийн орчны тогтмол ажиглалтыг үргэлжлүүлээрэй.');
+  } else {
+    lines.push('20 асуулттай үндсэн үнэлгээний мэдээлэл одоогоор алга. Доорх тандалтын хариултын тоо, тархалтыг тусад нь харна уу.');
+  }
+  lines.push('');
+  appendSurveyDistribution(lines,'СУРАГЧИЙН ТАНДАЛТ',payload.survey.students);
+  lines.push('');
+  appendSurveyDistribution(lines,'ЭЦЭГ ЭХИЙН ТАНДАЛТ',payload.survey.parents);
+  lines.push('');
+  lines.push('БАГШИД ӨГӨХ ЕРӨНХИЙ САНАЛ');
+  lines.push('1. Тоон үр дүнг сурагчийн зан чанар, сэтгэл зүйн онош гэж үзэхгүй; бодит ажиглалт, ярилцлага, сурагчийн нөхцөл байдлаар баталгаажуулна.');
+  lines.push('2. Сурагчийн код, хариуг ангийнханд нийтэд зарлахгүй. Хувь хүний мэдээллийг зөвхөн шаардлагатай мэргэжлийн хүмүүст нууцлалтай хуваалцана.');
+  lines.push('3. Тандалтын ганц хариултаар шийдвэр гаргахгүй. Сурагч, эцэг эх, багшийн ажиглалтыг харьцуулж, шаардлагатай үед сургуулийн сэтгэл зүйчтэй зөвлөлдөнө.');
+  lines.push('');
+  lines.push('Тайлбар: Энэ нь урьдчилан тогтоосон босго, дүрэмд суурилсан автомат нэгтгэл бөгөөд жинхэнэ хиймэл оюун ухааны дүгнэлт биш. Сэтгэл зүйн онош тавихгүй.');
+  return lines.join('\n');
+}
+
 async function runAIReportAnalysis(){
   const button=document.getElementById('aiReportButton');
   const status=document.getElementById('aiReportStatus');
   const output=document.getElementById('aiReportOutput');
   if(!button||!status||!output)return;
-  const {data:{session}}=await supabaseClient.auth.getSession();
-  if(!session){status.textContent='Эхлээд багшийн тайлан руу нэвтэрнэ үү.';return;}
-  const payload=buildAIReportPayload();
-  const noData=payload.survey.students.completed===0&&payload.survey.parents.completed===0&&payload.quickAssessment.assessedStudents===0;
-  if(noData){status.textContent='Энэ сонголтод дүн шинжилгээ хийх бүрэн мэдээлэл алга.';return;}
-  button.disabled=true;
-  const previousText=button.textContent;
-  button.textContent='⏳ Дүн шинжилгээ хийж байна...';
-  status.textContent='Зөвхөн нэгтгэсэн статистик ашиглаж байна.';
-  output.classList.add('hidden');
-  output.textContent='';
   try{
-    const {data,error}=await supabaseClient.functions.invoke('ai-report-analysis',{body:{report:payload}});
-    if(error){
-      let detail='';
-      try{ detail=error.context?.body?.error||error.message||''; }catch(_){ detail=error.message||''; }
-      throw new Error(detail||'AI үйлчилгээтэй холбогдож чадсангүй. Edge Function, нэвтрэлт, API түлхүүрийг шалгана уу.');
-    }
-    if(!data||!data.analysis)throw new Error(data?.error||'AI хариу хоосон ирлээ.');
-    output.textContent=data.analysis;
+    const {data:{session}}=await supabaseClient.auth.getSession();
+    if(!session){status.textContent='Эхлээд багшийн тайлан руу нэвтэрнэ үү.';return;}
+    const payload=buildAIReportPayload();
+    const noData=payload.survey.students.completed===0&&payload.survey.parents.completed===0&&payload.quickAssessment.assessedStudents===0;
+    if(noData){status.textContent='Энэ сонголтод тайлбар гаргах мэдээлэл алга. Эхлээд тайлангаа ачаална уу.';return;}
+    button.disabled=true;
+    const previousText=button.textContent;
+    button.textContent='⏳ Автомат тайлбар бэлдэж байна...';
+    status.textContent='Зөвхөн одоо байгаа нэгтгэсэн статистик ашиглаж байна. Гадаад AI үйлчилгээ дуудахгүй.';
+    output.classList.add('hidden'); output.textContent='';
+    // Энэ функц API эсвэл Supabase Edge Function руу хүсэлт явуулахгүй.
+    output.textContent=makeFreeRuleBasedAnalysis(payload);
     output.classList.remove('hidden');
-    status.textContent='Дүн шинжилгээ бэлэн. Үр дүнг багш өөрийн ажиглалттай хамтатган үнэлнэ үү.';
+    status.textContent='Үнэгүй автомат тайлбар бэлэн. Үр дүнг багш өөрийн ажиглалттай хамтатгана уу.';
+    button.disabled=false; button.textContent=previousText;
   }catch(err){
-    console.error('AI report analysis error:',err);
-    status.textContent=err.message||'AI хүсэлт амжилтгүй боллоо.';
-  }finally{
-    button.disabled=false;
-    button.textContent=previousText;
+    console.error('Free report analysis error:',err);
+    status.textContent=err.message||'Автомат тайлбар гаргахад алдаа гарлаа.';
+    button.disabled=false; button.textContent='📊 Автомат тайлбар гаргах';
   }
 }
 
