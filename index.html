@@ -34,6 +34,11 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 .site-footer{max-width:1120px;margin:4px auto 24px;padding:18px 22px;color:var(--muted);font-size:12px;text-align:center}
 .site-footer button{border:0;background:none;color:#3451aa;text-decoration:underline;cursor:pointer;font:inherit}
 @media(max-width:800px){.info-grid{grid-template-columns:1fr}}
+.ai-analysis-card{border:1px solid #d9e4ff;background:linear-gradient(180deg,#fff,#f8faff)}
+.ai-output{white-space:pre-wrap;line-height:1.7;background:#fbfcff;border:1px solid var(--line);padding:16px;border-radius:12px;overflow-wrap:anywhere}
+.ai-button-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn:disabled{opacity:.65;cursor:wait}
+
 .roleCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;cursor:pointer;font:inherit;color:var(--ink);min-height:135px;box-shadow:0 5px 18px rgba(20,40,80,.06);transition:.15s}.roleCard:hover{transform:translateY(-2px);border-color:var(--p)}.roleCard:first-line{font-size:28px}
 </style>
 </head>
@@ -210,6 +215,17 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
       <p class="small">Энэ нь онош биш. Зөвхөн тандалтын хариунд тулгуурласан анхаарах дохио бөгөөд багшийн ажиглалт, ярилцлагатай хамтатгана.</p>
       <div id="surveySupportList">Мэдээлэл ачаалж байна...</div>
     </div>
+  </div>
+
+  <div class="card ai-analysis-card" id="aiReportCard">
+    <h3>🤖 AI дүн шинжилгээ</h3>
+    <p class="small">Одоогоор сонгосон ангийн нэгтгэсэн тоо, хувь болон асуултын хариултын тархалтад тулгуурлан багшид зориулсан тайлбар, дэмжлэгийн санаа гаргана. Сурагчийн нэр, код, нэг бүрийн хариултыг AI руу илгээхгүй.</p>
+    <div class="notice" style="margin-bottom:14px"><b>Нууцлал ба хэрэглээ:</b> Товчийг дарахад зөвхөн нэр, кодгүй нэгтгэсэн статистик OpenAI AI үйлчилгээнд илгээгдэнэ. Үр дүн нь онош биш; багшийн мэргэжлийн дүгнэлт, сургуулийн сэтгэл зүйчийн ажлыг орлохгүй. AI хүсэлт API хэрэглээний төлбөртэй байж болно.</div>
+    <div class="ai-button-row">
+      <button class="btn" id="aiReportButton" onclick="runAIReportAnalysis()">✨ AI дүн шинжилгээ гаргах</button>
+      <span id="aiReportStatus" class="small" aria-live="polite"></span>
+    </div>
+    <div id="aiReportOutput" class="ai-output hidden" style="margin-top:14px" aria-live="polite"></div>
   </div>
 </div>
 </section>
@@ -936,6 +952,85 @@ function renderReportTable(){
     <td><b>${s.overall}%</b></td><td>${s.adapt}%</td><td>${s.relation}%</td>
     <td>${s.study}%</td><td>${s.emotion}%</td><td><span class="pill ${s.level[1]}">${s.level[0]}</span></td></tr>
   `).join("") || `<tr><td colspan="9" class="center small">Энэ сонголтод 20 асуулттай шуурхай үнэлгээний онооны бүртгэл алга. Тандалтын хариуг доорх тусдаа нэгтгэлээс үзнэ үү.</td></tr>`;
+}
+
+
+// AI тайлан — зөвхөн нэгтгэсэн, код/нэргүй статистик Edge Function руу явуулна.
+function buildAIQuestionSummary(role, submissions){
+  const qs=surveyQuestionsByRole[role]||[];
+  return qs.map((q,i)=>{
+    const counts=new Array(q.options.length).fill(0);
+    let responses=0;
+    const questionId=(role==='student'?100:200)+i+1;
+    submissions.forEach(s=>{
+      const row=(s.rows||[]).find(r=>Number(r.question_id)===questionId);
+      if(!row) return;
+      const answer=Number(row.answer);
+      if(Number.isInteger(answer)&&answer>=1&&answer<=counts.length){counts[answer-1]++;responses++;}
+    });
+    return {question:q.q,responses,options:q.options.map((label,j)=>({label,count:counts[j],percent:responses?Math.round(counts[j]/responses*100):0}))};
+  });
+}
+
+function buildAIReportPayload(){
+  const select=document.getElementById('reportGrade');
+  const selectedLabel=select?.selectedOptions?.[0]?.textContent?.trim()||'Сонголт тодорхойгүй';
+  const students=surveyReportRows?.student||[];
+  const parents=surveyReportRows?.parent||[];
+  const studentLevels=signalLevelCounts(students,'student');
+  const parentLevels=signalLevelCounts(parents,'parent');
+  const assessed=Array.isArray(reportStudents)?reportStudents:[];
+  const assessmentLevels={
+    green:assessed.filter(s=>s.overall>=75).length,
+    yellow:assessed.filter(s=>s.overall>=50&&s.overall<75).length,
+    red:assessed.filter(s=>s.overall<50).length
+  };
+  const avg=key=>assessed.length?Math.round(assessed.reduce((sum,s)=>sum+(Number(s[key])||0),0)/assessed.length):0;
+  return {
+    selection:selectedLabel,
+    generatedOn:new Date().toISOString().slice(0,10),
+    survey:{
+      students:{completed:students.length,levels:{green:studentLevels.good,yellow:studentLevels.warn,red:studentLevels.alert},questions:buildAIQuestionSummary('student',students)},
+      parents:{completed:parents.length,levels:{green:parentLevels.good,yellow:parentLevels.warn,red:parentLevels.alert},questions:buildAIQuestionSummary('parent',parents)}
+    },
+    quickAssessment:{assessedStudents:assessed.length,levels:assessmentLevels,averages:{overall:avg('overall'),adaptation:avg('adapt'),relationships:avg('relation'),learning:avg('study'),emotions:avg('emotion')}}
+  };
+}
+
+async function runAIReportAnalysis(){
+  const button=document.getElementById('aiReportButton');
+  const status=document.getElementById('aiReportStatus');
+  const output=document.getElementById('aiReportOutput');
+  if(!button||!status||!output)return;
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session){status.textContent='Эхлээд багшийн тайлан руу нэвтэрнэ үү.';return;}
+  const payload=buildAIReportPayload();
+  const noData=payload.survey.students.completed===0&&payload.survey.parents.completed===0&&payload.quickAssessment.assessedStudents===0;
+  if(noData){status.textContent='Энэ сонголтод дүн шинжилгээ хийх бүрэн мэдээлэл алга.';return;}
+  button.disabled=true;
+  const previousText=button.textContent;
+  button.textContent='⏳ Дүн шинжилгээ хийж байна...';
+  status.textContent='Зөвхөн нэгтгэсэн статистик ашиглаж байна.';
+  output.classList.add('hidden');
+  output.textContent='';
+  try{
+    const {data,error}=await supabaseClient.functions.invoke('ai-report-analysis',{body:{report:payload}});
+    if(error){
+      let detail='';
+      try{ detail=error.context?.body?.error||error.message||''; }catch(_){ detail=error.message||''; }
+      throw new Error(detail||'AI үйлчилгээтэй холбогдож чадсангүй. Edge Function, нэвтрэлт, API түлхүүрийг шалгана уу.');
+    }
+    if(!data||!data.analysis)throw new Error(data?.error||'AI хариу хоосон ирлээ.');
+    output.textContent=data.analysis;
+    output.classList.remove('hidden');
+    status.textContent='Дүн шинжилгээ бэлэн. Үр дүнг багш өөрийн ажиглалттай хамтатган үнэлнэ үү.';
+  }catch(err){
+    console.error('AI report analysis error:',err);
+    status.textContent=err.message||'AI хүсэлт амжилтгүй боллоо.';
+  }finally{
+    button.disabled=false;
+    button.textContent=previousText;
+  }
 }
 
 // Тайлан дээр дарахад эхлээд нэвтрэлт шалгана.
