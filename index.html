@@ -1094,4 +1094,102 @@ showReportContent();
 loadPublicQuestions();
 
 </script>
+<script>
+(function initJudgeFatigueSurvey(){
+ if(document.getElementById('judgeSurvey')) return;
+ var nav=document.querySelector('nav'), report=document.getElementById('report');
+ if(!nav||!report) return;
+ var surveyButton=Array.from(nav.querySelectorAll('button')).find(function(b){
+   return (b.getAttribute('onclick')||'').indexOf("show('survey'")!==-1;
+ });
+ var section=document.createElement('section');
+ section.id='judgeSurvey'; section.className='hidden';
+ section.innerHTML=
+ '<div class="card hero"><h2>🧑‍⚖️ Шүүгч, багш нарын тандалт</h2><h3>Архаг ядаргааг илрүүлэх ерөнхий асуултууд</h3><p>Өнгөрсөн нэг сарын хугацаанд доорх шинж тэмдгүүдээс илэрч байсан эсэхийг тодруулж асууж тэмдэглэ.</p><div class="notice"><b>Нууцлал:</b> Нэр, утас, ажлын газрын нэр авахгүй. Энэ тандалт сайн дурын үндсэн дээр бөглөгдөнө. Хариулт сурагчдын тандалтын хүснэгтээс тусдаа хадгалагдана. Энэ нь сэтгэл зүйн болон эмнэлгийн онош биш.</div></div>'+
+ '<div class="card" id="judgeFatigueFormCard"><p>Хэрэв эдгээрээс аль нэг шинж тэмдэг нь байвал цааш нь үргэлжлүүлнэ.</p><div id="judgeFatigueQuestions"></div><h3>I. Өнгөрсөн нэг сарын хугацаанд доорх үйл ажиллагааг хийсэн эсэхээ тэмдэглэнэ үү?</h3><div id="judgeFatigueActivities"></div><h3>II. Дээрхээс үндэслэн:</h3><div class="question"><label for="judgeFatigueDaysUnable"><b>Та хэдэн өдрийн турш өдөр тутмын үйл ажиллагаагаа гүйцэтгэж чадаагүй вэ?</b></label><input id="judgeFatigueDaysUnable" type="number" min="0" max="31" step="1" placeholder="Өдрийн тоо"></div><div class="question"><label for="judgeFatigueDaysBed"><b>Та хэдэн өдрийг орондоо хэвтэж өнгөрүүлсэн бэ?</b></label><input id="judgeFatigueDaysBed" type="number" min="0" max="31" step="1" placeholder="Өдрийн тоо"></div><div class="notice">Хариултаар автоматаар онош гаргахгүй. Хэрэв зовиур санаа зовоож байвал мэргэжлийн эмч, сэтгэл зүйн мэргэжилтнээс зөвлөгөө аваарай.</div><label class="option"><input type="checkbox" id="judgeFatigueConsent"> Би сайн дурын үндсэн дээр оролцож, хариултаа нэргүй хэлбэрээр хадгалахыг зөвшөөрч байна.</label><button type="button" id="judgeFatigueSubmit" class="btn">Тандалт илгээх</button><p id="judgeFatigueStatus" class="small" role="status" aria-live="polite"></p></div><div id="judgeFatigueResult" class="card hidden center"></div>'+
+ '<div class="card"><details><summary>Эх материал дахь дүгнэлт (автоматаар онош гаргахгүй)</summary><p>Дүгнэлт:</p><p>• I болон 1,2,3 дугаар асуултад тийм гэж хариулсан бол “Архаг ядаргаа”</p><p>• 4,5 тийм бол доорх асуултад анхаарлаа хандуулна уу?</p><p>• 6 дугаар асуултад тийм гэж хариулсан бол “сэтгэл гутрал”</p><p>• 7 дугаар асуултад тийм гэж хариулсан бол “сэтгэл түгшилт”</p><p>• 8,9 асуултад тийм гэж хариулсан бол амьдралын хэв маягаа өөрчлөх</p><p>• 10 асуултад тийм гэж хариулсан бол “нойрны хямрал”</p><p class="small">Эдгээр нь эх материал дахь заалт бөгөөд онош биш. Энэ сайт үр дүнгээр онош тогтоохгүй.</p></details></div>';
+ report.parentNode.insertBefore(section,report);
+ var navButton=document.createElement('button');
+ navButton.type='button'; navButton.textContent='🧑‍⚖️ Шүүгч, багш нарын тандалт';
+ navButton.addEventListener('click',function(){
+   document.querySelectorAll('section').forEach(function(s){s.classList.add('hidden');});
+   section.classList.remove('hidden');
+   document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
+   navButton.classList.add('active');
+ });
+ nav.insertBefore(navButton, surveyButton && surveyButton.nextSibling ? surveyButton.nextSibling : null);
+ var mainQuestions=[
+ ['screening','I. Та өдрийн ихэнх цагт ядарч буй мэт санагддаг уу?'],
+ ['q1','1. Та үргэлж ядардаг уу?'],
+ ['q2','2. Та өдөр тутмын үйл ажиллагаагаа гүйцэтгэхэд амархан ядардаг уу?'],
+ ['q3','3. Унтаад сэрэхэд нойр ханаагүй, амарч ядаргаагаа тайлж чадаагүй байдаг уу?'],
+ ['q4','4. Танд бие махбодын талаас ямар нэгэн өвдөлт байна уу?'],
+ ['q5','5. Та унтахын тулд ямар нэгэн эм хэрэглэдэг үү?'],
+ ['q6','6. Та уйтгар гунигтай болж өмнө нь баяр цэнгэл эдлүүлдэг байсан зүйлсээсээ одоо сэтгэлийн таашаал авахаа больсон уу?'],
+ ['q7','7. Таны сэтгэл тайван биш болж юманд санаа зовох буюу сэтгэл түгшдэг болсон уу?'],
+ ['q8','8. Та хэт их ачаалалтай ажилладаг уу? /гэр болон ажил дээрээ/'],
+ ['q9','9. Та өөртөө чөлөөт цаг гарган амарч чаддаг уу?'],
+ ['q10','10. Нойртой холбоотой ямар нэгэн асуудал танд байна уу?']
+ ];
+ var activityQuestions=[
+ ['activity1','– Та өөрийгөө арчлах сонирхол буурсан уу? /усанд орох, зөв хувцаслах, хооллох/'],
+ ['activity2','– Гэр бүлийнхэнтэйгээ харилцах харилцаа ямар вэ? /хань, хүүхдүүд, төрөл төрөгсөд/','text'],
+ ['activity3','– Ажил, сургуульд явах сонирхол буурсан уу?'],
+ ['activity4','– Гэр ахуйн ажил хийх идэвх сонирхол буурсан уу?'],
+ ['activity5','– Нийгмийн идэвх буурсан уу? /найзуудтайгаа уулзах гэх мэт/'],
+ ['activity6','– Мартамхай болж байна уу?']
+ ];
+ function escapeText(v){
+   if(typeof escapeHtml==='function') return escapeHtml(v);
+   return String(v).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});
+ }
+ function yesNo(item){
+   return '<div class="question"><b>'+escapeText(item[1])+'</b><div style="display:flex;flex-direction:column;gap:8px;margin-top:10px"><label class="option"><input type="radio" name="jfat_'+item[0]+'" value="Тийм"> Тийм</label><label class="option"><input type="radio" name="jfat_'+item[0]+'" value="Үгүй"> Үгүй</label></div></div>';
+ }
+ document.getElementById('judgeFatigueQuestions').innerHTML=mainQuestions.map(yesNo).join('');
+ document.getElementById('judgeFatigueActivities').innerHTML=activityQuestions.map(function(item){
+   if(item[2]==='text') return '<div class="question"><label for="jfat_'+item[0]+'"><b>'+escapeText(item[1])+'</b></label><textarea id="jfat_'+item[0]+'" rows="3" maxlength="1000" placeholder="Нэр, таних мэдээлэл бичихгүйгээр хариулна уу"></textarea></div>';
+   return yesNo(item);
+ }).join('');
+ document.getElementById('judgeFatigueSubmit').addEventListener('click',submitSurvey);
+ async function submitSurvey(){
+   var status=document.getElementById('judgeFatigueStatus');
+   if(!document.getElementById('judgeFatigueConsent').checked){status.textContent='Илгээхийн өмнө сайн дурын оролцооны зөвшөөрлийг тэмдэглэнэ үү.';return;}
+   var answers={voluntary_consent:true};
+   for(var i=0;i<mainQuestions.length;i++){
+     var q=mainQuestions[i],v=document.querySelector('input[name="jfat_'+q[0]+'"]:checked');
+     if(!v){status.textContent='Бүх Тийм/Үгүй асуултад хариулна уу.';return;}
+     answers[q[0]]=v.value;
+   }
+   for(var j=0;j<activityQuestions.length;j++){
+     var a=activityQuestions[j];
+     if(a[2]==='text') answers.family_relationship=(document.getElementById('jfat_'+a[0]).value||'').trim();
+     else {
+       var av=document.querySelector('input[name="jfat_'+a[0]+'"]:checked');
+       if(!av){status.textContent='Бүх Тийм/Үгүй асуултад хариулна уу.';return;}
+       answers[a[0]]=av.value;
+     }
+   }
+   var daysUnable=document.getElementById('judgeFatigueDaysUnable').value;
+   var daysBed=document.getElementById('judgeFatigueDaysBed').value;
+   if(daysUnable===''||daysBed===''){status.textContent='Өдрийн тоотой хоёр асуултад хариулна уу. 0 өдөр бол 0 гэж бичнэ үү.';return;}
+   if(!Number.isInteger(Number(daysUnable))||Number(daysUnable)<0||Number(daysUnable)>31||!Number.isInteger(Number(daysBed))||Number(daysBed)<0||Number(daysBed)>31){status.textContent='Өдрийн тоог 0–31 бүхэл тоогоор оруулна уу.';return;}
+   answers.days_unable=Number(daysUnable); answers.days_in_bed=Number(daysBed);
+   var submitButton=document.getElementById('judgeFatigueSubmit');
+   submitButton.disabled=true;submitButton.textContent='Хадгалж байна…';status.textContent='Хариултыг тусдаа хүснэгтэд хадгалж байна.';
+   try{
+     var saved=await supabaseClient.from('judge_teacher_fatigue_surveys').insert({answers:answers,form_version:'source-v1'});
+     if(saved.error) throw saved.error;
+     document.getElementById('judgeFatigueFormCard').classList.add('hidden');
+     var out=document.getElementById('judgeFatigueResult');out.classList.remove('hidden');
+     out.innerHTML='<div class="score">✓</div><h2>Тандалт илгээгдлээ</h2><p>Хариултыг амжилттай хадгаллаа. Баярлалаа.</p><div class="notice">Хариулт сурагчдын тандалтын өгөгдлөөс тусдаа хадгалагдсан. Энэ тандалт онош биш.</div>';
+   }catch(err){
+     console.error('Шүүгч/багшийн тандалт хадгалах алдаа:',err);
+     status.textContent='Хариулт хадгалагдсангүй. Supabase хүснэгт, эрхийн тохиргоог шалгах шаардлагатай.';
+     submitButton.disabled=false;submitButton.textContent='Тандалт илгээх';
+   }
+ }
+})();
+</script>
+
 </body></html>
