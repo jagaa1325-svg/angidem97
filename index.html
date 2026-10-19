@@ -1177,6 +1177,7 @@ loadPublicQuestions();
    answers.days_unable=Number(daysUnable); answers.days_in_bed=Number(daysBed);
    var submitButton=document.getElementById('judgeFatigueSubmit');
    submitButton.disabled=true;submitButton.textContent='Хадгалж байна…';status.textContent='Хариултыг тусдаа хүснэгтэд хадгалж байна.';
+   
    try{
      var saved=await supabaseClient.from('judge_teacher_fatigue_surveys').insert({answers:answers,form_version:'source-v1'});
      if(saved.error) throw saved.error;
