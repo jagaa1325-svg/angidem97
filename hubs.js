@@ -80,7 +80,14 @@
     });
   });
   document.querySelectorAll('[data-hub-href]').forEach(function(button){
-    button.addEventListener('click', function(){ window.location.href = button.getAttribute('data-hub-href'); });
+    button.addEventListener('click', function(){
+  var target = button.getAttribute('data-hub-href');
+  if (target === 'judge-report.html') {
+    window.location.href = target + '?refresh=' + Date.now();
+  } else {
+    window.location.href = target;
+  }
+});
   });
   document.querySelectorAll('[data-hub-survey]').forEach(function(button){
     button.addEventListener('click', function(){
