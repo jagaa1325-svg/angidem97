@@ -1,0 +1,11 @@
+ANGIDEM97 - hubs.js шинэчлэх заавар
+
+1. GitHub: https://github.com/jagaa1325-svg/angidem97/blob/main/hubs.js
+2. Edit (харандаа) товчийг дарна.
+3. Одоогийн hubs.js кодыг бүхэлд нь сонгож устгана.
+4. hubs-update.txt файлыг Notepad-оор нээгээд бүх кодыг хуулж GitHub editor-т тавина.
+5. Commit changes дарна.
+6. Сайтаа шинэчилж шалгана: https://jagaa1325-svg.github.io/angidem97/
+7. index.html-ийг солих шаардлагагүй.
+
+Тайлбар: Чатны хажуугийн preview дээр "Couldn't load this file" гарсан нь кодыг preview дээр харуулж чадаагүйг илтгэнэ. Энэ нь сайт чинь эвдэрсэн гэсэн үг биш.
