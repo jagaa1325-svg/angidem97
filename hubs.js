@@ -76,7 +76,8 @@
 
   nav.innerHTML = '';
   addTopButton('🏠 Нүүр', 'dashboard');
-  addTopButton('💚 Эрүүл мэндийн булан', 'healthHub');
+  addTopButton('ℹ️ Сайтын танилцуулга', 'about');
+   addTopButton('💚 Эрүүл мэндийн булан', 'healthHub');
   addTopButton('👩‍🏫 Багшийн булан', 'teacherHub');
   addTopButton('👨‍👩‍👧 Эцэг эхийн булан', 'parentHub');
 
