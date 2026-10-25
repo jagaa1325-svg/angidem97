@@ -1,5 +1,5 @@
 /* АНГИ ДЭМ 97 — гурван үндсэн булангийн навигаци.
-   index.html файлыг солихгүй; <script defer src="hubs.js"></script> мөрөөр холбоно. */
+   index.html файлыг солихгүй; <script src="hubs.js"></script> мөрөөр холбоно. */
 (function initAngidem97ThreeHubs(){
   if (window.__angidem97ThreeHubsV1) return;
   window.__angidem97ThreeHubsV1 = true;
@@ -26,16 +26,23 @@
     '<div class="card"><h3>🌿 Өөрийгөө дэмжих</h3><p>Амралт, нойр, ажлын ачааллаа анзаарч, удаан үргэлжилсэн зовиурын үед мэргэжлийн хүнээс зөвлөгөө аваарай.</p><p class="small">Энэ мэдээлэл эмнэлгийн зөвлөгөө, онош орлохгүй.</p></div>' +
     '</div>');
 
+  addSection('teacherSupport',
+    '<div class="card hero"><h1>💡 Хүүхдээ дэмжих 3 минут</h1><p>Урт заавар унших шаардлагагүй. Түвшнээ сонгоод өнөөдөр хийх нэг алхмаа аваарай.</p><div class="notice"><b>Санамж:</b> Өнгө нь онош биш, анхаарах дохио юм. Үр дүнг бодит ажиглалт, хүүхэдтэй хийх тайван ярилцлагатай хамтатгана.</div><button type="button" class="btn secondary" data-hub-section="teacherHub">← Багшийн булан руу буцах</button></div>' +
+    '<div class="card"><h2>🟢 Ногоон — Сайн дадлыг дэмжих</h2><p><b>Өнөөдөр хийх нэг зүйл:</b> Хүүхдийн хичээл зүтгэл эсвэл бусдад үзүүлсэн тусыг нь тодорхой хэлж урамшуул.</p><div class="notice"><b>Ингэж хэлээрэй:</b> “Чи өнөөдөр найздаа тусалсан нь сайхан байлаа.”</div><details><summary>Өөр нэг богино санаа</summary><p>Хичээлийн төгсгөлд “Өнөөдөр юу нь сайн болсон бэ?” гэж асуугаад, хүүхдийн хариултыг сонс.</p></details></div>' +
+    '<div class="card"><h2>🟡 Шар — Ангийн багшийн дэмжлэг</h2><p><b>1. Тайван ярилц.</b> Хүүхдийн яриаг таслалгүй сонс.</p><p><b>2. Нэг жижиг зорилго тохир.</b> Маргааш хийж болох бодит алхам сонго.</p><p><b>3. Ахиц ажигла.</b> Хэд хоногийн дараа тохирсон алхам хэр болсон талаар эргэн асуу.</p><div class="notice"><b>Ингэж асуугаарай:</b> “Сүүлийн үед юу хамгийн хэцүү байна? Би юугаар тусалж болох вэ?”</div><p class="small">Хүндрэл үргэлжилж, нэмэгдэж байвал сургуулийн сэтгэл зүйчтэй зөвлөлдөнө.</p></div>' +
+    '<div class="card"><h2>🔴 Улаан — Нэмэлт дэмжлэг зохион байгуулах</h2><p><b>1. Нөхцөл байдлыг нягтал.</b> Тандалтын хариуг багшийн ажиглалттай хамтатгаж, хүүхэдтэй нууцлалыг хүндэтгэсэн орчинд ярилц.</p><p><b>2. Сургуулийн сэтгэл зүйчтэй холбохыг дэмж.</b> Хүүхдийн болон гэр бүлийн санаа зовнилыг хүчлэхгүй сонс.</p><p><b>3. Дэмжлэгийг үргэлжлүүл.</b> Уулзалт хойшилсон эсвэл татгалзсан ч хүүхдийг орхигдуулахгүй. Сургуулийн холбогдох журам, хүүхэд хамгааллын хариуцсан ажилтны чиглэлийг дагана.</p><div class="notice"><b>Ингэж хэлж болно:</b> “Чамайг хүчлэх гэсэнгүй. Юу тухгүй санагдаж байгааг сонсмоор байна. Бид хамтдаа тохиромжтой дараагийн алхмаа ярилцъя.”</div><details><summary>Эцэг эх зөвшөөрөхгүй эсвэл хүүхэд уулзахыг хүсэхгүй бол</summary><p>Татгалзаж буй шалтгааныг хүндэтгэлтэй тодруулж, багшийн хүрээнд аюулгүй дэмжлэгээ үргэлжлүүлэн, сургуулийн сэтгэл зүйч болон холбогдох хариуцсан ажилтантай сургуулийн журмын дагуу зөвлөлдөнө. Хүүхдийн аюулгүй байдалд шууд эрсдэл байвал яаралтай хамгааллын журмыг мөрдөнө.</p></details></div>' +
+    '<div class="card"><h3>✓ Багшийн санах 3 зүйл</h3><p>Хүүхдийг өнгөөр нь шошголохгүй. Зөвхөн тандалтын оноогоор оношлохгүй. Урт тайлангаас илүү хүүхэдтэй бодитоор ярилцаж, ахицыг ажигла.</p></div>');
+
   addSection('teacherHub',
     '<div class="card hero"><h1>👩‍🏫 Анги удирдсан багш нарын булан</h1><p>Сурагчдыг таньж ойлгох, ангийн орчныг төлөвлөх, хэрэгцээг ажиглаж тохирсон дэмжлэг үзүүлэх хэрэгслүүд нэг дор.</p><div class="notice"><b>Санамж:</b> Тандалт, темпераментын асуулга нь онош биш. Ажиглалт, сурагчтай ярилцах, гэр бүл болон мэргэжилтэнтэй хамтрахыг хослуулна.</div></div>' +
     '<div class="grid3">' +
+    '<div class="card"><h3>💡 Хүүхдээ дэмжих 3 минут</h3><p class="small">Ногоон, шар, улаан түвшинд багшийн хийх нэг энгийн алхам.</p><button class="btn" data-hub-section="teacherSupport">Богино зөвлөмж үзэх</button></div>' +
     '<div class="card"><h3>🧠 Темперамент ба хөгжлийн дэмжлэг</h3><p class="small">Өөрийгөө таних асуулга, хөгжлийн онцлогтой сурагчийг дэмжих гарын авлага.</p><button class="btn secondary" data-hub-href="temperament-support.html">Нээх</button></div>' +
     '<div class="card"><h3>⚡ Шуурхай үнэлгээ</h3><p class="small">Сурагчийн анхаарах чиглэлийг урьдчилан ажиглах хэрэгсэл.</p><button class="btn secondary" data-hub-section="test">Үнэлгээ эхлүүлэх</button></div>' +
     '<div class="card"><h3>👥 Сурагчдын мэдээлэл</h3><button class="btn secondary" data-hub-section="students">Нээх</button></div>' +
     '<div class="card"><h3>📋 Сурагчийн тандалт</h3><p class="small">Дасан зохицол, харилцаа, суралцах байдал, сэтгэл хөдлөл.</p><button class="btn secondary" data-hub-survey="student">Асуулга нээх</button></div>' +
     '<div class="card"><h3>📊 Ангийн нэгдсэн тайлан</h3><button class="btn secondary" data-hub-section="report">Тайлан нээх</button></div>' +
     '<div class="card"><h3>⚙️ Асуултын сан</h3><button class="btn secondary" data-hub-section="questionsAdmin">Асуултын сан нээх</button></div>' +
-    '<div class="card"><h3>💡 Ажиллах санаа</h3><button class="btn secondary" data-hub-section="guide">Санаанууд үзэх</button></div>' +
     '<div class="card"><h3>ℹ️ Танилцуулга / Холбоо барих</h3><button class="btn secondary" data-hub-section="about">Нээх</button></div>' +
     '</div>');
 
@@ -63,8 +70,8 @@
   nav.innerHTML = '';
   addTopButton('🏠 Нүүр', 'dashboard');
   addTopButton('💚 Эрүүл мэндийн булан', 'healthHub');
-  addTopButton('👩‍🏫 Анги удирдсан багш нарын булан', 'teacherHub');
-  addTopButton('👨‍👩‍👧 Эцэг эхчүүдийн булан', 'parentHub');
+  addTopButton('👩‍🏫 Багшийн булан', 'teacherHub');
+  addTopButton('👨‍👩‍👧 Эцэг эхийн булан', 'parentHub');
 
   function navigateFromHub(sectionId, hubId) {
     window.show(sectionId, null);
@@ -81,13 +88,13 @@
   });
   document.querySelectorAll('[data-hub-href]').forEach(function(button){
     button.addEventListener('click', function(){
-  var target = button.getAttribute('data-hub-href');
-  if (target === 'judge-report.html') {
-    window.location.href = target + '?refresh=' + Date.now();
-  } else {
-    window.location.href = target;
-  }
-});
+      var target = button.getAttribute('data-hub-href');
+      if (target === 'judge-report.html') {
+        window.location.href = target + '?refresh=' + Date.now();
+      } else {
+        window.location.href = target;
+      }
+    });
   });
   document.querySelectorAll('[data-hub-survey]').forEach(function(button){
     button.addEventListener('click', function(){
