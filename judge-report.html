@@ -2,7 +2,7 @@
 <html lang="mn">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>АНГИ ДЭМ 97 — Шүүгч, багш нарын тандалтын тайлан</title>
+<title>АНГИ ДЭМ 97 — Багшийн өөрийн үнэлгээний үр дүн</title>
 <style>
 :root{--navy:#16365f;--blue:#2575c7;--teal:#169e9a;--line:#dbe6f1;--ink:#203247;--muted:#63758a;--soft:#f5f9fc;--gold:#fff4d6}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f2f9ff,#f0fbf7);font-family:Arial,"Segoe UI",sans-serif;color:var(--ink);line-height:1.55}main{max-width:1100px;margin:auto;padding:24px 16px 48px}
@@ -11,7 +11,7 @@ header{padding:26px;border-radius:20px;background:linear-gradient(120deg,#fff,#e
 @media print{body{background:#fff}main{max-width:none;padding:0}header{box-shadow:none}.no-print,#loginCard,header .small,footer{display:none!important}.card,.response,.chart-group,.day-card,.metric-card{box-shadow:none;background:#fff}.response-head{background:#edf7ff!important}.stackbar,.day-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style></head>
 <body><main>
-<header><div class="eyebrow">Нууцлалтай тайлан</div><h1>АНГИ ДЭМ 97</h1><p><b>Эрүүл мэндийн булан — шүүгч, багш нарын тандалтын тайлан</b></p><p class="small">Нэгдсэн график, асуулт бүрийн хариултын тоо ба хувь, дэлгэрэнгүй хариулт. Зөвхөн эрх бүхий администратор нэвтэрч үзнэ.</p></header>
+<header><div class="eyebrow">Нууцлалтай тайлан</div><h1>АНГИ ДЭМ 97</h1><p><b>Эрүүл мэндийн булан — Багшийн өөрийн үнэлгээний үр дүн</b></p><p class="small">Нэгдсэн график, асуулт бүрийн хариултын тоо ба хувь, дэлгэрэнгүй хариулт. Зөвхөн эрх бүхий администратор нэвтэрч үзнэ.</p></header>
 <section id="loginCard" class="card"><h2>🔐 Багшийн нэвтрэлт</h2><p class="muted">Зөвхөн тандалт хариуцсан эрх бүхий хэрэглэгчийн бүртгэлээр нэвтэрнэ.</p><label for="email">Имэйл</label><input id="email" type="email" autocomplete="username" placeholder="Имэйл хаяг"><label for="password">Нууц үг</label><input id="password" type="password" autocomplete="current-password" placeholder="Нууц үг"><div style="margin-top:14px"><button class="btn" id="loginBtn" type="button">Нэвтрэх</button></div><p id="loginStatus" class="status" role="status" aria-live="polite"></p></section>
 <section id="reportView" class="hidden"><div class="card no-print"><div class="row"><div><h2>📊 Нэгдсэн тайлан</h2><p class="muted">Тоо, хувийн график болон хариулт бүрийн дэлгэрэнгүй.</p></div><div class="row"><button type="button" class="secondary" id="refreshBtn">↻ Шинэчлэх</button><button type="button" class="secondary" id="csvBtn">CSV татах</button><button type="button" class="secondary" id="printBtn">Хэвлэх</button><button type="button" class="secondary" id="logoutBtn">Гарах</button></div></div><div class="notice">Энэ нь нэргүй тандалтын хариултын нэгтгэл болохоос онош биш. “Тийм” гэдэг хариулт бүх асуултад ижил утгатай биш; тайлбарлахдаа асуултын агуулгыг хамтад нь харна уу.</div><p id="reportStatus" class="muted" role="status" aria-live="polite"></p></div>
 <div class="stats"><div class="stat"><span class="muted">Нийт бүртгэл</span><b id="recordCount">0</b><span class="muted">Графикт ашигласан хариултын тоо</span></div><div class="stat"><span class="muted">Сүүлийн хариулт</span><b id="latestDate" style="font-size:17px">—</b></div></div>
