@@ -54,7 +54,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <button onclick="show('questionsAdmin',this)">⚙️ Асуултын сан</button>
 <button onclick="show('guide',this)">💡 Ажиллах санаа</button>
 <button onclick="show('about',this)">ℹ️ Танилцуулга / Холбоо барих</button>
-<button onclick="window.location.href='judge-report.html'">📊 Шүүгч, багш нарын тайлан</button></nav>
+<button onclick="window.location.href='judge-report.html'">📊 Багшийн өөрийн үнэлгээний үр дүн</button></nav>
 
 <section id="dashboard">
 <div class="card hero">
@@ -1105,12 +1105,12 @@ loadPublicQuestions();
  var section=document.createElement('section');
  section.id='judgeSurvey'; section.className='hidden';
  section.innerHTML=
- '<div class="card hero"><h2>🧑‍⚖️ Шүүгч, багш нарын тандалт</h2><h3>Архаг ядаргааг илрүүлэх ерөнхий асуултууд</h3><p>Өнгөрсөн нэг сарын хугацаанд доорх шинж тэмдгүүдээс илэрч байсан эсэхийг тодруулж асууж тэмдэглэ.</p><div class="notice"><b>Нууцлал:</b> Нэр, утас, ажлын газрын нэр авахгүй. Энэ тандалт сайн дурын үндсэн дээр бөглөгдөнө. Хариулт сурагчдын тандалтын хүснэгтээс тусдаа хадгалагдана. Энэ нь сэтгэл зүйн болон эмнэлгийн онош биш.</div></div>'+
+ '<div class="card hero"><h2>🧑‍⚖️ 🌱 Өөртөө анхаарах цаг</h2><h3>Архаг ядаргааг илрүүлэх ерөнхий асуултууд</h3><p>Өнгөрсөн нэг сарын хугацаанд доорх шинж тэмдгүүдээс илэрч байсан эсэхийг тодруулж асууж тэмдэглэ.</p><div class="notice"><b>Нууцлал:</b> Нэр, утас, ажлын газрын нэр авахгүй. Энэ тандалт сайн дурын үндсэн дээр бөглөгдөнө. Хариулт сурагчдын тандалтын хүснэгтээс тусдаа хадгалагдана. Энэ нь сэтгэл зүйн болон эмнэлгийн онош биш.</div></div>'+
  '<div class="card" id="judgeFatigueFormCard"><p>Хэрэв эдгээрээс аль нэг шинж тэмдэг нь байвал цааш нь үргэлжлүүлнэ.</p><div id="judgeFatigueQuestions"></div><h3>I. Өнгөрсөн нэг сарын хугацаанд доорх үйл ажиллагааг хийсэн эсэхээ тэмдэглэнэ үү?</h3><div id="judgeFatigueActivities"></div><h3>II. Дээрхээс үндэслэн:</h3><div class="question"><label for="judgeFatigueDaysUnable"><b>Та хэдэн өдрийн турш өдөр тутмын үйл ажиллагаагаа гүйцэтгэж чадаагүй вэ?</b></label><input id="judgeFatigueDaysUnable" type="number" min="0" max="31" step="1" placeholder="Өдрийн тоо"></div><div class="question"><label for="judgeFatigueDaysBed"><b>Та хэдэн өдрийг орондоо хэвтэж өнгөрүүлсэн бэ?</b></label><input id="judgeFatigueDaysBed" type="number" min="0" max="31" step="1" placeholder="Өдрийн тоо"></div><div class="notice">Хариултаар автоматаар онош гаргахгүй. Хэрэв зовиур санаа зовоож байвал мэргэжлийн эмч, сэтгэл зүйн мэргэжилтнээс зөвлөгөө аваарай.</div><label class="option"><input type="checkbox" id="judgeFatigueConsent"> Би сайн дурын үндсэн дээр оролцож, хариултаа нэргүй хэлбэрээр хадгалахыг зөвшөөрч байна.</label><button type="button" id="judgeFatigueSubmit" class="btn">Тандалт илгээх</button><p id="judgeFatigueStatus" class="small" role="status" aria-live="polite"></p></div><div id="judgeFatigueResult" class="card hidden center"></div>'+
  '<div class="card"><details><summary>Эх материал дахь дүгнэлт (автоматаар онош гаргахгүй)</summary><p>Дүгнэлт:</p><p>• I болон 1,2,3 дугаар асуултад тийм гэж хариулсан бол “Архаг ядаргаа”</p><p>• 4,5 тийм бол доорх асуултад анхаарлаа хандуулна уу?</p><p>• 6 дугаар асуултад тийм гэж хариулсан бол “сэтгэл гутрал”</p><p>• 7 дугаар асуултад тийм гэж хариулсан бол “сэтгэл түгшилт”</p><p>• 8,9 асуултад тийм гэж хариулсан бол амьдралын хэв маягаа өөрчлөх</p><p>• 10 асуултад тийм гэж хариулсан бол “нойрны хямрал”</p><p class="small">Эдгээр нь эх материал дахь заалт бөгөөд онош биш. Энэ сайт үр дүнгээр онош тогтоохгүй.</p></details></div>';
  report.parentNode.insertBefore(section,report);
  var navButton=document.createElement('button');
- navButton.type='button'; navButton.textContent='🧑‍⚖️ Шүүгч, багш нарын тандалт';
+ navButton.type='button'; navButton.textContent='🧑‍⚖️ 🌱 Өөртөө анхаарах цаг';
  navButton.addEventListener('click',function(){
    document.querySelectorAll('section').forEach(function(s){s.classList.add('hidden');});
    section.classList.remove('hidden');
