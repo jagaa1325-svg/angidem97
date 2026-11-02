@@ -21,8 +21,8 @@
   addSection('healthHub',
     '<div class="card hero"><h1>💚 Эрүүл мэндийн булан</h1><p>Багш, ажилтны сайн сайхан байдал, ядаргаа, нойр, стрессийг анзаарч, шаардлагатай үед тохирсон дэмжлэг авахад зориулсан мэдээлэл.</p><div class="notice"><b>Нууцлал:</b> Тандалтын хариулт нь онош биш. Хувийн мэдээллийг нууцалж, сайн дурын оролцоог баримтална.</div></div>' +
     '<div class="grid3">' +
-    '<div class="card"><h3>📝 Шүүгч, багш нарын тандалт</h3><p class="small">Ядаргаа, нойр, өдөр тутмын үйл ажиллагааны асуулга.</p><button class="btn secondary" data-hub-section="judgeSurvey">Тандалт бөглөх</button></div>' +
-    '<div class="card"><h3>📊 Тандалтын хариултын тайлан</h3><p class="small">Хадгалсан хариултыг бүтэн асуулттай нь харах.</p><button class="btn secondary" data-hub-href="judge-report.html">Тайлан нээх</button></div>' +
+    '<div class="card"><h3>📝 Өөртөө анхаарах цаг</h3><p class="small">Ажлын ачаалал, ядаргаа, нойр болон өдөр тутмын байдлаа анзаарах богино тандалт.</p><button class="btn secondary" data-hub-section="judgeSurvey">Тандалт бөглөх</button></div>' +
+    '<div class="card"><h3>📊 Багшийн өөрийн үнэлгээний үр дүн</h3><p class="small">Өөрийн үнэлгээний хариуг нэгтгэн харах.</p><button class="btn secondary" data-hub-href="judge-report.html">Тайлан нээх</button></div>' +
     '<div class="card"><h3>🌿 Өөрийгөө дэмжих</h3><p>Амралт, нойр, ажлын ачааллаа анзаарч, удаан үргэлжилсэн зовиурын үед мэргэжлийн хүнээс зөвлөгөө аваарай.</p><p class="small">Энэ мэдээлэл эмнэлгийн зөвлөгөө, онош орлохгүй.</p></div>' +
     '</div>');
 
