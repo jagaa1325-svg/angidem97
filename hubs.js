@@ -19,7 +19,7 @@
   }
 
   addSection('healthHub',
-    '<div class="card hero"><h1>💚 Эрүүл мэндийн булан</h1><p>Багш, ажилтны сайн сайхан байдал, ядаргаа, нойр, стрессийг анзаарч, шаардлагатай үед тохирсон дэмжлэг авахад зориулсан мэдээлэл.</p><div class="notice"><b>Нууцлал:</b> Тандалтын хариулт нь онош биш. Хувийн мэдээллийг нууцалж, сайн дурын оролцоог баримтална.</div></div>' +
+    '<div class="card hero"><h1>💚 Эрүүл мэнд</h1><p>Багш, ажилтны сайн сайхан байдал, ядаргаа, нойр, стрессийг анзаарч, шаардлагатай үед тохирсон дэмжлэг авахад зориулсан мэдээлэл.</p><div class="notice"><b>Нууцлал:</b> Тандалтын хариулт нь онош биш. Хувийн мэдээллийг нууцалж, сайн дурын оролцоог баримтална.</div></div>' +
     '<div class="grid3">' +
     '<div class="card"><h3>🌱 Өөртөө анхаарах цаг</h3><p class="small">Ажлын ачаалал, ядаргаа, нойр болон өдөр тутмын байдлаа анзаарах богино тандалт.</p><button class="btn secondary" data-hub-section="judgeSurvey">Тандалт бөглөх</button></div>' +
     '<div class="card"><h3>📊 Багшийн өөрийн үнэлгээний үр дүн</h3><p class="small">Өөрийн үнэлгээний хариуг нэгтгэн харах.</p><button class="btn secondary" data-hub-href="judge-report.html">Тайлан нээх</button></div>' +
@@ -27,7 +27,7 @@
     '</div>');
 
   addSection('teacherSupport',
-    '<div class="card hero"><h1>💡 Хүүхдээ дэмжих 3 минут</h1><p>Урт заавар унших шаардлагагүй. Түвшнээ сонгоод өнөөдөр хийх нэг алхмаа аваарай.</p><div class="notice"><b>Санамж:</b> Өнгө нь онош биш, анхаарах дохио юм. Үр дүнг бодит ажиглалт, хүүхэдтэй хийх тайван ярилцлагатай хамтатгана.</div><button type="button" class="btn secondary" data-hub-section="teacherHub">← Багшийн булан руу буцах</button></div>' +
+    '<div class="card hero"><h1>💡 Хүүхдээ дэмжих 3 минут</h1><p>Урт заавар унших шаардлагагүй. Түвшнээ сонгоод өнөөдөр хийх нэг алхмаа аваарай.</p><div class="notice"><b>Санамж:</b> Өнгө нь онош биш, анхаарах дохио юм. Үр дүнг бодит ажиглалт, хүүхэдтэй хийх тайван ярилцлагатай хамтатгана.</div><button type="button" class="btn secondary" data-hub-section="teacherHub">← Анги Удирдсан багш руу буцах</button></div>' +
     '<div class="card"><h2>🎬 Богино сургалтын видеонууд</h2><p class="small">Хүүхдийн зан байдал, сэтгэл хөдлөлийн онцлогт тохируулан нэг богино видео сонгоорой. Үзээд хүүхэдтэйгээ шууд ажиллах нэг аргыг хэрэглэнэ.</p><div class="grid3">' +
     '<div class="card" style="margin:0"><h3>🤝 Ичимхий, ганцаардсан хүүхэд</h3><p class="small">Итгэлцэл бий болгож, хүчлэхгүй дэмжих</p><video controls preload="metadata" playsinline style="width:100%;aspect-ratio:16/9;border-radius:12px;background:#111" src="behavior-shy-voice.mp4"></video></div>' +
     '<div class="card" style="margin:0"><h3>🌿 Сандарч, түгшсэн хүүхэд</h3><p class="small">Тайван сонсож, аюулгүй мэдрэмж өгөх</p><video controls preload="metadata" playsinline style="width:100%;aspect-ratio:16/9;border-radius:12px;background:#111" src="behavior-anxiety-voice.mp4"></video></div>' +
@@ -77,9 +77,9 @@
   nav.innerHTML = '';
   addTopButton('🏠 Нүүр', 'dashboard');
   addTopButton('ℹ️ Сайтын танилцуулга', 'about');
-   addTopButton('💚 Эрүүл мэндийн булан', 'healthHub');
-  addTopButton('👩‍🏫 Багшийн булан', 'teacherHub');
-  addTopButton('👨‍👩‍👧 Эцэг эхийн булан', 'parentHub');
+   addTopButton('💚 Эрүүл мэнд', 'healthHub');
+  addTopButton('👩‍🏫 Анги Удирдсан багш', 'teacherHub');
+  addTopButton('👨‍👩‍👧 Эцэг эх, асран хамгаалагч нар', 'parentHub');
 
   function navigateFromHub(sectionId, hubId) {
     window.show(sectionId, null);
