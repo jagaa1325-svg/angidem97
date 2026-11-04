@@ -61,7 +61,7 @@
     '<div class="card"><h3>📚 Суралцах дадлыг дэмжих</h3><p>Хүүхдийн нас, чадварт тохируулан гэрийн ажил хариуцуулах, суралцах дадлыг дэмжих зөвлөмж.</p><button class="btn secondary" data-hub-href="parent-learning-habits.html">Зөвлөмж унших</button></div>' +
     '<div class="card"><h3>🤝 Сургуультай хамтрах</h3><p>Хүүхдийнхээ талаар багштай нээлттэй ярилцаж, гэр болон сургуулийн ажиглалтыг хуваалцах зөвлөмж.</p><button class="btn secondary" data-hub-href="parent-school-partnership.html">Зөвлөмж унших</button></div>' +
     '<div class="card"><h3>📱 Дэлгэцийн хэрэглээ</h3><p>Гэр бүлээрээ тохирсон цаг, дэлгэцгүй үе, нойр болон хөдөлгөөний дадлыг төлөвлөх зөвлөмжтэй танилцаарай.</p><button class="btn secondary" data-hub-href="parent-screen-use-guide.html">Зөвлөмж унших</button></div>' +
-    '<div class="card"><h3>'<div class="card"><h3>🌱 Хүүхдийн давуу тал</h3><p>Хүүхдийн сонирхол, чадвар, “Би чадна” гэсэн итгэлийг дэмжих зөвлөмж.</p><button class="btn secondary" data-hub-href="parent-child-strengths.html">Зөвлөмж унших</button></div>' +</h3><p>Сонирхол, амжилт, дуртай үйл ажиллагааг нь анзаарч дэмж. Бусад хүүхэдтэй бүү харьцуул.</p></div>' +
+    '<div class="card"><h3>🌱 Хүүхдийн давуу тал</h3><p>Хүүхдийн сонирхол, чадвар, “Би чадна” гэсэн итгэлийг дэмжих зөвлөмж.</p><button class="btn secondary" data-hub-href="parent-child-strengths.html">Зөвлөмж унших</button></div>' +
     '</div>');
 
   var topButtons = {};
