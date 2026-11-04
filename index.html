@@ -126,10 +126,10 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 
 <section id="report" class="hidden">
 <div id="reportLogin" class="card center">
-  <h2>🔐 Багшийн тайлан</h2>
+  <h2>🔐 Анги удирдсан багшийн тайлан</h2>
   <p class="small">Сурагчдын үнэлгээний мэдээлэл зөвхөн эрхтэй багшид харагдана.</p>
   <div style="max-width:480px;margin:0 auto;text-align:left">
-    <label>Багшийн имэйл</label>
+    <label>Анги удирдсан багшийн имэйл</label>
     <input id="teacherEmail" type="email" placeholder="teacher@example.com">
     <label>Нууц үг</label>
     <input id="teacherPassword" type="password" placeholder="Нууц үг">
@@ -517,7 +517,7 @@ function renderQuestionBank(){
   body.innerHTML=arr.map(r=>`<tr><td>${r.question_no}</td><td>${escapeHtml(r.question_text)}</td><td>${categoryLabel(r.category)}</td><td>${r.reverse_score?"Тийм":"Үгүй"}</td><td><button class="btn secondary" onclick="editQuestion('${r.id}')">Засах</button> <button class="btn danger" onclick="deleteQuestion('${r.id}')">Устгах</button></td></tr>`).join("")||`<tr><td colspan="5" class="center small">Энэ ангид асуулт алга.</td></tr>`;
 }
 async function saveQuestion(){
-  const {data:{session}}=await supabaseClient.auth.getSession(); if(!session){alert("Эхлээд багшийн тайлан хэсгээр нэвтэрнэ үү.");return;}
+  const {data:{session}}=await supabaseClient.auth.getSession(); if(!session){alert("Эхлээд Анги удирдсан багшийн тайлан хэсгээр нэвтэрнэ үү.");return;}
   const grade=+document.getElementById("qbGrade").value,no=+document.getElementById("qbNo").value,text=document.getElementById("qbText").value.trim(),cat=document.getElementById("qbCategory").value,rev=document.getElementById("qbReverse").checked;
   const msg=document.getElementById("qbMsg"); if(!no||!text){msg.textContent="Асуултын дугаар болон асуултаа оруулна уу.";return;} msg.textContent="Хадгалж байна...";
   const payload={grade,question_no:no,question_text:text,category:cat,reverse_score:rev,active:true};
@@ -1060,7 +1060,7 @@ async function runAIReportAnalysis(){
   if(!button||!status||!output)return;
   try{
     const {data:{session}}=await supabaseClient.auth.getSession();
-    if(!session){status.textContent='Эхлээд багшийн тайлан руу нэвтэрнэ үү.';return;}
+    if(!session){status.textContent='Эхлээд Анги удирдсан багшийн тайлан руу нэвтэрнэ үү.';return;}
     const payload=buildAIReportPayload();
     const noData=payload.survey.students.completed===0&&payload.survey.parents.completed===0&&payload.quickAssessment.assessedStudents===0;
     if(noData){status.textContent='Энэ сонголтод тайлбар гаргах мэдээлэл алга. Эхлээд тайлангаа ачаална уу.';return;}
