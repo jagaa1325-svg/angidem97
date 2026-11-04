@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Сургуультай хамтран ажиллах нь | АНГИ ДЭМ 97</title>
+<style>
+:root{
+  --navy:#17324d;--teal:#167c73;--mint:#eaf7f3;--blue:#eef5fb;
+  --ink:#243447;--muted:#607184;--line:#dce6ed;--gold:#fff7e5;
+  --shadow:0 8px 24px rgba(26,55,79,.07)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f4f7fa;color:var(--ink);font-family:Arial,"Segoe UI",sans-serif;line-height:1.7}
+.wrap{max-width:940px;margin:0 auto;padding:24px 18px 54px}
+header,main section{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+header{padding:28px 30px;margin-bottom:18px;background:linear-gradient(130deg,#fff 0%,#eef8f6 100%)}
+.eyebrow{color:var(--teal);font-weight:800;font-size:13px;letter-spacing:.04em}
+h1{color:var(--navy);font-size:clamp(27px,4vw,38px);line-height:1.2;margin:9px 0 12px}
+h2{color:var(--navy);font-size:23px;line-height:1.3;margin:0 0 12px}
+h3{color:var(--navy);font-size:18px;margin:0 0 8px}
+p{margin:8px 0}
+.lead{font-size:17px;color:#40566a}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.btn{display:inline-block;text-decoration:none;background:var(--teal);color:#fff;padding:10px 15px;border-radius:11px;font-weight:750;font-size:14px}
+.btn.alt{background:#fff;color:var(--navy);border:1px solid var(--line)}
+main section{padding:23px 25px;margin:16px 0}
+.intro{background:var(--mint);border-left:4px solid var(--teal);padding:15px 17px;border-radius:12px;margin:12px 0 18px}
+ol{list-style:none;padding:0;margin:0;counter-reset:item}
+li{counter-increment:item;display:grid;grid-template-columns:38px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid #edf1f5}
+li:last-child{border-bottom:0}
+li::before{content:counter(item);width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:var(--mint);color:var(--teal);font-weight:800}
+li b{color:var(--navy)}
+.closing{padding:18px 20px;border-radius:14px;background:var(--blue);border:1px solid #dceafa;margin-top:18px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:18px 0 0}
+@media(max-width:650px){.wrap{padding:14px 12px 36px}header,main section{padding:19px 17px}.lead{font-size:15px}li{grid-template-columns:33px 1fr;gap:9px}}
+@media print{body{background:#fff}.wrap{max-width:none;padding:0}header,main section{box-shadow:none;break-inside:avoid}.actions{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">АНГИ ДЭМ 97 · ЭЦЭГ ЭХ, АСРАН ХАМГААЛАГЧ НАРТ</div>
+  <h1>Сургуультай хамтран ажиллах нь</h1>
+  <p class="lead">Хүүхдийн хөгжил, төлөвшлийг дэмжихэд гэр бүл, сургууль нэг зорилготой хамтран ажиллах нь чухал.</p>
+  <div class="actions">
+    <a class="btn" href="index.html" onclick="if(document.referrer && new URL(document.referrer).origin===location.origin){event.preventDefault();history.back();}">← Эцэг эхийн булан руу буцах</a>
+    <a class="btn alt" href="#zuvlumj">Зөвлөмжүүдийг үзэх</a>
+  </div>
+</header>
+
+<main>
+<section id="zuvlumj">
+  <h2>🤝 Эцэг эхчүүдэд өгөх зөвлөмж</h2>
+  <div class="intro">Хүүхдийнхээ талаар гэртээ ажигласан зүйлсийг багштайгаа тайван, нээлттэй хуваалцаж, хүүхдэд тохирох дэмжлэгийг хамтран төлөвлөөрэй.</div>
+  <ol>
+    <li><div><b>Хүүхдээ анхааралтай ажиглах</b> – Гэртээ хүүхдийн зан байдал, сэтгэл хөдлөл, харилцаанд гарч буй өөрчлөлтийг анзаарч, ярилцаж байх.</div></li>
+    <li><div><b>Багштай нээлттэй харилцах</b> – Хүүхэдтэй холбоотой асуудал, санаа зовоосон зүйл гарвал багштай цаг тухайд нь ярилцах.</div></li>
+    <li><div><b>Асуудал давтагдвал нууцлалтай ярилцах</b> – Тухайн асуудал дахин давтагдсан тохиолдолд багштай ганцаарчилсан, нууцлал хангасан байдлаар уулзаж, шийдвэрлэх арга замыг хамтран эрэлхийлэх.</div></li>
+    <li><div><b>Гэр болон сургуулийн ажиглалтыг хуваалцах</b> – Хүүхдийн гэртээ болон сургууль дээр гаргаж буй зан байдал, сэтгэл хөдлөл, харилцааны талаар харилцан мэдээлэл солилцох.</div></li>
+    <li><div><b>Хүүхдийг буруутгахгүй, дэмжих</b> – Асуудал гарсан үед хүүхдийг загнах, буруутгахаас илүүтэй шалтгааныг ойлгож, тайван ярилцан дэмжих.</div></li>
+    <li><div><b>Хамтын ажиллагааг эрхэмлэх</b> – Эцэг эх, багш, сургуулийн зүгээс нэг зорилготой байж, хүүхдийн сайн сайхны төлөө хамтран ажиллах.</div></li>
+  </ol>
+  <div class="closing">Хүүхдийн хөгжил, төлөвшилд гэр бүл болон сургуулийн хамтын ажиллагаа маш чухал. Аливаа асуудал гарсан тохиолдолд харилцан буруутгах бус, ажигласан зүйлсээ нээлттэй хуваалцаж, нууцлалыг хадгалан, хүүхдэд хамгийн зөв дэмжлэгийг хамтдаа үзүүлэх нь чухал юм.</div>
+</section>
+</main>
+
+<footer>АНГИ ДЭМ 97 · Хүүхэд бүрийн онцлог — Хөгжлийн эхлэл</footer>
+</div>
+</body>
+</html>
