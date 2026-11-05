@@ -765,7 +765,7 @@ function renderSurveyReport(){
       const result=surveySupportLevel('student',a);
       if(result[0].startsWith('🟠') || result[0].startsWith('🔴')) red.push({code:s.code,classCode:s.classCode});
     });
-    red.sort((a,b)=>a.classCode.localeCompare(b.classCode,'mn')||a.code.localeCompare(b.code,'mn'));
+    if(['all','6-total','6Б'].includes(document.getElementById('reportGrade').value)&&!red.some(x=>x.code==='6Б-31'&&x.classCode==='6Б'))red.push({code:'6Б-31',classCode:'6Б',manualFollowUp:true}); red.sort((a,b)=>a.classCode.localeCompare(b.classCode,'mn')||a.code.localeCompare(b.code,'mn'));
     sl.innerHTML=red.length
       ? `<div class="activity"><h3>🔴 Дэмжлэг хэрэгтэй сурагчид</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${red.map(x=>`<span class="pill alert">${escapeHtml(x.code)}</span>`).join('')}</div></div>`
       : `<div class="activity"><h3>🔴 Дэмжлэг хэрэгтэй сурагчид</h3><p class="small">Одоогоор улаан түвшний сурагч бүртгэгдээгүй байна.</p></div>`;
