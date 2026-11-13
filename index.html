@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>АНГИ ДЭМ 97 — Анги удирдсан багшийн дэмжлэгийн веб</title>
+<title>АНГИ ДЭМ 97 — Багшийн дэмжлэгийн веб</title>
 <style>
 :root{--p:#4267d5;--p2:#6f5ce8;--ink:#1f2d3d;--muted:#6d7b8c;--bg:#f4f7fb;--card:#fff;--line:#e4e9f2;--good:#19945a;--warn:#b67b00;--alert:#c74646}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
@@ -43,7 +43,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 </style>
 </head>
 <body>
-<header><div class="brand"><img src="logo.jpg" alt="97-р сургуулийн лого"><div><div class="logo">АНГИ ДЭМ 97</div><div class="tag">Анги удирдсан багшийн тандалт · Шуурхай үнэлгээ · Дэмжлэг</div></div></div><div class="small" style="color:#fff">Анги удирдсан багшийн ажлын самбар</div></header>
+<header><div class="brand"><img src="logo.jpg" alt="97-р сургуулийн лого"><div><div class="logo">АНГИ ДЭМ 97</div><div class="tag">Багшийн ажиглалт · Шуурхай үнэлгээ · Дэмжлэг</div></div></div><div class="small" style="color:#fff">Багшийн хувийн ажлын самбар</div></header>
 <div class="container">
 <nav>
 <button class="active" onclick="show('dashboard',this)">🏠 Нүүр</button>
@@ -52,14 +52,14 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <button onclick="show('survey',this)">📋 Тандалт</button>
 <button onclick="show('report',this)">📊 Тайлан</button>
 <button onclick="show('questionsAdmin',this)">⚙️ Асуултын сан</button>
-<button onclick="show('guide',this)">💡 Ажиллах санаа</button>
+<button onclick="show('guide',this)">💡 Хүүхдээ дэмжих 3 минут</button>
 <button onclick="show('about',this)">ℹ️ Танилцуулга / Холбоо барих</button>
-<button onclick="window.location.href='judge-report.html'">📊 Анги удирдсан багшийн өөрийн үнэлгээний үр дүн</button></nav>
+<button onclick="window.location.href='judge-report.html'">📊 Шүүгч, багш нарын тайлан</button></nav>
 
 <section id="dashboard">
 <div class="card hero">
-<h1>Хүүхэд бүрийн онцлог — Хөгжлийн эхлэл</h1>
-<p>“АНГИ ДЭМ 97” вэб хуудсыг хөгжүүлж, анги удирдсан багшийн тандалт, ажиглалтад үндэслэн сурагчдын сэтгэл зүйн хэрэгцээг илрүүлэх, сэтгэл зүйн тогтвортой байдал, эерэг төлөвшлийг дэмжихэд оршино.</p>
+<h1>Сурагч бүрийг анзаарах — анги бүрийг дэмжих</h1>
+<p>АНГИ ДЭМ 97 нь ангийн багш сурагчдын сургалтын орчинд дасан зохицох байдал, суралцах оролцоо, харилцаа болон анхаарах хэрэгцээг хурдан илрүүлж, анги удирдлагын ажлаа төлөвлөхөд зориулсан дэмжлэгийн хэрэгсэл юм.</p>
 <div class="notice"><b>Чухал:</b> Энэ веб нь эмнэлзүйн/сэтгэл зүйн онош тавихгүй. Эрсдэлийн дохио ажиглагдвал сургуулийн сэтгэл зүйч болон холбогдох мэргэжилтэнтэй хамтран ажиллана.</div><br>
 <button class="btn" onclick="show('test')">Шуурхай үнэлгээ эхлүүлэх →</button>
 </div>
@@ -82,7 +82,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 </section>
 
 <section id="test" class="hidden">
-<div class="card"><h2>⚡ Шуурхай үнэлгээ</h2><p class="small">20 богино асуулт · 5 түвшний хариулт · ойролцоогоор 10–15 минут</p><div class="row"><div><label>Анги</label><select id="testGrade"><option value="6">6-р анги</option><option value="9">9-р анги</option><option value="12">12-р анги</option></select></div><div><label>Сурагчийн код</label><input id="testStudent" placeholder="Жишээ: 6А-01"></div></div>
+<div class="card"><h2>⚡ Шуурхай үнэлгээ</h2><p class="small">20 богино асуулт · 5 түвшний хариулт · ойролцоогоор 10–15 минут</p><div class="row"><div><label>Анги</label><select id="testGrade"><option value="6">6-р анги</option><option value="9">9-р анги</option><option value="12">12-р анги</option></select></div><div><label>Сурагчийн код</label><input id="testStudent" placeholder="Жишээ: Q7-01"></div></div>
 <div class="progress"><div id="qbar" class="bar"></div></div><div id="questions"></div>
 <button class="btn" onclick="finishTest()">Үр дүн гаргах</button></div>
 <div id="testResult" class="card hidden center"></div>
@@ -92,7 +92,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <div class="card hero">
 <h2>📋 Тандалт судалгаа</h2>
 <p>6-р ангийн сурагчдын <b>дасан зохицол, харилцаа, суралцах байдал, сэтгэл хөдлөл</b>-ийг сурагч болон эцэг эхийн байр сууриас тандалт хийх хэсэг.</p>
-<div class="notice"><b>Анхаарах:</b> Энэ хэсэг нь сэтгэл зүйн эмнэлзүйн онош тавихгүй. Тандалтын үр дүнг анги удирдсан багшийн ажиглалт, ярилцлагатай хамтатган ашиглана.</div>
+<div class="notice"><b>Анхаарах:</b> Энэ хэсэг нь сэтгэл зүйн эмнэлзүйн онош тавихгүй. Тандалтын үр дүнг багшийн ажиглалт, ярилцлагатай хамтатган ашиглана.</div>
 </div>
 
 <div id="surveyHome" class="card">
@@ -109,11 +109,11 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <div><h3 id="surveyRoleTitle">Тандалт</h3><p class="small">Асуулт бүрээс өөрт тохирох нэг хариултыг сонгоно уу. Бүх асуултад хариулсны дараа “Тандалт дуусгах” товчийг дарна уу.</p></div>
 <button class="btn secondary" onclick="backToSurveyRoles()">← Буцах</button>
 </div>
-<div class="notice">📝 Нэр бичих шаардлагагүй. Хүүхдийнхээ бүлэг болон сурагчийн кодыг сонгоно уу. Жишээ: 6А-01. Эцэг эх хүүхдийнхээ кодыг сонгоно.</div>
+<div class="notice">📝 Нэр бичих шаардлагагүй. Хүүхдийнхээ бүлгийн код болон сурагчийн кодыг сонгоно уу. Жишээ: Q7-01. Эцэг эх хүүхдийнхээ кодыг сонгоно.</div>
 <div class="row" style="margin-top:12px">
   <div><label>1. Бүлэг</label><select id="surveyGroup" onchange="populateSurveyCodes()">
     <option value="">-- Бүлгээ сонгоно уу --</option>
-    <option value="6А">6А</option><option value="6Б">6Б</option><option value="6В">6В</option><option value="6Г">6Г</option><option value="6Д">6Д</option><option value="6Е">6Е</option><option value="6Ё">6Ё</option><option value="6Ж">6Ж</option><option value="6З">6З</option><option value="6И">6И</option>
+    <option value="Q7">Q7</option><option value="M4">M4</option><option value="R9">R9</option><option value="T2">T2</option><option value="K8">K8</option><option value="V5">V5</option><option value="N3">N3</option><option value="C6">C6</option><option value="H2">H2</option><option value="W7">W7</option>
   </select></div>
   <div><label>2. Сурагчийн код</label><select id="surveyStudentCode" disabled><option value="">-- Эхлээд бүлгээ сонгоно уу --</option></select><p class="small">Бүлэг бүр 01–50 хүртэлх сурагчийн кодтой.</p></div>
 </div>
@@ -126,10 +126,10 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 
 <section id="report" class="hidden">
 <div id="reportLogin" class="card center">
-  <h2>🔐 Анги удирдсан багшийн тайлан</h2>
-  <p class="small">Сурагчдын үнэлгээний мэдээлэл зөвхөн эрхтэй анги удирдсан багшид харагдана.</p>
+  <h2>🔐 Багшийн тайлан</h2>
+  <p class="small">Сурагчдын үнэлгээний мэдээлэл зөвхөн эрхтэй багшид харагдана.</p>
   <div style="max-width:480px;margin:0 auto;text-align:left">
-    <label>Анги удирдсан багшийн имэйл</label>
+    <label>Багшийн имэйл</label>
     <input id="teacherEmail" type="email" placeholder="teacher@example.com">
     <label>Нууц үг</label>
     <input id="teacherPassword" type="password" placeholder="Нууц үг">
@@ -152,7 +152,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
       <div><label>Анги сонгох</label><select id="reportGrade" onchange="loadReport()">
         <option value="all">Бүх анги</option>
         <option value="6-total">Нийт 6 дугаар анги (10 бүлэг)</option>
-        <option value="6А">6А анги</option><option value="6Б">6Б анги</option><option value="6В">6В анги</option><option value="6Г">6Г анги</option><option value="6Д">6Д анги</option><option value="6Е">6Е анги</option><option value="6Ё">6Ё анги</option><option value="6Ж">6Ж анги</option><option value="6З">6З анги</option><option value="6И">6И анги</option>
+        <option value="Q7">Q7 бүлэг</option><option value="M4">M4 бүлэг</option><option value="R9">R9 бүлэг</option><option value="T2">T2 бүлэг</option><option value="K8">K8 бүлэг</option><option value="V5">V5 бүлэг</option><option value="N3">N3 бүлэг</option><option value="C6">C6 бүлэг</option><option value="H2">H2 бүлэг</option><option value="W7">W7 бүлэг</option>
         <option value="9">9-р анги (нэгтгэл)</option><option value="12">12-р анги (нэгтгэл)</option>
       </select></div>
       <div><label>Хайх сурагчийн код</label><input id="reportSearch" placeholder="Жишээ: 12A-01" oninput="renderReportTable()"></div>
@@ -212,15 +212,15 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 
     <div class="card" style="margin-top:16px">
       <h3>🔎 Сурагчийн кодоор анхаарах дохио</h3>
-      <p class="small">Энэ нь онош биш. Зөвхөн тандалтын хариунд тулгуурласан анхаарах дохио бөгөөд анги удирдсан багшийн ажиглалт, ярилцлагатай хамтатгана.</p>
+      <p class="small">Энэ нь онош биш. Зөвхөн тандалтын хариунд тулгуурласан анхаарах дохио бөгөөд багшийн ажиглалт, ярилцлагатай хамтатгана.</p>
       <div id="surveySupportList">Мэдээлэл ачаалж байна...</div>
     </div>
   </div>
 
   <div class="card ai-analysis-card" id="aiReportCard">
     <h3>📊 Тайлангийн автомат тайлбар (үнэгүй)</h3>
-    <p class="small">Сонгосон ангийн нэгтгэсэн оноо, хувь, хариултын тархалтад тулгуурлан анги удирдсан багшид зориулсан автомат тайлбар, дэмжлэгийн санаа гаргана.</p>
-    <div class="notice" style="margin-bottom:14px"><b>Үнэгүй горим:</b> Энэ тайлбар нь сайтын доторх оноо, хувь, тоонд тулгуурласан дүрэмд суурилсан тооцоолол. OpenAI API ашиглахгүй, нэмэлт API төлбөр үүсгэхгүй. Үр дүн нь сэтгэл зүйн онош биш бөгөөд анги удирдсан багшийн ажиглалт, ярилцлага, сургуулийн сэтгэл зүйчийн дэмжлэгийг орлохгүй.</div>
+    <p class="small">Сонгосон ангийн нэгтгэсэн оноо, хувь, хариултын тархалтад тулгуурлан багшид зориулсан автомат тайлбар, дэмжлэгийн санаа гаргана.</p>
+    <div class="notice" style="margin-bottom:14px"><b>Үнэгүй горим:</b> Энэ тайлбар нь сайтын доторх оноо, хувь, тоонд тулгуурласан дүрэмд суурилсан тооцоолол. OpenAI API ашиглахгүй, нэмэлт API төлбөр үүсгэхгүй. Үр дүн нь сэтгэл зүйн онош биш бөгөөд багшийн ажиглалт, ярилцлага, сургуулийн сэтгэл зүйчийн дэмжлэгийг орлохгүй.</div>
     <div class="ai-button-row">
       <button class="btn" id="aiReportButton" onclick="runAIReportAnalysis()">📊 Автомат тайлбар гаргах</button>
       <span id="aiReportStatus" class="small" aria-live="polite"></span>
@@ -234,7 +234,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 <div id="qAdminLogin" class="card center">
   <h2>🔐 Асуултын сан</h2>
   <p class="small">Асуулт нэмэх, засах, устгах хэсэг. Зөвхөн нэвтэрсэн багш ашиглана.</p>
-  <button class="btn" onclick="goToReportLogin()">Анги удирдсан багшийн нэвтрэлт рүү очих</button>
+  <button class="btn" onclick="goToReportLogin()">Багшийн нэвтрэлт рүү очих</button>
 </div>
 <div id="qAdminContent" class="hidden">
   <div class="card">
@@ -269,22 +269,46 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 </section>
 
 <section id="guide" class="hidden">
-<div class="card"><h2>💡 Үр дүнд тулгуурлан хийх ажлууд</h2>
-<div class="activity"><b>🤝 Харилцаа сул байвал</b>Багаар ажиллах богино дасгал, хосын ярилцлага, ангийн эерэг дүрмийг хамтран боловсруулах.</div>
-<div class="activity"><b>📚 Суралцах идэвх буурвал</b>Богино зорилго тавих, сурагчийн давуу талыг илрүүлэх, сонголттой даалгавар болон амжилтын жижиг алхмууд ашиглах.</div>
-<div class="activity"><b>🌱 Дасан зохицол сул байвал</b>Анги доторх өдөр тутмын хуваарь, дүрэм, хүлээлтийг ойлгомжтой болгох; шинэ сурагчийг хос/багаар дэмжих.</div>
-<div class="activity"><b>💬 Сурагчийг тусгайлан анхаарах шаардлагатай бол</b>Тайван, шүүмжлэлгүй ярилцах; зөвхөн вебийн оноонд тулгуурлан дүгнэлт хийхгүй байх; шаардлагатай үед сургуулийн сэтгэл зүйчид шилжүүлэх.</div>
+<div class="card hero">
+<h2>💡 Хүүхдээ дэмжих 3 минут</h2>
+<p>Урт нийтлэл унших шаардлагагүй. Өөрт хэрэгтэй зөвлөмжөө шууд ашиглаарай. <b>Нэг хүүхэдтэй хийх нэг жижиг алхам хангалттай.</b></p>
+<div class="notice"><b>Санах зүйл:</b> Ногоон, шар, улаан нь онош биш — анхаарах дохио. Тандалтын дүнг хүүхдийн бодит нөхцөл байдал, багшийн ажиглалттай хамтатгана.</div>
 </div>
-<div class="card"><h3>Анги удирдсан багшид зориулсан санамж</h3><p>Үнэлгээний зорилго нь хүүхдийг “сайн/муу” гэж ангилах биш, <b>ямар дэмжлэг хэрэгтэйг эрт олж харах</b> юм.</p></div>
+<div class="card">
+<h3>🟢 Ногоон — Сайн хэвшлийг дэмж</h3>
+<div class="activity"><b>Өнөөдөр хийх зүйл · 1 минут</b>Хүүхдийн хичээл зүтгэл эсвэл эерэг үйлдлийг тодорхой хэлж урамшуул: “Чи өнөөдөр найздаа тусалсан нь сайхан байлаа.”</div>
+<div class="activity"><b>Богино асуулт</b>“Өнөөдөр юу нь чамд сайн болсон бэ?” гэж асууж, хариултыг нь сонс.</div>
+</div>
+<div class="card">
+<h3>🟡 Шар — Ангийн багш өөрөө дэмж</h3>
+<div class="activity"><b>1. Тайван ярилц · 2 минут</b>“Сүүлийн үед сургууль дээр юу хамгийн хэцүү байна? Би яаж тусалж болох вэ?” гэж асуу. Таслалгүй, буруутгалгүй сонс.</div>
+<div class="activity"><b>2. Нэг жижиг зорилго тохир</b>Маргааш хийх ганц бодит алхмыг хүүхэдтэй хамт сонго. Жишээ нь, даалгаврын эхний хэсгийг хийх эсвэл ойлгохгүй зүйлээ багшаас асуух.</div>
+<div class="activity"><b>3. Ахцыг дахин ажигла</b>Хэд хоногийн дараа тохирсон алхам хэр болсон талаар асуу. Хүндрэл үргэлжилж эсвэл нэмэгдвэл сургуулийн сэтгэл зүйчтэй зөвлөлд.</div>
+</div>
+<div class="card">
+<h3>🔴 Улаан — Нэмэлт дэмжлэг зохион байгуул</h3>
+<div class="activity"><b>1. Нөхцөл байдлыг нягтал</b>Тандалтын хариуг багшийн ажиглалттай харьцуулж, хүүхэдтэй тайван, нууцлалыг хүндэтгэсэн орчинд ярилц. Зөвхөн оноонд тулгуурлан дүгнэлт бүү хий.</div>
+<div class="activity"><b>2. Сэтгэл зүйчтэй холбох боломж хай</b>Хүүхэд болон гэр бүлийн оролцоог хүндэтгэн, сургуулийн сэтгэл зүйчтэй зөвлөлдөж дараагийн алхмыг тохир.</div>
+<div class="activity"><b>3. Дэмжлэгийг үргэлжлүүл</b>Уулзалт хойшилсон ч хүүхдийг орхихгүй. Сургууль дээр нь тогтмол богино ярилцаж, ажиглалтаа үргэлжлүүл.</div>
+</div>
+<div class="card">
+<h3>💬 Хүүхэд сэтгэл зүйчтэй уулзахыг хүсэхгүй, эсвэл гэр бүл зөвшөөрөхгүй бол</h3>
+<p><b>Ингэж хэлж болно:</b> “Чамд юу тухгүй санагдаж байгааг сонсмоор байна. Чамд тохирох дэмжлэгийн арга хамтдаа хайя.”</p>
+<p>Хүчлэх, ичээх, буруутгах хэрэггүй. Татгалзсан шалтгааныг тайван сонсож, сургуулийн сэтгэл зүйч, удирдлага эсвэл хүүхэд хамгааллын хариуцсан ажилтантай сургуулийн журмын дагуу зөвлөлдөнө. Хүүхдийн аюулгүй байдалд шууд эрсдэл байвал журмын дагуу шуурхай арга хэмжээ авна.</p>
+</div>
+<div class="card">
+<h3>✓ Багшийн санах 3 зүйл</h3>
+<ul><li>Хүүхдийг өнгөөр нь шошголохгүй, бусадтай харьцуулахгүй.</li><li>Тандалтын үр дүнгээр дангаар нь сэтгэл зүйн онош тавихгүй.</li><li>Сайт дээр удаан суухын оронд хүүхэдтэй бодитоор ярилцаж, жижиг алхам хэрэгжүүлээд ахицыг ажигла.</li></ul>
+</div>
 </section>
 
 <section id="about" class="hidden">
   <div class="card hero">
     <div class="pill good">Танилцуулга</div>
     <h1>АНГИ ДЭМ 97</h1>
-    <p><b>Хүүхэд бүрийн онцлог — Хөгжлийн эхлэл</b></p>
-    <p>“АНГИ ДЭМ 97” вэб хуудсыг хөгжүүлж, анги удирдсан багшийн тандалт, ажиглалтад үндэслэн сурагчдын сэтгэл зүйн хэрэгцээг илрүүлэх, сэтгэл зүйн тогтвортой байдал, эерэг төлөвшлийг дэмжихэд оршино.</p>
-    <div class="notice"><b>Чухал:</b> Энэ веб нь эмнэлзүйн болон сэтгэл зүйн онош тавихгүй. Үр дүнг анги удирдсан багшийн ажиглалт, хүүхэдтэй хийх тайван ярилцлага болон шаардлагатай үед сургуулийн сэтгэл зүйчийн мэргэжлийн үнэлгээтэй хамтатган ашиглана.</div>
+    <p><b>Сурагч бүрийг анзаарах — анги бүрийг дэмжих.</b></p>
+    <p>АНГИ ДЭМ 97 нь ангийн багшид сурагчдын сургалтын орчинд дасан зохицох байдал, харилцаа, суралцах оролцоо, сэтгэл хөдлөлийн талаар санал мэдээлэл цуглуулж, ямар дэмжлэг хэрэгтэйг эрт анзаарахад туслах зориулалттай веб хэрэгсэл юм.</p>
+    <div class="notice"><b>Чухал:</b> Энэ веб нь эмнэлзүйн болон сэтгэл зүйн онош тавихгүй. Үр дүнг багшийн ажиглалт, хүүхэдтэй хийх тайван ярилцлага болон шаардлагатай үед сургуулийн сэтгэл зүйчийн мэргэжлийн үнэлгээтэй хамтатган ашиглана.</div>
   </div>
 
   <div class="info-grid">
@@ -298,8 +322,8 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
     </div>
     <div class="info-card">
       <h3>👥 Хэнд зориулсан бэ?</h3>
-      <ul> <li>Анги Удирдсан багш</li> <li>Сурагчид</li> <li>Эцэг эх, асран хамгаалагч нар</li> </ul>
-      
+      <p>Ангийн багш, сурагч болон эцэг эхэд зориулсан. Багш тайланг ашиглан бүлэг, анги болон чиглэлээр нэгтгэсэн үр дүнг харж болно.</p>
+      <p>Хариултад нэр шаардахгүй бөгөөд бүлэг, сурагчийн кодоор бүртгэлүүдийг холбодог. Код нь хүүхдийг таних боломж олгож болох тул нууцлан ашиглана.</p>
     </div>
     <div class="info-card">
       <h3>🧭 Хэрхэн ашиглах вэ?</h3>
@@ -312,7 +336,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
     </div>
     <div class="info-card">
       <h3>📊 Үр дүнг ойлгох нь</h3>
-      <ul> <li>4 асуулттай тандалтын үр дүн болон 20 асуулттай шуурхай үнэлгээ нь хоёр тусдаа мэдээлэл юм. Тэдгээрийн тоо заавал ижил байхгүй.</li> <li>Ногоон, шар, улаан зэрэг тэмдэглэгээ нь урьдчилсан анхаарах дохио болохоос хүүхдийн талаар эцсийн дүгнэлт биш.</li> </ul>
+      <p>4 асуулттай тандалтын үр дүн болон 20 асуулттай шуурхай үнэлгээ нь хоёр тусдаа мэдээлэл юм. Тэдгээрийн тоо заавал ижил байхгүй.</p>
       <p>Ногоон, шар, улаан зэрэг тэмдэглэгээ нь урьдчилсан анхаарах дохио болохоос хүүхдийн талаар эцсийн дүгнэлт биш.</p>
     </div>
     <div class="info-card">
@@ -340,7 +364,7 @@ table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:12px;bor
 </div>
 
 <footer class="site-footer">
-  <div><b>АНГИ ДЭМ 97</b> · Анги удирдсан багшийн дэмжлэгийн веб</div>
+  <div><b>АНГИ ДЭМ 97</b> · Багшийн дэмжлэгийн веб</div>
   <div>Тандалт нь онош биш. Хариуг хүүхдийн эрх ашиг, нууцлалыг хүндэтгэн ашиглана.</div>
   <div><button type="button" onclick="show('about')">Танилцуулга ба холбоо барих</button></div>
 </footer>
@@ -365,7 +389,27 @@ const surveyQuestionsByRole={
 };
 let currentSurveyRole="student";
 // 6-р ангийн 10 бүлэг, бүлэг бүр 50 хүртэлх сурагчийн код
-const grade6Groups=["А","Б","В","Г","Д","Е","Ё","Ж","З","И"];
+// 6-р ангийн бүлгийн нууц код. Хуучин өгөгдлийг хадгалж, тайланд шинэ кодоор харуулна.
+const grade6GroupMap={"6А":"Q7","6Б":"M4","6В":"R9","6Г":"T2","6Д":"K8","6Е":"V5","6Ё":"N3","6Ж":"C6","6З":"H2","6И":"W7"};
+const grade6GroupCodes=Object.values(grade6GroupMap);
+const grade6LegacyByCode=Object.fromEntries(Object.entries(grade6GroupMap).map(([legacy,code])=>[code,legacy]));
+const grade6Groups=grade6GroupCodes;
+function grade6StoredClassAliases(code){
+  const legacy=grade6LegacyByCode[code];
+  return [code,legacy,legacy?`${legacy} анги`:null].filter(Boolean);
+}
+function normalizeGrade6GroupCode(value){
+  const v=String(value||"").trim();
+  const exact=grade6GroupMap[v];
+  if(exact) return exact;
+  const withSuffix=v.match(/^(6[АБВГДЕЁЖЗИ])\s*анги$/);
+  return withSuffix ? (grade6GroupMap[withSuffix[1]]||v) : v;
+}
+function normalizeGrade6StudentCode(value){
+  const v=String(value||"").trim();
+  const match=v.match(/^(6[АБВГДЕЁЖЗИ])-(\d{2})$/);
+  return match && grade6GroupMap[match[1]] ? `${grade6GroupMap[match[1]]}-${match[2]}` : v;
+}
 function populateSurveyCodes(){
   const groupEl=document.getElementById('surveyGroup');
   const sel=document.getElementById('surveyStudentCode');
@@ -474,7 +518,7 @@ let questions=questionSets[6]||[];
 let questionBankRows=[];
 let editingQuestionId=null;
 
-const labels=["Огт үгүй","Хааяа","Заримдаа","Ихэнхдээ","Үргэлж"];
+const labels=["Огт үгүй","Ховор","Заримдаа","Ихэнхдээ","Үргэлж"];
 
 function escapeHtml(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
 function categoryLabel(c){return ({adapt:"🌱 Дасан зохицол",relation:"🤝 Харилцаа",study:"📚 Суралцах",emotion:"💬 Сэтгэл хөдлөл"}[c]||c)}
@@ -517,7 +561,7 @@ function renderQuestionBank(){
   body.innerHTML=arr.map(r=>`<tr><td>${r.question_no}</td><td>${escapeHtml(r.question_text)}</td><td>${categoryLabel(r.category)}</td><td>${r.reverse_score?"Тийм":"Үгүй"}</td><td><button class="btn secondary" onclick="editQuestion('${r.id}')">Засах</button> <button class="btn danger" onclick="deleteQuestion('${r.id}')">Устгах</button></td></tr>`).join("")||`<tr><td colspan="5" class="center small">Энэ ангид асуулт алга.</td></tr>`;
 }
 async function saveQuestion(){
-  const {data:{session}}=await supabaseClient.auth.getSession(); if(!session){alert("Эхлээд Анги удирдсан багшийн тайлан хэсгээр нэвтэрнэ үү.");return;}
+  const {data:{session}}=await supabaseClient.auth.getSession(); if(!session){alert("Эхлээд багшийн тайлан хэсгээр нэвтэрнэ үү.");return;}
   const grade=+document.getElementById("qbGrade").value,no=+document.getElementById("qbNo").value,text=document.getElementById("qbText").value.trim(),cat=document.getElementById("qbCategory").value,rev=document.getElementById("qbReverse").checked;
   const msg=document.getElementById("qbMsg"); if(!no||!text){msg.textContent="Асуултын дугаар болон асуултаа оруулна уу.";return;} msg.textContent="Хадгалж байна...";
   const payload={grade,question_no:no,question_text:text,category:cat,reverse_score:rev,active:true};
@@ -545,9 +589,11 @@ function renderQuestions(){
 function updateProgress(){let a=questions.filter((_,i)=>document.querySelector(`input[name=q${i}]:checked`)).length;document.getElementById("qbar").style.width=a/questions.length*100+"%"}
 async function finishTest(){
  let vals=[];for(let i=0;i<questions.length;i++){let x=document.querySelector(`input[name=q${i}]:checked`);if(!x){alert((i+1)+"-р асуултыг бөглөнө үү.");return}vals.push(+x.value)}
- const student=document.getElementById("testStudent").value.trim();
+ const rawStudent=document.getElementById("testStudent").value.trim();
  const grade=+document.getElementById("testGrade").value;
- const classCode=document.getElementById("className").value.trim()||(`${grade}-р анги`);
+ const rawClassCode=document.getElementById("className").value.trim()||(`${grade}-р анги`);
+ const student=grade===6?normalizeGrade6StudentCode(rawStudent):rawStudent;
+ const classCode=grade===6?normalizeGrade6GroupCode(rawClassCode):rawClassCode;
  if(!student){alert("Сурагчийн нэр / код оруулна уу.");return}
  let total=0;let cats={adapt:[],relation:[],study:[],emotion:[]};
  vals.forEach((v,i)=>{let q=questions[i],s=q[2]?4-v:v;total+=s;cats[q[1]].push(s)});
@@ -585,8 +631,10 @@ function latestSurveySubmissions(rows){
     const role=surveyRoleFromQuestionId(r.question_id);
     if(!role || !r.student_code) continue;
     const stamp=r.created_at ? new Date(r.created_at).getTime() : 0;
-    const key=`${role}|${r.student_code}|${r.class_code||""}|${stamp}`;
-    if(!groups.has(key)) groups.set(key,{role,code:r.student_code,classCode:r.class_code||"",stamp,rows:[]});
+    const code=normalizeGrade6StudentCode(r.student_code);
+    const classCode=normalizeGrade6GroupCode(r.class_code||"");
+    const key=`${role}|${code}|${classCode}|${stamp}`;
+    if(!groups.has(key)) groups.set(key,{role,code,classCode,stamp,rows:[]});
     groups.get(key).rows.push(r);
   }
   // Keep the newest complete 4-question submission per role + student code.
@@ -765,7 +813,7 @@ function renderSurveyReport(){
       const result=surveySupportLevel('student',a);
       if(result[0].startsWith('🟠') || result[0].startsWith('🔴')) red.push({code:s.code,classCode:s.classCode});
     });
-    if(['all','6-total','6Б'].includes(document.getElementById('reportGrade').value)&&!red.some(x=>x.code==='6Б-31'&&x.classCode==='6Б'))red.push({code:'6Б-31',classCode:'6Б',manualFollowUp:true}); red.sort((a,b)=>a.classCode.localeCompare(b.classCode,'mn')||a.code.localeCompare(b.code,'mn'));
+    red.sort((a,b)=>a.classCode.localeCompare(b.classCode,'mn')||a.code.localeCompare(b.code,'mn'));
     sl.innerHTML=red.length
       ? `<div class="activity"><h3>🔴 Дэмжлэг хэрэгтэй сурагчид</h3><div style="display:flex;flex-wrap:wrap;gap:8px">${red.map(x=>`<span class="pill alert">${escapeHtml(x.code)}</span>`).join('')}</div></div>`
       : `<div class="activity"><h3>🔴 Дэмжлэг хэрэгтэй сурагчид</h3><p class="small">Одоогоор улаан түвшний сурагч бүртгэгдээгүй байна.</p></div>`;
@@ -817,8 +865,8 @@ async function loadReport(){
         .order("created_at",{ascending:true})
         .range(offset,offset+pageSize-1);
       // Бүлэг сонгосон үед тухайн бүлгийн кодоор шүүнэ; 6-total нь 10 бүлгийг нэгтгэнэ.
-      if(/^6[АБВГДЕЁЖЗИ]$/.test(grade)) q=q.eq("class_code",grade);
-      else if(grade==="6-total") q=q.in("class_code",["6А","6Б","6В","6Г","6Д","6Е","6Ё","6Ж","6З","6И"]);
+      if(grade6Groups.includes(grade)) q=q.in("class_code",grade6StoredClassAliases(grade));
+      else if(grade==="6-total") q=q.in("class_code",grade6Groups.flatMap(grade6StoredClassAliases));
       else if(grade!=="all") q=q.eq("grade",+grade);
       const {data,error}=await q;
       if(error) throw error;
@@ -883,7 +931,7 @@ function buildReportStudents(){
     const avg=k=>cats[k].length?Math.round(cats[k].reduce((a,b)=>a+b,0)/(cats[k].length*4)*100):0;
     const level=pct>=75?["🟢 Тогтвортой","good"]:pct>=50?["🟡 Анхаарч ажиллах","warn"]:["🔴 Дэмжлэг хэрэгтэй","alert"];
     reportStudents.push({
-      code:rows[0].student_code,grade,classCode:rows[0].class_code||"",overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
+      code:normalizeGrade6StudentCode(rows[0].student_code),grade,classCode:normalizeGrade6GroupCode(rows[0].class_code||""),overall:pct,adapt:avg("adapt"),relation:avg("relation"),study:avg("study"),emotion:avg("emotion"),level
     });
   }
   reportStudents.sort((a,b)=>a.grade-b.grade || a.code.localeCompare(b.code));
@@ -897,7 +945,7 @@ function renderReportTable(){
   const selected=document.getElementById("reportGrade").value;
   const term=document.getElementById("reportSearch").value.trim().toLowerCase();
   let arr=reportStudents.filter(s=>{
-    const classMatch=/^6[АБВГДЕЁЖЗИ]$/.test(selected) ? String(s.classCode||"")===selected : (selected==="all" || (selected==="6-total" ? /^6[АБВГДЕЁЖЗИ]$/.test(String(s.classCode||"")) : String(s.grade)===selected));
+    const classMatch=grade6Groups.includes(selected) ? normalizeGrade6GroupCode(s.classCode)===selected : (selected==="all" || (selected==="6-total" ? grade6Groups.includes(normalizeGrade6GroupCode(s.classCode)) : String(s.grade)===selected));
     return classMatch && (!term||s.code.toLowerCase().includes(term));
   });
   // Тандалтын 101–204 ID-ууд нь 20 асуулттай үнэлгээ биш. Үнэлгээний хэсгийг зөвхөн 1–20 ID-ийн бодит оноо байвал харуулна.
@@ -1005,7 +1053,7 @@ function freeScoreMeaning(value){
 function freeScoreAdvice(name,value){
   if(value>=75) return `${name}: ${value}% — харьцангуй тогтвортой. Эерэг дадлыг хадгалж, сурагчийн оролцоог дэмжээрэй.`;
   if(value>=50) return `${name}: ${value}% — анхаарч ажиллах чиглэл. Дараагийн 2–3 долоо хоногт тодорхой жижиг зорилго тавьж, ахицыг ажиглаарай.`;
-  return `${name}: ${value}% — нэмэлт дэмжлэг шаардлагатай байж болзошгүй. Сурагчтай тайван, нууцлалтай ярилцаж, анги удирдсан багшийн ажиглалтаа сургуулийн сэтгэл зүйчтэй зөвлөлдөн нягтлаарай.`;
+  return `${name}: ${value}% — нэмэлт дэмжлэг шаардлагатай байж болзошгүй. Сурагчтай тайван, нууцлалтай ярилцаж, багшийн ажиглалтаа сургуулийн сэтгэл зүйчтэй зөвлөлдөн нягтлаарай.`;
 }
 function appendSurveyDistribution(lines,title,survey){
   lines.push(`${title}: ${survey.completed} хариулт`);
@@ -1047,7 +1095,7 @@ function makeFreeRuleBasedAnalysis(payload){
   lines.push('БАГШИД ӨГӨХ ЕРӨНХИЙ САНАЛ');
   lines.push('1. Тоон үр дүнг сурагчийн зан чанар, сэтгэл зүйн онош гэж үзэхгүй; бодит ажиглалт, ярилцлага, сурагчийн нөхцөл байдлаар баталгаажуулна.');
   lines.push('2. Сурагчийн код, хариуг ангийнханд нийтэд зарлахгүй. Хувь хүний мэдээллийг зөвхөн шаардлагатай мэргэжлийн хүмүүст нууцлалтай хуваалцана.');
-  lines.push('3. Тандалтын ганц хариултаар шийдвэр гаргахгүй. Сурагч, эцэг эх, анги удирдсан багшийн ажиглалтыг харьцуулж, шаардлагатай үед сургуулийн сэтгэл зүйчтэй зөвлөлдөнө.');
+  lines.push('3. Тандалтын ганц хариултаар шийдвэр гаргахгүй. Сурагч, эцэг эх, багшийн ажиглалтыг харьцуулж, шаардлагатай үед сургуулийн сэтгэл зүйчтэй зөвлөлдөнө.');
   lines.push('');
   lines.push('Тайлбар: Энэ нь урьдчилан тогтоосон босго, дүрэмд суурилсан автомат нэгтгэл бөгөөд жинхэнэ хиймэл оюун ухааны дүгнэлт биш. Сэтгэл зүйн онош тавихгүй.');
   return lines.join('\n');
@@ -1060,7 +1108,7 @@ async function runAIReportAnalysis(){
   if(!button||!status||!output)return;
   try{
     const {data:{session}}=await supabaseClient.auth.getSession();
-    if(!session){status.textContent='Эхлээд Анги удирдсан багшийн тайлан руу нэвтэрнэ үү.';return;}
+    if(!session){status.textContent='Эхлээд багшийн тайлан руу нэвтэрнэ үү.';return;}
     const payload=buildAIReportPayload();
     const noData=payload.survey.students.completed===0&&payload.survey.parents.completed===0&&payload.quickAssessment.assessedStudents===0;
     if(noData){status.textContent='Энэ сонголтод тайлбар гаргах мэдээлэл алга. Эхлээд тайлангаа ачаална уу.';return;}
@@ -1105,12 +1153,12 @@ loadPublicQuestions();
  var section=document.createElement('section');
  section.id='judgeSurvey'; section.className='hidden';
  section.innerHTML=
- '<div class="card hero"><h2>🧑‍⚖️ 🌱 Өөртөө анхаарах цаг</h2><h3>Архаг ядаргааг илрүүлэх ерөнхий асуултууд</h3><p>Өнгөрсөн нэг сарын хугацаанд доорх шинж тэмдгүүдээс илэрч байсан эсэхийг тэмдэглээрэй. Баярлалаа. 🌷</p><div class="notice"><b>Нууцлал:</b> Нэр, утас, ажлын газрын нэр авахгүй. Энэ тандалт сайн дурын үндсэн дээр бөглөгдөнө. Хариулт сурагчдын тандалтын хүснэгтээс тусдаа хадгалагдана. Энэ нь сэтгэл зүйн болон эмнэлгийн онош биш.</div></div>'+
+ '<div class="card hero"><h2>🧑‍⚖️ Шүүгч, багш нарын тандалт</h2><h3>Архаг ядаргааг илрүүлэх ерөнхий асуултууд</h3><p>Өнгөрсөн нэг сарын хугацаанд доорх шинж тэмдгүүдээс илэрч байсан эсэхийг тодруулж асууж тэмдэглэ.</p><div class="notice"><b>Нууцлал:</b> Нэр, утас, ажлын газрын нэр авахгүй. Энэ тандалт сайн дурын үндсэн дээр бөглөгдөнө. Хариулт сурагчдын тандалтын хүснэгтээс тусдаа хадгалагдана. Энэ нь сэтгэл зүйн болон эмнэлгийн онош биш.</div></div>'+
  '<div class="card" id="judgeFatigueFormCard"><p>Хэрэв эдгээрээс аль нэг шинж тэмдэг нь байвал цааш нь үргэлжлүүлнэ.</p><div id="judgeFatigueQuestions"></div><h3>I. Өнгөрсөн нэг сарын хугацаанд доорх үйл ажиллагааг хийсэн эсэхээ тэмдэглэнэ үү?</h3><div id="judgeFatigueActivities"></div><h3>II. Дээрхээс үндэслэн:</h3><div class="question"><label for="judgeFatigueDaysUnable"><b>Та хэдэн өдрийн турш өдөр тутмын үйл ажиллагаагаа гүйцэтгэж чадаагүй вэ?</b></label><input id="judgeFatigueDaysUnable" type="number" min="0" max="31" step="1" placeholder="Өдрийн тоо"></div><div class="question"><label for="judgeFatigueDaysBed"><b>Та хэдэн өдрийг орондоо хэвтэж өнгөрүүлсэн бэ?</b></label><input id="judgeFatigueDaysBed" type="number" min="0" max="31" step="1" placeholder="Өдрийн тоо"></div><div class="notice">Хариултаар автоматаар онош гаргахгүй. Хэрэв зовиур санаа зовоож байвал мэргэжлийн эмч, сэтгэл зүйн мэргэжилтнээс зөвлөгөө аваарай.</div><label class="option"><input type="checkbox" id="judgeFatigueConsent"> Би сайн дурын үндсэн дээр оролцож, хариултаа нэргүй хэлбэрээр хадгалахыг зөвшөөрч байна.</label><button type="button" id="judgeFatigueSubmit" class="btn">Тандалт илгээх</button><p id="judgeFatigueStatus" class="small" role="status" aria-live="polite"></p></div><div id="judgeFatigueResult" class="card hidden center"></div>'+
  '<div class="card"><details><summary>Эх материал дахь дүгнэлт (автоматаар онош гаргахгүй)</summary><p>Дүгнэлт:</p><p>• I болон 1,2,3 дугаар асуултад тийм гэж хариулсан бол “Архаг ядаргаа”</p><p>• 4,5 тийм бол доорх асуултад анхаарлаа хандуулна уу?</p><p>• 6 дугаар асуултад тийм гэж хариулсан бол “сэтгэл гутрал”</p><p>• 7 дугаар асуултад тийм гэж хариулсан бол “сэтгэл түгшилт”</p><p>• 8,9 асуултад тийм гэж хариулсан бол амьдралын хэв маягаа өөрчлөх</p><p>• 10 асуултад тийм гэж хариулсан бол “нойрны хямрал”</p><p class="small">Эдгээр нь эх материал дахь заалт бөгөөд онош биш. Энэ сайт үр дүнгээр онош тогтоохгүй.</p></details></div>';
  report.parentNode.insertBefore(section,report);
  var navButton=document.createElement('button');
- navButton.type='button'; navButton.textContent='🧑‍⚖️ 🌱 Өөртөө анхаарах цаг';
+ navButton.type='button'; navButton.textContent='🧑‍⚖️ Шүүгч, багш нарын тандалт';
  navButton.addEventListener('click',function(){
    document.querySelectorAll('section').forEach(function(s){s.classList.add('hidden');});
    section.classList.remove('hidden');
@@ -1194,4 +1242,4 @@ loadPublicQuestions();
 </script>
 
 
-<script src="hubs.js?v=20261104-2"></script></body></html>
+<script src="hubs.js"></script></body></html>
